@@ -1,0 +1,497 @@
+# 🎭 Face Emotion Detection — Master & Advanced Prompt
+## Full Streamlit Dashboard Build Specification
+
+---
+
+## 🧭 PROJECT CONTEXT
+
+You are building a **10/10 production-grade Streamlit dashboard** for a Face Emotion Detection system powered by a CNN trained on FER2013. The model (`emotion_model.h5`) detects 7 emotions: **Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise** from 48×48 grayscale face images.
+
+The existing codebase has:
+- `train.py` — CNN training with CLI args (epochs, batch_size, model_name)
+- `inference.py` — Static image prediction
+- `webcam_inference.py` — Real-time OpenCV webcam detection
+- `emotion_model.h5` — Pre-trained model (~62% val accuracy on FER2013)
+- `requirements.txt` — tensorflow, numpy, matplotlib, kagglehub, opencv-python, pillow
+
+---
+
+## 🚀 MASTER STREAMLIT APP SPECIFICATION
+
+### App Identity
+- **App Title:** `EmotionLens 🎭`
+- **Tagline:** *"Real-time facial emotion intelligence powered by CNN"*
+- **Theme:** Dark, futuristic, neural-network-inspired UI
+- **Color Palette:** Deep dark background (#0D1117), electric teal accents (#00D4AA), amber for warnings (#F5A623), coral for angry (#FF6B6B), sky blue for neutral (#4ECDC4)
+
+---
+
+## 📐 FULL APP ARCHITECTURE
+
+### Page Structure (Multi-page Streamlit App)
+
+```
+streamlit_app.py          ← Entry point & sidebar navigation
+pages/
+  1_🎥_Live_Camera.py     ← Real-time webcam emotion detection
+  2_🖼️_Image_Analysis.py  ← Upload image(s) for prediction
+  3_📊_Analytics.py       ← Session stats & emotion history charts
+  4_🏋️_Train_Model.py    ← GUI-based model training
+  5_🧠_Model_Inspector.py ← CNN architecture visualizer
+  6_🎯_Emotion_Game.py    ← Interactive emotion challenge game
+  7_📖_About.py           ← Project info & docs
+utils/
+  model_utils.py          ← Model loading, caching
+  emotion_utils.py        ← Preprocessing, prediction logic
+  session_utils.py        ← Session state management
+assets/
+  style.css               ← Custom dark theme CSS
+```
+
+---
+
+## 📋 PAGE-BY-PAGE REQUIREMENTS
+
+---
+
+### PAGE 1: 🎥 Live Camera (MOST IMPORTANT)
+
+**Goal:** Real-time webcam stream with live emotion detection overlay.
+
+**Implementation Strategy (Streamlit-compatible):**
+Since Streamlit doesn't natively support OpenCV webcam streams in browser, use `streamlit-webrtc` library which enables browser-native camera access with real-time frame processing.
+
+```python
+pip install streamlit-webrtc av
+```
+
+**Features:**
+1. **Live Video Feed** with face detection bounding boxes (Haar Cascade)
+2. **Emotion Label** overlaid on each detected face (colored by emotion)
+3. **Confidence Bar** shown below each face bounding box
+4. **Dominant Emotion Card** — large display showing current top emotion + emoji
+5. **Real-time Probability Gauge** — 7-bar horizontal chart updating every frame
+6. **Smile Detector Alert** — special "😊 You're Smiling!" green toast when Happy > 70%
+7. **Mood Tracker Sidebar** — last 30 frames' emotion history as sparkline
+8. **FPS Counter** — show inference speed
+9. **Multi-face Support** — detect and label all faces in frame
+10. **Snapshot Button** — capture current frame and add to session history
+11. **Emotion Lock Feature** — hold current detection for X seconds for comparison
+
+**Emotion → Color → Emoji Mapping:**
+```python
+EMOTION_CONFIG = {
+    'Angry':    {'color': '#FF6B6B', 'emoji': '😠', 'bg': '#2D1515'},
+    'Disgust':  {'color': '#9B59B6', 'emoji': '🤢', 'bg': '#1E0A2E'},
+    'Fear':     {'color': '#F39C12', 'emoji': '😨', 'bg': '#2D1F0A'},
+    'Happy':    {'color': '#2ECC71', 'emoji': '😊', 'bg': '#0A2D15'},
+    'Neutral':  {'color': '#95A5A6', 'emoji': '😐', 'bg': '#1A1F20'},
+    'Sad':      {'color': '#3498DB', 'emoji': '😢', 'bg': '#0A1520'},
+    'Surprise': {'color': '#E67E22', 'emoji': '😲', 'bg': '#2D1A0A'},
+}
+```
+
+**streamlit-webrtc Implementation Template:**
+```python
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
+import av
+
+class EmotionProcessor(VideoProcessorBase):
+    def __init__(self):
+        self.model = load_model_cached()
+        self.face_cascade = cv2.CascadeClassifier(...)
+        self.result = None  # Store last prediction for display
+    
+    def recv(self, frame: av.VideoFrame) -> av.VideoFrame:
+        img = frame.to_ndarray(format="bgr24")
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+        
+        for (x, y, w, h) in faces:
+            roi = gray[y:y+h, x:x+w]
+            roi = cv2.resize(roi, (48, 48))
+            roi = roi.astype('float32') / 255.0
+            roi = np.expand_dims(roi, axis=[0, -1])
+            preds = self.model.predict(roi, verbose=0)[0]
+            emotion = EMOTIONS[np.argmax(preds)]
+            conf = preds.max()
+            
+            # Draw colored bounding box
+            color = hex_to_bgr(EMOTION_CONFIG[emotion]['color'])
+            cv2.rectangle(img, (x, y), (x+w, y+h), color, 2)
+            
+            # Draw label with background
+            label = f"{EMOTION_CONFIG[emotion]['emoji']} {emotion} {conf*100:.0f}%"
+            (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+            cv2.rectangle(img, (x, y-th-15), (x+tw+10, y), color, -1)
+            cv2.putText(img, label, (x+5, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+            
+            self.result = {'emotion': emotion, 'confidence': conf, 'all_preds': preds}
+        
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
+
+ctx = webrtc_streamer(
+    key="emotion-detection",
+    video_processor_factory=EmotionProcessor,
+    rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
+    media_stream_constraints={"video": True, "audio": False},
+)
+
+if ctx.video_processor and ctx.video_processor.result:
+    result = ctx.video_processor.result
+    # Render live emotion metrics below the video
+    render_emotion_dashboard(result)
+```
+
+**Layout of Live Camera Page:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [▶ Start Camera]         [📸 Snapshot]    [🔒 Lock Frame]  │
+├─────────────────────────────┬───────────────────────────────┤
+│                             │  🎯 DOMINANT EMOTION           │
+│   LIVE VIDEO FEED           │  ┌──────────────────────┐     │
+│   with face boxes           │  │  😊 HAPPY             │    │
+│   and emotion labels        │  │  Confidence: 87.3%    │    │
+│                             │  └──────────────────────┘     │
+│                             │                               │
+│                             │  📊 ALL EMOTIONS              │
+│                             │  Angry    ████░░░░ 5%         │
+│                             │  Disgust  ██░░░░░░ 2%         │
+│                             │  Fear     ███░░░░░ 4%         │
+│                             │  Happy    ████████ 87%        │
+│                             │  Neutral  ██░░░░░░ 1%         │
+│                             │  Sad      █░░░░░░░ 0%         │
+│                             │  Surprise ██░░░░░░ 1%         │
+├─────────────────────────────┴───────────────────────────────┤
+│  📈 Emotion History (last 60 frames)                        │
+│  [sparkline chart showing emotion changes over time]        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 2: 🖼️ Image Analysis
+
+**Features:**
+1. **Drag & Drop Upload** (supports JPG, PNG, WEBP, multiple files)
+2. **Batch Processing** — upload up to 10 images, process all
+3. **Auto Face Detection** — Haar Cascade locates faces, crops ROI
+4. **Manual Crop Mode** — if no face detected, let user draw bounding box using `streamlit-drawable-canvas`
+5. **Results Gallery** — grid view of all uploaded images with emotion overlaid
+6. **Confidence Visualization** — radar chart (Plotly) showing all 7 emotion probabilities
+7. **Side-by-side Compare** — compare emotions between two uploaded images
+8. **Export Results** — download CSV with filename, predicted emotion, confidence scores
+
+**Layout:**
+```
+┌─────────────────────────────────────────────────────────────┐
+│  [📁 Upload Image(s)]    [📋 Batch Mode]                   │
+├─────────────────┬───────────────────┬───────────────────────┤
+│  Original Image │  Face Detected    │  Emotion Radar Chart  │
+│                 │  + Bounding Box   │     (Plotly)          │
+├─────────────────┴───────────────────┴───────────────────────┤
+│  Results:                                                   │
+│  ┌────────┐ ┌────────┐ ┌────────┐ ┌────────┐              │
+│  │ img1   │ │ img2   │ │ img3   │ │ img4   │              │
+│  │ 😊Happy│ │ 😢Sad  │ │ 😠Angr │ │ 😐Neut │              │
+│  │  87%   │ │  72%   │ │  65%   │ │  90%   │              │
+│  └────────┘ └────────┘ └────────┘ └────────┘              │
+│  [📥 Export CSV]                                           │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 3: 📊 Analytics Dashboard
+
+**Features (Session-based Stats):**
+1. **Emotion Distribution Pie Chart** (Plotly)
+2. **Emotion Over Time Line Chart** — timeline of predictions this session
+3. **Average Confidence per Emotion** Bar Chart
+4. **Most Detected Emotion** Metric Card
+5. **Total Predictions Made** Counter
+6. **Session Duration** Timer
+7. **Confidence Heatmap** — matrix of predictions
+8. **Export Session Data** — JSON/CSV download
+9. **Reset Session** Button
+
+---
+
+### PAGE 4: 🏋️ Train Model
+
+**GUI for `train.py`:**
+1. **Dataset Source Selector** — Kaggle (auto-download) or Local Folder
+2. **Hyperparameter Sliders:**
+   - Epochs: 1–200 (default 50)
+   - Batch Size: 16, 32, 64, 128
+   - Learning Rate: 0.0001 – 0.01
+   - Dropout Rate: 0.1 – 0.5
+3. **Architecture Selector:**
+   - Lightweight (2 Conv blocks)
+   - Standard (3 Conv blocks — current)
+   - Deep (5 Conv blocks)
+4. **Data Augmentation Toggles:**
+   - Horizontal Flip ✓
+   - Rotation Range: 0–20°
+   - Zoom Range: 0–0.2
+5. **Training Progress Display:**
+   - Live `st.progress()` bar
+   - Real-time loss/accuracy metrics using `st.empty()`
+   - Epoch-by-epoch updating chart
+6. **Save Model** — custom filename, download `.h5`
+7. **Training History Plot** — accuracy + loss curves (Matplotlib → Streamlit)
+
+---
+
+### PAGE 5: 🧠 Model Inspector
+
+**CNN Architecture Visualizer:**
+1. **Layer-by-Layer Breakdown** Table:
+   - Layer name, type, output shape, params count
+2. **Architecture Flow Diagram** (using `graphviz` or custom HTML/CSS)
+3. **Model Summary** in styled code block
+4. **Parameter Count Metrics:**
+   - Total params
+   - Trainable params
+   - Non-trainable params
+5. **Feature Map Visualizer** (ADVANCED):
+   - Upload an image
+   - Select a Conv layer
+   - Visualize all activation maps for that layer using `matplotlib`
+6. **Grad-CAM Heatmap** (ADVANCED):
+   - Upload face image
+   - Generate Grad-CAM overlay showing which pixels influenced the prediction
+   - Display original + heatmap side-by-side
+
+---
+
+### PAGE 6: 🎯 Emotion Challenge Game
+
+**Interactive Emotion Game:**
+1. **"Make This Face!" Mode:**
+   - Random emotion is displayed: "Show us HAPPY! 😊"
+   - 10-second countdown timer
+   - Live webcam checks if user's emotion matches target
+   - Score awarded for correct match + confidence bonus
+2. **"Guess the Emotion" Mode:**
+   - Show a blurred/partially revealed face image
+   - User picks emotion from 7 buttons
+   - Compare with model prediction
+3. **Leaderboard** — top scores this session
+4. **Achievement Badges** — "Smile Master", "Fear Factor", "Poker Face"
+
+---
+
+### PAGE 7: 📖 About
+
+1. Model architecture details
+2. FER2013 dataset info with class distribution chart
+3. ~62% validation accuracy explanation
+4. GitHub README rendered
+5. Tech stack badges
+6. Author info
+
+---
+
+## 🎨 GLOBAL STYLING REQUIREMENTS
+
+### Custom CSS (inject via `st.markdown`)
+
+```css
+/* Dark neural-network theme */
+:root {
+    --bg-primary: #0D1117;
+    --bg-secondary: #161B22;
+    --bg-card: #1C2128;
+    --accent-teal: #00D4AA;
+    --accent-amber: #F5A623;
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --border-color: #30363D;
+}
+
+/* Glowing metric cards */
+.metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s;
+}
+.metric-card:hover {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+}
+
+/* Animated confidence bars */
+.conf-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-amber));
+    transition: width 0.3s ease;
+}
+
+/* Emotion badge */
+.emotion-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+}
+```
+
+### Plotly Chart Theme
+```python
+PLOTLY_THEME = {
+    'paper_bgcolor': '#1C2128',
+    'plot_bgcolor': '#161B22',
+    'font': {'color': '#E6EDF3', 'family': 'Inter'},
+    'colorscale': 'Viridis',
+}
+```
+
+---
+
+## 🔧 UTILITY MODULES
+
+### `utils/model_utils.py`
+```python
+@st.cache_resource
+def load_model_cached(path='emotion_model.h5'):
+    """Load model once, cache in session for speed."""
+    return load_model(path)
+
+@st.cache_resource  
+def load_face_cascade():
+    return cv2.CascadeClassifier(
+        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+    )
+```
+
+### `utils/session_utils.py`
+```python
+def init_session_state():
+    defaults = {
+        'predictions': [],          # List of {emotion, confidence, timestamp}
+        'snapshots': [],            # Captured frames as PIL Images
+        'session_start': datetime.now(),
+        'total_predictions': 0,
+        'game_score': 0,
+    }
+    for k, v in defaults.items():
+        if k not in st.session_state:
+            st.session_state[k] = v
+
+def add_prediction(emotion, confidence, all_probs):
+    st.session_state.predictions.append({
+        'emotion': emotion,
+        'confidence': confidence,
+        'probabilities': all_probs.tolist(),
+        'timestamp': datetime.now().isoformat()
+    })
+    st.session_state.total_predictions += 1
+```
+
+---
+
+## 📦 COMPLETE REQUIREMENTS.TXT
+
+```
+# Core ML
+tensorflow>=2.10.0
+numpy>=1.21.0
+opencv-python-headless>=4.5.0  # Use headless for server/cloud
+pillow>=9.0.0
+kagglehub
+
+# Streamlit
+streamlit>=1.28.0
+streamlit-webrtc>=0.47.0       # Live webcam
+streamlit-drawable-canvas       # Manual face crop
+av>=10.0.0                      # Video frame processing for webrtc
+
+# Visualization
+matplotlib>=3.5.0
+plotly>=5.10.0
+seaborn>=0.12.0
+
+# Utils
+pandas>=1.4.0
+scikit-learn>=1.0.0
+scipy>=1.7.0
+```
+
+---
+
+## 🆕 NEW FEATURES TO ADD (Original Ideas)
+
+### Feature 1: Emotion Timeline Replay
+Record a 60-second session and play back the emotion timeline as an animated chart — see your emotional journey over time.
+
+### Feature 2: Mood Music Sync
+Based on dominant emotion, display a Spotify/YouTube search link for music that matches the mood (Happy → upbeat, Sad → melancholic).
+
+### Feature 3: Emotion API Endpoint
+Expose a simple REST endpoint (using `streamlit` + background thread or FastAPI sidecar) that accepts a base64 image and returns emotion JSON — lets other apps consume the model.
+
+### Feature 4: Face Anonymizer
+Blur detected faces in uploaded images, then run emotion detection — privacy-preserving mode for analyzing crowd emotions.
+
+### Feature 5: Emotion Intensity Meter
+Beyond binary classification, show a "positivity score" computed as `(Happy*1 + Surprise*0.3 + Neutral*0 - Sad*0.8 - Angry*1 - Fear*0.6 - Disgust*0.5)` — a single −1 to +1 meter.
+
+### Feature 6: Multi-Person Emotion Summary
+When multiple faces detected in one image, show a group emotion summary: "Your group is 60% Happy, 30% Neutral, 10% Surprised 🎉".
+
+### Feature 7: Temporal Smoothing
+Apply a rolling average over last 5 frames to reduce flickering in live detection — smoother, more stable emotion display.
+
+### Feature 8: Custom Dataset Upload
+Allow users to upload their own labeled face images, auto-generate a mini training session, and compare with base model accuracy.
+
+### Feature 9: Grad-CAM Live
+In real-time mode, optionally overlay Grad-CAM heatmap on the face region to visualize which facial features (eyes, mouth, brow) the CNN focuses on per emotion.
+
+### Feature 10: Dark/Light Mode Toggle
+Full theme switching between the dark neural UI and a clean white clinical UI.
+
+---
+
+## 🏆 QUALITY CHECKLIST (10/10 Requirements)
+
+- [ ] **Performance**: Model loaded with `@st.cache_resource` — loads once, reused everywhere
+- [ ] **Error Handling**: Graceful fallbacks for no webcam, missing model, corrupt images
+- [ ] **Responsive**: Works on both wide and narrow screens
+- [ ] **Loading States**: `st.spinner()` on every slow operation
+- [ ] **Progress Feedback**: Training shows live epoch progress
+- [ ] **Documentation**: Tooltips (`help=` parameter) on every input widget
+- [ ] **Session Persistence**: All predictions stored in `st.session_state`
+- [ ] **Mobile-friendly**: Camera page works on mobile browsers via WebRTC
+- [ ] **No Global State Bugs**: All mutable state in `st.session_state`
+- [ ] **Professional UI**: Consistent spacing, colors, font sizes throughout
+
+---
+
+## 🚀 DEPLOYMENT NOTES
+
+### Local Run
+```bash
+streamlit run streamlit_app.py --server.port 8501
+```
+
+### Streamlit Cloud
+- Upload all files including `emotion_model.h5`
+- Set `packages.txt` for system deps: `libgl1-mesa-glx` (for OpenCV)
+- WebRTC works on Streamlit Cloud with STUN servers
+
+### Docker
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY . .
+RUN pip install -r requirements.txt
+RUN apt-get update && apt-get install -y libgl1-mesa-glx libglib2.0-0
+EXPOSE 8501
+CMD ["streamlit", "run", "streamlit_app.py"]
+```
