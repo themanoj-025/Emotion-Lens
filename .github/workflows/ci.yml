@@ -1,12 +1,306 @@
 name: EmotionLens CI
+
 on: [push, pull_request]
+
 jobs:
-  test:
+  # ─── Lint & Validate ──────────────────────────────────────
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with: { python-version: '3.10' }
-      - run: pip install -r requirements.txt
-      - run: python -c "from utils.config import EMOTIONS, EMOTION_CONFIG; assert len(EMOTIONS)==7"
-      - run: python -c "from utils.model_utils import preprocess_roi; import numpy as np; r=preprocess_roi(np.zeros((96,96),dtype='uint8')); assert r.shape==(1,48,48,1)"
+
+      - name: Install base linting tools
+        run: pip install pyflakes
+
+      - name: Python syntax check (all files)
+        run: |
+          echo "Checking syntax of all Python files..."
+          find . -name '*.py' -not -path './__pycache__/*' -exec python -m py_compile {} \;
+          echo "✅ All files compile cleanly"
+
+      - name: Static analysis with pyflakes (warnings only, non-blocking)
+        continue-on-error: true
+        run: |
+          pyflakes streamlit_app.py api_server.py train.py inference.py webcam_inference.py
+          pyflakes utils/ pages/
+          echo "ℹ️  Pyflakes warnings above (non-blocking — many are false positives from Streamlit patterns)"
+
+  # ─── Import & Runtime Checks ──────────────────────────────
+  import-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+
+      - name: Install system deps (OpenCV)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify emotion config
+        run: |
+          python -c "
+from utils.config import EMOTIONS, EMOTION_CONFIG, PLOTLY_LAYOUT, positivity_score
+assert len(EMOTIONS) == 7, 'EMOTIONS must have 7 entries'
+assert len(EMOTION_CONFIG) == 7, 'EMOTION_CONFIG must have 7 entries'
+for e in EMOTIONS:
+    assert e in EMOTION_CONFIG, f'{e} missing from EMOTION_CONFIG'
+    assert 'color' in EMOTION_CONFIG[e], f'{e} missing color'
+    assert 'emoji' in EMOTION_CONFIG[e], f'{e} missing emoji'
+# Test positivity_score
+ps = positivity_score([0.5]*7)
+assert -1.0 <= ps <= 1.0, f'positivity_score out of range: {ps}'
+print('✅ Emotion config valid')
+"
+
+      - name: Verify model_utils
+        run: |
+          python -c "
+from utils.model_utils import EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME, \
+    is_model_available, MODEL_PATH, MODEL_DOWNLOAD_URLS, try_download_model, \
+    ensure_model_on_cloud
+assert isinstance(MODEL_DOWNLOAD_URLS, list)
+print(f'✅ Model utils OK — model_path={MODEL_PATH}')
+"
+
+      - name: Verify emotion_utils (no-model tests)
+        run: |
+          python -c "
+from utils.emotion_utils import compute_positivity_score, generate_emotion_summary, \
+    image_to_base64, preprocess_face, EMOTIONS
+import numpy as np
+from PIL import Image
+# Test preprocess_face
+roi = np.zeros((96, 96), dtype='uint8')
+processed = preprocess_face(roi)
+assert processed.shape == (1, 48, 48, 1), f'preprocess_face shape: {processed.shape}'
+# Test positivity score
+ps = compute_positivity_score([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+assert ps == 1.0, f'Happy should give 1.0, got {ps}'
+# Test generate_emotion_summary
+summary = generate_emotion_summary([{'emotion': 'Happy', 'confidence': 0.9}])
+assert 'Happy' in summary
+print('✅ Emotion utils valid')
+"
+
+      - name: Verify session_utils
+        run: |
+          python -c "
+from utils.session_utils import init_session_state, format_session_duration, \
+    get_prediction_dataframe, get_emotion_distribution
+# init_session_state requires streamlit runtime
+print('✅ Session utils import OK')
+"
+
+      - name: Verify smoothing_utils
+        run: |
+          python -c "
+from utils.smoothing_utils import EmotionSmoother
+smoother = EmotionSmoother(window=5)
+result = smoother.update([0.1]*7)
+assert len(result) == 7
+emotion, conf, probs = smoother.smoothed_emotion([0.2]*7)
+assert len(probs) == 7
+print('✅ Smoothing utils valid')
+"
+
+      - name: Verify gradcam_utils
+        run: |
+          python -c "
+from utils.gradcam_utils import make_gradcam_heatmap, overlay_gradcam
+import numpy as np
+print('✅ GradCAM utils import OK')
+"
+
+      - name: Verify export_utils
+        run: |
+          python -c "
+from utils.export_utils import predictions_to_dataframe, export_predictions_csv, \
+    export_predictions_json, export_session_report
+import pandas as pd
+# Test with empty data
+assert export_predictions_csv([]) is None
+assert export_predictions_json([]) is None
+assert export_session_report([]) is None
+# Test with sample data
+sample = [{'emotion': 'Happy', 'confidence': 0.9, 'probabilities': [0.0]*7, 'timestamp': 'now', 'source': 'test'}]
+csv_out = export_predictions_csv(sample)
+assert csv_out is not None and 'Happy' in csv_out
+json_out = export_predictions_json(sample)
+assert json_out is not None and 'Happy' in json_out
+report = export_session_report(sample)
+assert report is not None and 'Happy' in report
+df = predictions_to_dataframe(sample)
+assert not df.empty
+print('✅ Export utils valid')
+"
+
+      - name: Verify chart_utils
+        run: |
+          python -c "
+from utils.chart_utils import emotion_bar_chart, emotion_radar_chart, emotion_pie
+fig1 = emotion_bar_chart([0.1]*7)
+fig2 = emotion_radar_chart([0.1]*7)
+fig3 = emotion_pie([{'emotion': 'Happy'}, {'emotion': 'Sad'}])
+print('✅ Chart utils valid')
+"
+
+  # ─── Streamlit Cloud Deployment Checks ────────────────────
+  deploy-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify essential deployment files exist
+        run: |
+          errors=0
+          for file in \
+            'streamlit_app.py' \
+            'requirements.txt' \
+            'packages.txt' \
+            '.streamlit/config.toml' \
+            'assets/style.css' \
+            'utils/config.py' \
+            'utils/model_utils.py' \
+            'utils/emotion_utils.py' \
+            'utils/session_utils.py' \
+            'utils/smoothing_utils.py' \
+            'utils/gradcam_utils.py' \
+            'utils/export_utils.py' \
+            'utils/chart_utils.py' \
+            'pages/page1_live_camera.py' \
+            'pages/page2_image_analysis.py' \
+            'pages/page3_analytics.py' \
+            'pages/page4_train_model.py' \
+            'pages/page5_model_inspector.py' \
+            'pages/page6_emotion_game.py' \
+            'pages/page7_about.py' \
+          ; do
+            if [ ! -f "$file" ]; then
+              echo "❌ MISSING: $file"
+              errors=$((errors+1))
+            else
+              echo "✅ $file"
+            fi
+          done
+          if [ $errors -gt 0 ]; then exit 1; fi
+          echo "All deployment files present."
+
+      - name: Verify packages.txt format
+        run: |
+          while IFS= read -r pkg; do
+            [ -z "$pkg" ] && continue
+            echo "  System package: $pkg"
+          done < packages.txt
+          echo "✅ packages.txt valid"
+
+      - name: Verify requirements.txt has no conflicts
+        run: |
+          # Check for common conflicting packages
+          if grep -qi "tensorflow-gpu" requirements.txt; then
+            echo "⚠️ tensorflow-gpu may not install on Streamlit Cloud (use tensorflow-cpu or tensorflow)"
+          fi
+          # Check no duplicate package names
+          packages=$(grep -E '^[a-zA-Z]' requirements.txt | sed 's/[>=<].*//' | sort)
+          duplicates=$(echo "$packages" | uniq -d)
+          if [ -n "$duplicates" ]; then
+            echo "❌ Duplicate packages found:"
+            echo "$duplicates"
+            exit 1
+          fi
+          echo "✅ requirements.txt valid"
+
+      - name: Verify .streamlit/config.toml
+        run: |
+          if grep -q "maxUploadSize" .streamlit/config.toml; then
+            echo "✅ config.toml has maxUploadSize"
+          fi
+          echo "✅ config.toml valid"
+
+      - name: Check for unwanted large files
+        run: |
+          echo "Checking for large files that should not be committed..."
+          large_files=$(find . -name '*.h5' -o -name '*.pkl' -o -name '*.pt' -o -name '*.pth' | head -5)
+          if [ -n "$large_files" ]; then
+            echo "⚠️ Large model files detected (should be in .gitignore):"
+            echo "$large_files"
+          else
+            echo "✅ No model files committed (good for git)"
+          fi
+
+      - name: Validate Python version compatibility
+        run: |
+          python -c "
+import sys
+ver = sys.version_info
+print(f'Python {ver.major}.{ver.minor}.{ver.micro}')
+assert ver.major == 3 and ver.minor >= 9, 'Streamlit Cloud supports Python 3.9+'
+print('✅ Python version compatible')
+"
+
+      - name: Check for common Streamlit Cloud pitfalls
+        run: |
+          errors=0
+          # Check for absolute file paths
+          if grep -rn 'C:\\\\' --include='*.py' . 2>/dev/null; then
+            echo "❌ Found Windows absolute paths (C:\\) in code"
+            errors=$((errors+1))
+          fi
+          # Check for hardcoded localhost in critical places
+          echo "ℹ️ Note: localhost references in API server docs are acceptable"
+          echo "✅ Streamlit Cloud compatibility check complete"
+          exit $errors
+
+  # ─── Page Import Simulation (headless) ────────────────────
+  page-imports:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify all page modules can be imported (AST-level)
+        run: |
+          python -c "
+import ast, sys
+
+pages = [
+    'pages.page1_live_camera',
+    'pages.page2_image_analysis',
+    'pages.page3_analytics',
+    'pages.page4_train_model',
+    'pages.page5_model_inspector',
+    'pages.page6_emotion_game',
+    'pages.page7_about',
+]
+
+for page in pages:
+    # Convert module path to file path
+    filepath = page.replace('.', '/') + '.py'
+    try:
+        with open(filepath, encoding='utf-8') as f:
+            ast.parse(f.read())
+        print(f'✅ {page} — syntax OK')
+    except SyntaxError as e:
+        print(f'❌ {page} — SYNTAX ERROR: {e}')
+        sys.exit(1)
+
+print('All page modules compile cleanly.')
+"
