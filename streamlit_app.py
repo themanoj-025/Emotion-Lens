@@ -5,7 +5,7 @@ Multi-page Streamlit dashboard for face emotion detection.
 
 import streamlit as st
 from utils.session_utils import init_session_state
-from utils.model_utils import is_model_available
+from utils.model_utils import is_model_available, ensure_model_on_cloud
 
 # Page configuration — MUST be the first Streamlit command
 st.set_page_config(
@@ -17,6 +17,9 @@ st.set_page_config(
 
 # Initialize session state
 init_session_state()
+
+# Ensure model is available (attempts auto-download on Streamlit Cloud)
+ensure_model_on_cloud()
 
 # Inject custom CSS
 with open("assets/style.css") as f:

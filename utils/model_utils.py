@@ -1,6 +1,7 @@
 """
 Model utility functions for EmotionLens 🎭
-Handles model loading with Streamlit caching, face cascade loading.
+Handles model loading with Streamlit caching, face cascade loading,
+and automatic model download for Streamlit Cloud deployment.
 """
 
 import os
@@ -78,6 +79,79 @@ def is_model_available():
     return os.path.exists(MODEL_PATH)
 
 
+# ─── Model Auto-Download (for Streamlit Cloud) ──────────────────
+
+# Add URLs to pre-trained model files here to enable auto-download on Streamlit Cloud.
+# Example:
+# MODEL_DOWNLOAD_URLS = [
+#     "https://github.com/YOUR_USER/YOUR_REPO/releases/download/v1.0/emotion_model.h5",
+# ]
+MODEL_DOWNLOAD_URLS: list[str] = []
+
+
+def try_download_model() -> bool:
+    """Attempt to download a pre-trained emotion model from configured URLs.
+    
+    Tries each URL in MODEL_DOWNLOAD_URLS. Returns True if a model was
+    successfully downloaded and saved, False otherwise.
+    
+    This is automatically called on app startup in Streamlit Cloud.
+    """
+    if is_model_available():
+        return True
+
+    if not MODEL_DOWNLOAD_URLS:
+        return False
+
+    try:
+        import requests
+    except ImportError:
+        return False
+
+    for url in MODEL_DOWNLOAD_URLS:
+        try:
+            st.info(f"⬇️ Downloading model from {url}...")
+            resp = requests.get(url, timeout=120, stream=True)
+            if resp.status_code != 200:
+                continue
+            with open(MODEL_PATH, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100000:
+                st.success(f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH)//1024} KB)")
+                return True
+        except Exception:
+            continue
+
+    return False
+
+
+def ensure_model_on_cloud():
+    """Run on Streamlit Cloud startup to ensure model is available.
+    
+    Checks if the model exists. If not, tries to download or prompts
+    the user to train one.
+    """
+    if is_model_available():
+        return
+
+    # Attempt auto-download
+    if try_download_model():
+        return
+
+    # Last resort: prompt the user
+    st.warning(
+        "⚠️ **No pre-trained model found.**\n\n"
+        "To use EmotionLens on Streamlit Cloud, you have two options:\n\n"
+        "1. **Train a model here** — Go to the **🏋️ Train Model** page and train one. "
+        "The FER2013 dataset will be auto-downloaded. Training takes ~10–30 minutes.\n\n"
+        "2. **Upload your own model** — Add your `emotion_model.h5` file to the project root "
+        "and redeploy.\n\n"
+        "You can also deploy the model separately by setting up a GitHub Release "
+        "and adding the URL to `MODEL_DOWNLOAD_URLS` in `model_utils.py`."
+    )
+
+
 def get_model_summary(model):
     """
     Get model summary as a list of layer dictionaries.
@@ -144,7 +218,7 @@ MOOD_MUSIC_MAP = {
     },
     'Neutral': {
         'spotify': 'chill ambient study focus',
-        'youtube': 'chill lo-fi study music',
+        'youtube': 'chill lo-fi music study',
         'spotify_uri': 'spotify:search:chill+ambient+study',
         'vibe': '🧘 Chill & Focused',
         'desc': 'Stay centered with calm lo-fi beats and ambient textures',

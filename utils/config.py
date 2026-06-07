@@ -11,7 +11,7 @@ from typing import Final
 EMOTIONS: Final = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
 # ─── Model Paths ────────────────────────────────────────────
-MODEL_PATH: Final = 'models/emotion_model.h5'
+MODEL_PATH: Final = 'emotion_model.h5'
 IMG_SIZE: Final = (48, 48)
 
 # ─── Emotion Config (color, bg, emoji, valence, arousal) ───
