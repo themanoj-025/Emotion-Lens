@@ -1,0 +1,12 @@
+name: EmotionLens CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.10' }
+      - run: pip install -r requirements.txt
+      - run: python -c "from utils.config import EMOTIONS, EMOTION_CONFIG; assert len(EMOTIONS)==7"
+      - run: python -c "from utils.model_utils import preprocess_roi; import numpy as np; r=preprocess_roi(np.zeros((96,96),dtype='uint8')); assert r.shape==(1,48,48,1)"
