@@ -1,0 +1,276 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0D1117"/>
+      <stop offset="50%" stop-color="#161B22"/>
+      <stop offset="100%" stop-color="#0D1117"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00D4AA"/>
+      <stop offset="100%" stop-color="#00A3FF"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1C2128"/>
+      <stop offset="100%" stop-color="#161B22"/>
+    </linearGradient>
+    <linearGradient id="gradcam" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#FF3366"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)" rx="12"/>
+
+  <!-- Grid pattern -->
+  <g opacity="0.03">
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="#fff" stroke-width="0.5"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="#fff" stroke-width="0.5"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="#fff" stroke-width="0.5"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="#fff" stroke-width="0.5"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="#fff" stroke-width="0.5"/>
+    <line x1="200" y1="0" x2="200" y2="630" stroke="#fff" stroke-width="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="630" stroke="#fff" stroke-width="0.5"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="#fff" stroke-width="0.5"/>
+    <line x1="800" y1="0" x2="800" y2="630" stroke="#fff" stroke-width="0.5"/>
+    <line x1="1000" y1="0" x2="1000" y2="630" stroke="#fff" stroke-width="0.5"/>
+  </g>
+
+  <!-- Header bar -->
+  <rect x="0" y="0" width="1200" height="56" fill="#161B22" rx="12"/>
+  <rect x="0" y="30" width="1200" height="26" fill="#161B22"/>
+  <text x="24" y="36" fill="#00D4AA" font-family="monospace" font-size="16" font-weight="bold">🎭 EmotionLens</text>
+  <text x="200" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Live Camera</text>
+  <text x="310" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Image Analysis</text>
+  <text x="430" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Analytics</text>
+  <text x="520" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Train Model</text>
+  <text x="620" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Inspector</text>
+  <text x="700" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">Game</text>
+  <text x="760" y="36" fill="#8B949E" font-family="sans-serif" font-size="13">About</text>
+  <circle cx="1140" cy="28" r="12" fill="#1C2128" stroke="#30363D" stroke-width="1.5"/>
+  <circle cx="1140" cy="28" r="4" fill="#00D4AA"/>
+
+  <!-- Left panel - Live Camera feed -->
+  <rect x="20" y="72" width="580" height="360" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1" filter="url(#shadow)"/>
+  <text x="40" y="100" fill="#00D4AA" font-family="monospace" font-size="12" font-weight="bold">🎥 LIVE CAMERA — REAL-TIME FEED</text>
+  <text x="560" y="100" fill="#00D4AA" font-family="monospace" font-size="11">● LIVE</text>
+
+  <!-- Camera viewfinder -->
+  <rect x="30" y="110" width="320" height="310" fill="#0D1117" rx="6" stroke="#21262D" stroke-width="1"/>
+  <!-- Face oval -->
+  <ellipse cx="190" cy="260" rx="70" ry="90" fill="none" stroke="#00D4AA" stroke-width="2" opacity="0.6" stroke-dasharray="4,3"/>
+  <!-- Bounding box -->
+  <rect x="110" y="165" width="165" height="195" fill="none" stroke="#00D4AA" stroke-width="2.5" rx="4" opacity="0.7" filter="url(#glow)"/>
+  <!-- Eyes -->
+  <circle cx="165" cy="235" r="6" fill="#00D4AA" opacity="0.4"/>
+  <circle cx="220" cy="235" r="6" fill="#00D4AA" opacity="0.4"/>
+  <!-- Mouth -->
+  <path d="M160 285 Q190 305 225 285" fill="none" stroke="#00D4AA" stroke-width="2" opacity="0.5"/>
+  <!-- Happy label -->
+  <rect x="155" y="370" width="75" height="24" rx="12" fill="#00D4AA" opacity="0.15"/>
+  <text x="168" y="387" fill="#00D4AA" font-family="monospace" font-size="11" font-weight="bold">😊 Happy</text>
+  <text x="245" y="387" fill="#8B949E" font-family="sans-serif" font-size="10">87.3%</text>
+
+  <!-- Right side - Confidence bars -->
+  <text x="370" y="130" fill="#8B949E" font-family="sans-serif" font-size="11" font-weight="bold">EMOTION PROBABILITIES</text>
+
+  <!-- Emotion bars -->
+  <g transform="translate(370, 145)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="12" height="6" rx="3" fill="#FF4444"/>
+    <text x="220" y="9" fill="#FF4444" font-family="monospace" font-size="10">😠 Angry   1.2%</text>
+  </g>
+  <g transform="translate(370, 165)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="5" height="6" rx="3" fill="#FF8C00"/>
+    <text x="220" y="9" fill="#FF8C00" font-family="monospace" font-size="10">🤢 Disgust  0.4%</text>
+  </g>
+  <g transform="translate(370, 185)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="18" height="6" rx="3" fill="#FFB347"/>
+    <text x="220" y="9" fill="#FFB347" font-family="monospace" font-size="10">😨 Fear     1.8%</text>
+  </g>
+  <g transform="translate(370, 205)">
+    <rect x="0" y="0" width="210" height="8" rx="4" fill="#21262D"/>
+    <rect x="0" y="0" width="183" height="8" rx="4" fill="url(#accent)"/>
+    <text x="220" y="11" fill="#00D4AA" font-family="monospace" font-size="10" font-weight="bold">😊 Happy  87.3%</text>
+  </g>
+  <g transform="translate(370, 228)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="30" height="6" rx="3" fill="#4FC3F7"/>
+    <text x="220" y="9" fill="#4FC3F7" font-family="monospace" font-size="10">😐 Neutral 3.0%</text>
+  </g>
+  <g transform="translate(370, 248)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="25" height="6" rx="3" fill="#7E57C2"/>
+    <text x="220" y="9" fill="#7E57C2" font-family="monospace" font-size="10">😢 Sad     2.5%</text>
+  </g>
+  <g transform="translate(370, 268)">
+    <rect x="0" y="0" width="210" height="6" rx="3" fill="#21262D"/>
+    <rect x="0" y="0" width="38" height="6" rx="3" fill="#FF6B35"/>
+    <text x="220" y="9" fill="#FF6B35" font-family="monospace" font-size="10">😲 Surprise 3.8%</text>
+  </g>
+
+  <!-- Dominant Emotion Card -->
+  <rect x="370" y="290" width="220" height="60" fill="#0D1117" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="385" y="312" fill="#8B949E" font-family="sans-serif" font-size="10">Dominant Emotion</text>
+  <text x="385" y="338" fill="#00D4AA" font-family="monospace" font-size="22">😊 Happy</text>
+  <text x="385" y="350" fill="#8B949E" font-family="monospace" font-size="10">Confidence: 87.3%</text>
+  <text x="520" y="338" fill="#00D4AA" font-family="monospace" font-size="16" font-weight="bold">✓</text>
+
+  <!-- Grad-CAM overlay indicator -->
+  <rect x="30" y="428" width="220" height="56" fill="url(#gradcam)" rx="8" opacity="0.9"/>
+  <text x="48" y="456" fill="#fff" font-family="sans-serif" font-size="11" font-weight="bold">🔥 Grad-CAM Overlay</text>
+  <text x="48" y="472" fill="#fff" font-family="sans-serif" font-size="9" opacity="0.8">Neural activation heatmap</text>
+  <circle cx="230" cy="456" r="10" fill="#fff" opacity="0.2"/>
+  <text x="226" y="460" fill="#fff" font-family="sans-serif" font-size="12">▶</text>
+
+  <!-- Stats row -->
+  <rect x="270" y="428" width="120" height="56" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="285" y="452" fill="#8B949E" font-family="sans-serif" font-size="9">Faces Detected</text>
+  <text x="300" y="474" fill="#fff" font-family="monospace" font-size="20" font-weight="bold">1</text>
+
+  <rect x="405" y="428" width="100" height="56" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="418" y="452" fill="#8B949E" font-family="sans-serif" font-size="9">FPS</text>
+  <text x="435" y="474" fill="#00D4AA" font-family="monospace" font-size="20" font-weight="bold">30</text>
+
+  <rect x="520" y="428" width="80" height="56" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="533" y="452" fill="#8B949E" font-family="sans-serif" font-size="9">Positivity</text>
+  <text x="540" y="474" fill="#FFB300" font-family="monospace" font-size="16" font-weight="bold">+0.74</text>
+
+  <!-- Bottom row - Analytics Cards -->
+  <rect x="20" y="500" width="185" height="115" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="36" y="522" fill="#4FC3F7" font-family="monospace" font-size="11" font-weight="bold">📈 SESSION ANALYTICS</text>
+  <line x1="36" y1="530" x2="36" y2="600" stroke="#00D4AA" stroke-width="2" opacity="0.3"/>
+  <line x1="46" y1="540" x2="46" y2="600" stroke="#4FC3F7" stroke-width="1.5" opacity="0.2"/>
+  <line x1="56" y1="560" x2="56" y2="600" stroke="#7E57C2" stroke-width="1.5" opacity="0.2"/>
+  <line x1="66" y1="545" x2="66" y2="600" stroke="#FF6B35" stroke-width="1.5" opacity="0.2"/>
+  <line x1="36" y1="590" x2="195" y2="590" stroke="#30363D" stroke-width="0.5"/>
+  <!-- Sparkline -->
+  <polyline points="40,570 60,580 80,560 100,575 120,550 140,565 160,545 180,555 190,535" fill="none" stroke="#00D4AA" stroke-width="1.5" opacity="0.6"/>
+  <polyline points="40,570 60,580 80,560 100,575 120,550 140,565 160,545 180,555 190,535" fill="none" stroke="url(#accent)" stroke-width="1"/>
+  <circle cx="190" cy="535" r="2.5" fill="#00D4AA"/>
+
+  <rect x="220" y="500" width="185" height="115" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="236" y="522" fill="#FFB300" font-family="monospace" font-size="11" font-weight="bold">📊 EMOTION DISTRIBUTION</text>
+  <!-- Doughnut chart -->
+  <circle cx="310" cy="565" r="30" fill="none" stroke="#21262D" stroke-width="8"/>
+  <circle cx="310" cy="565" r="30" fill="none" stroke="#00D4AA" stroke-width="8" stroke-dasharray="130 75" stroke-dashoffset="20"/>
+  <circle cx="310" cy="565" r="30" fill="none" stroke="#FF6B35" stroke-width="8" stroke-dasharray="40 170" stroke-dashoffset="150"/>
+  <circle cx="310" cy="565" r="30" fill="none" stroke="#7E57C2" stroke-width="8" stroke-dasharray="25 185" stroke-dashoffset="130"/>
+  <text x="310" y="565" fill="#fff" font-family="monospace" font-size="10" text-anchor="middle">87%</text>
+  <!-- Legend -->
+  <circle cx="375" cy="540" r="4" fill="#00D4AA"/>
+  <text x="382" y="544" fill="#8B949E" font-family="sans-serif" font-size="9">Happy</text>
+  <circle cx="375" cy="558" r="4" fill="#FF6B35"/>
+  <text x="382" y="562" fill="#8B949E" font-family="sans-serif" font-size="9">Other</text>
+  <circle cx="375" cy="576" r="4" fill="#7E57C2"/>
+  <text x="382" y="580" fill="#8B949E" font-family="sans-serif" font-size="9">Neutral</text>
+
+  <rect x="420" y="500" width="185" height="115" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="436" y="522" fill="#FF6B35" font-family="monospace" font-size="11" font-weight="bold">🔥 GRAD-CAM HEATMAP</text>
+  <rect x="440" y="535" width="75" height="65" fill="#0D1117" rx="4"/>
+  <!-- Heatmap squares -->
+  <rect x="440" y="535" width="15" height="13" fill="#FF0000" opacity="0.1"/>
+  <rect x="455" y="535" width="15" height="13" fill="#FF4400" opacity="0.15"/>
+  <rect x="470" y="535" width="15" height="13" fill="#FF8800" opacity="0.25"/>
+  <rect x="485" y="535" width="15" height="13" fill="#FFCC00" opacity="0.35"/>
+  <rect x="500" y="535" width="15" height="13" fill="#FF6600" opacity="0.2"/>
+  <rect x="440" y="548" width="15" height="13" fill="#FF2200" opacity="0.2"/>
+  <rect x="455" y="548" width="15" height="13" fill="#FF6600" opacity="0.35"/>
+  <rect x="470" y="548" width="15" height="13" fill="#FFAA00" opacity="0.55"/>
+  <rect x="485" y="548" width="15" height="13" fill="#FFDD00" opacity="0.7"/>
+  <rect x="500" y="548" width="15" height="13" fill="#FF8800" opacity="0.4"/>
+  <rect x="440" y="561" width="15" height="13" fill="#FF4400" opacity="0.15"/>
+  <rect x="455" y="561" width="15" height="13" fill="#FFAA00" opacity="0.4"/>
+  <rect x="470" y="561" width="15" height="13" fill="#FFEE00" opacity="0.65"/>
+  <rect x="485" y="561" width="15" height="13" fill="#FFFF00" opacity="0.85"/>
+  <rect x="500" y="561" width="15" height="13" fill="#FFBB00" opacity="0.5"/>
+  <rect x="440" y="574" width="15" height="13" fill="#FF0000" opacity="0.05"/>
+  <rect x="455" y="574" width="15" height="13" fill="#FF6600" opacity="0.2"/>
+  <rect x="470" y="574" width="15" height="13" fill="#FFCC00" opacity="0.35"/>
+  <rect x="485" y="574" width="15" height="13" fill="#FFAA00" opacity="0.45"/>
+  <rect x="500" y="574" width="15" height="13" fill="#FF6600" opacity="0.2"/>
+  <rect x="440" y="587" width="15" height="13" fill="#000000" opacity="0"/>
+  <rect x="455" y="587" width="15" height="13" fill="#FF4400" opacity="0.1"/>
+  <rect x="470" y="587" width="15" height="13" fill="#FF8800" opacity="0.2"/>
+  <rect x="485" y="587" width="15" height="13" fill="#FF6600" opacity="0.15"/>
+  <rect x="500" y="587" width="15" height="13" fill="#FF2200" opacity="0.05"/>
+  <text x="530" y="555" fill="#8B949E" font-family="sans-serif" font-size="9">Neural</text>
+  <text x="530" y="567" fill="#8B949E" font-family="sans-serif" font-size="9">activation</text>
+  <text x="530" y="579" fill="#8B949E" font-family="sans-serif" font-size="9">map shows</text>
+  <text x="530" y="591" fill="#8B949E" font-family="sans-serif" font-size="9">key features</text>
+
+  <rect x="620" y="500" width="250" height="115" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="636" y="522" fill="#BB86FC" font-family="monospace" font-size="11" font-weight="bold">🎯 RECENT PREDICTIONS</text>
+  <rect x="636" y="535" width="220" height="20" rx="4" fill="#0D1117"/>
+  <text x="646" y="550" fill="#00D4AA" font-family="monospace" font-size="10">😊 Happy <tspan fill="#8B949E">87.3%</tspan></text>
+  <rect x="636" y="560" width="220" height="20" rx="4" fill="#0D1117"/>
+  <text x="646" y="575" fill="#4FC3F7" font-family="monospace" font-size="10">😐 Neutral <tspan fill="#8B949E">72.1%</tspan></text>
+  <rect x="636" y="585" width="220" height="20" rx="4" fill="#0D1117"/>
+  <text x="646" y="600" fill="#FF8C00" font-family="monospace" font-size="10">😲 Surprise <tspan fill="#8B949E">64.5%</tspan></text>
+
+  <rect x="885" y="500" width="295" height="115" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="900" y="522" fill="#FFB300" font-family="monospace" font-size="11" font-weight="bold">⚡ REAL-TIME METRICS</text>
+  <text x="900" y="550" fill="#8B949E" font-family="sans-serif" font-size="10">Model:</text>
+  <text x="950" y="550" fill="#fff" font-family="monospace" font-size="10">EmotionNet v1.0</text>
+  <text x="900" y="570" fill="#8B949E" font-family="sans-serif" font-size="10">Accuracy:</text>
+  <text x="960" y="570" fill="#00D4AA" font-family="monospace" font-size="10">~62.0% (FER2013)</text>
+  <text x="900" y="590" fill="#8B949E" font-family="sans-serif" font-size="10">Session:</text>
+  <text x="955" y="590" fill="#fff" font-family="monospace" font-size="10">42 predictions</text>
+
+  <!-- Title overlay -->
+  <rect x="620" y="72" width="560" height="120" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <rect x="620" y="72" width="560" height="120" fill="url(#bg)" rx="8" opacity="0.5"/>
+  <text x="640" y="105" fill="#00D4AA" font-family="sans-serif" font-size="20" font-weight="bold">EmotionLens 🎭</text>
+  <text x="640" y="130" fill="#8B949E" font-family="sans-serif" font-size="13">Production-grade dashboard for real-time facial</text>
+  <text x="640" y="148" fill="#8B949E" font-family="sans-serif" font-size="13">emotion intelligence powered by CNN</text>
+
+  <!-- Tech badges -->
+  <rect x="640" y="165" width="65" height="22" rx="4" fill="#512BD4" opacity="0.8"/>
+  <text x="650" y="180" fill="#fff" font-family="sans-serif" font-size="9">Python</text>
+  <rect x="712" y="165" width="80" height="22" rx="4" fill="#FF6F00" opacity="0.8"/>
+  <text x="722" y="180" fill="#fff" font-family="sans-serif" font-size="9">TensorFlow</text>
+  <rect x="798" y="165" width="65" height="22" rx="4" fill="#FF4B4B" opacity="0.8"/>
+  <text x="808" y="180" fill="#fff" font-family="sans-serif" font-size="9">Streamlit</text>
+  <rect x="870" y="165" width="60" height="22" rx="4" fill="#5C3EE8" opacity="0.8"/>
+  <text x="880" y="180" fill="#fff" font-family="sans-serif" font-size="9">OpenCV</text>
+  <rect x="936" y="165" width="60" height="22" rx="4" fill="#009688" opacity="0.8"/>
+  <text x="946" y="180" fill="#fff" font-family="sans-serif" font-size="9">FastAPI</text>
+
+  <!-- Snapshot gallery -->
+  <rect x="620" y="200" width="560" height="210" fill="url(#card)" rx="8" stroke="#30363D" stroke-width="1"/>
+  <text x="640" y="228" fill="#8B949E" font-family="sans-serif" font-size="11" font-weight="bold">📸 SNAPSHOT GALLERY</text>
+  <rect x="640" y="240" width="100" height="75" fill="#0D1117" rx="4" stroke="#30363D" stroke-width="0.5"/>
+  <circle cx="690" cy="275" r="15" fill="none" stroke="#00D4AA" stroke-width="1" opacity="0.4"/>
+  <text x="685" y="279" fill="#00D4AA" font-family="sans-serif" font-size="8">😊</text>
+  <text x="656" y="330" fill="#8B949E" font-family="sans-serif" font-size="9">Happy 87%</text>
+  <rect x="752" y="240" width="100" height="75" fill="#0D1117" rx="4" stroke="#30363D" stroke-width="0.5"/>
+  <circle cx="802" cy="275" r="15" fill="none" stroke="#4FC3F7" stroke-width="1" opacity="0.4"/>
+  <text x="797" y="279" fill="#4FC3F7" font-family="sans-serif" font-size="8">😐</text>
+  <text x="768" y="330" fill="#8B949E" font-family="sans-serif" font-size="9">Neutral 72%</text>
+  <rect x="864" y="240" width="100" height="75" fill="#0D1117" rx="4" stroke="#30363D" stroke-width="0.5"/>
+  <circle cx="914" cy="275" r="15" fill="none" stroke="#FF8C00" stroke-width="1" opacity="0.4"/>
+  <text x="909" y="279" fill="#FF8C00" font-family="sans-serif" font-size="8">😲</text>
+  <text x="880" y="330" fill="#8B949E" font-family="sans-serif" font-size="9">Surprise 64%</text>
+  <rect x="976" y="240" width="100" height="75" fill="#0D1117" rx="4" stroke="#30363D" stroke-width="0.5"/>
+  <circle cx="1026" cy="275" r="15" fill="none" stroke="#7E57C2" stroke-width="1" opacity="0.4"/>
+  <text x="1021" y="279" fill="#7E57C2" font-family="sans-serif" font-size="8">😢</text>
+  <text x="992" y="330" fill="#8B949E" font-family="sans-serif" font-size="9">Sad 58%</text>
+
+  <!-- Sparkline chart -->
+  <rect x="640" y="348" width="530" height="50" fill="#0D1117" rx="4"/>
+  <text x="652" y="366" fill="#8B949E" font-family="sans-serif" font-size="9">Emotion History (last 60 frames)</text>
+  <polyline points="652,385 672,390 692,380 712,395 732,370 752,385 772,365 792,375 812,358 832,368 852,352 872,362 892,345 912,355 932,340 952,350 972,335 992,345 1012,330 1032,340 1052,325 1072,335 1092,328 1112,338 1132,332 1152,340" fill="none" stroke="url(#accent)" stroke-width="1.5"/>
+  <polyline points="652,388 672,389 692,387 712,390 732,386 752,388 772,383 792,386 812,375 832,380 852,368 872,375 892,365 912,372 932,362 952,370 972,358 992,365 1012,355 1032,362 1052,350 1072,358 1092,345 1112,355 1132,348 1152,355" fill="none" stroke="#4FC3F7" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- Footer -->
+  <text x="36" y="622" fill="#30363D" font-family="sans-serif" font-size="10">7 emotion classes · FER2013 dataset · CNN architecture · ~1.2M params</text>
+</svg>

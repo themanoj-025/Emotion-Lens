@@ -7,6 +7,9 @@
     <img src="https://img.shields.io/badge/Streamlit-1.36+-red?style=flat&logo=streamlit" alt="Streamlit">
     <img src="https://img.shields.io/badge/OpenCV-4.x-green?style=flat&logo=opencv" alt="OpenCV">
     <img src="https://img.shields.io/badge/FastAPI-0.104+-teal?style=flat&logo=fastapi" alt="FastAPI">
+    <img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat" alt="License">
+    <a href="https://github.com/themanoj-025/Emotion-Lens/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/themanoj-025/Emotion-Lens/ci.yml?branch=main&label=CI&logo=github&style=flat" alt="CI"></a>
+    <a href="https://github.com/themanoj-025/Emotion-Lens/security/dependabot"><img src="https://img.shields.io/badge/dependabot-enabled-025E8C?logo=dependabot&style=flat" alt="Dependabot"></a>
   </p>
 </div>
 
@@ -18,7 +21,7 @@
 
 Powered by a **Convolutional Neural Network (CNN)** trained on the **FER2013 dataset** (~62% validation accuracy), it features a multi-page **Streamlit dashboard** with real-time webcam detection, static image analysis, model training GUI, Grad-CAM visualization, interactive games, and a REST API — all in a futuristic dark-themed UI.
 
-![EmotionLens Dashboard](https://via.placeholder.com/800x400/0D1117/00D4AA?text=EmotionLens+🎭+Dashboard)
+![EmotionLens Dashboard](assets/dashboard-preview.svg)
 
 ---
 
@@ -102,8 +105,8 @@ Powered by a **Convolutional Neural Network (CNN)** trained on the **FER2013 dat
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/Face-Emotion-Detection.git
-cd Face-Emotion-Detection
+git clone https://github.com/themanoj-025/Emotion-Lens.git
+cd Emotion-Lens
 
 # 2. Install dependencies
 pip install -r requirements.txt

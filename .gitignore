@@ -30,7 +30,11 @@ MANIFEST
 venv/
 .venv/
 env/
-.env/
+
+# Environment & secrets (NEVER COMMIT)
+.env
+.env.*
+!.env.example
 
 # Jupyter Notebook
 .ipynb_checkpoints

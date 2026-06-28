@@ -259,6 +259,30 @@ print('✅ Python version compatible')
           echo "✅ Streamlit Cloud compatibility check complete"
           exit $errors
 
+  # ─── Link Check ───────────────────────────────────────────
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for broken links in docs
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --config /dev/null
+            --no-progress
+            --exclude 'https?://localhost'
+            --exclude 'https?://127\.0\.0\.1'
+            --exclude 'https?://.*shields\.io'
+            --exclude 'https?://.*example\.com'
+            --exclude 'https?://.*test\.org'
+            --exclude 'https?://.*your-username.*'
+            --exclude 'https?://.*\{.*\}.*'
+            --exclude 'https?://.*static\.streamlit\.io'
+            --exclude 'https?://.*via\.placeholder\.com'
+            '**/*.md'
+        continue-on-error: true
+
   # ─── Page Import Simulation (headless) ────────────────────
   page-imports:
     runs-on: ubuntu-latest
