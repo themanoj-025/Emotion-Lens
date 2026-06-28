@@ -3,7 +3,7 @@ tensorflow==2.12.0
 numpy==1.23.5
 opencv-python-headless==4.8.1.78
 pillow==10.1.0
-kagglehub>=0.3.0
+kagglehub>=1.0.2
 
 # Streamlit
 streamlit==1.36.0
