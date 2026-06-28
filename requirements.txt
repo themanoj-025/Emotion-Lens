@@ -6,7 +6,7 @@ pillow==10.1.0
 kagglehub>=0.3.0
 
 # Streamlit
-streamlit==1.36.0
+streamlit==1.58.0
 
 # Visualization
 matplotlib==3.8.2
