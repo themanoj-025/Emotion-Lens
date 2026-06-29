@@ -54,3 +54,18 @@ saved_model/
 
 # Misc
 .DS_Store
+
+# ML experiment tracking & additional artifact patterns
+mlruns/
+*.pt
+*.ckpt
+*.parquet
+*.pkl
+*.joblib
+.kaggle/
+.cache/
+
+# Streamlit secrets (NEVER COMMIT)
+.streamlit/secrets.toml
+
+CLAUDE.md
