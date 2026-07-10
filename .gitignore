@@ -37,7 +37,8 @@ env/
 !.env.example
 
 # Jupyter Notebook
-.ipynb_checkpoints
+.ipynb_checkpoints/
+*.ipynb
 
 # VSCode
 .vscode/

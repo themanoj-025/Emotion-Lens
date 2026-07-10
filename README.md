@@ -362,3 +362,18 @@ Contributions, issues, and feature requests are welcome! Feel free to open an is
   <p>FER2013 dataset courtesy of ICML 2013 Workshop on Challenges in Representation Learning</p>
   <p><strong>EmotionLens 🎭 v1.0</strong></p>
 </div>
+
+---
+
+## 📖 Documentation
+
+For comprehensive codebase intelligence and architecture documentation, see the [`docs/`](docs/) folder:
+
+| File | Description |
+|------|-------------|
+| [`memory.md`](memory.md) | Complete project brain — purpose, tech stack, features, data flow |
+| [`docs/architecture.md`](docs/architecture.md) | System architecture diagram + layered breakdown |
+| [`docs/routes.md`](docs/routes.md) | Full route table (app pages + API) |
+| [`docs/api-map.md`](docs/api-map.md) | Complete API inventory with endpoints, inputs, outputs |
+| [`docs/database-map.md`](docs/database-map.md) | Database schema, entities, fields, relationships |
+| [`docs/dependency-graph.md`](docs/dependency-graph.md) | Module dependency map + critical files |

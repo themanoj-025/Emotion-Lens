@@ -1,52 +1,45 @@
-# Emotion-Lens — Architecture
+# Architecture — Emotion-Lens
 
-```mermaid
-graph TB
-    subgraph UI ["Streamlit Dashboard (7 pages)"]
-        A[streamlit_app.py] --> B[page1_live_camera]
-        A --> C[page2_image_analysis]
-        A --> D[page3_analytics]
-        A --> E[page4_train_model]
-        A --> F[page5_model_inspector]
-        A --> G[page6_emotion_game]
-        A --> H[page7_about]
-    end
-
-    subgraph Utils ["Utility Layer"]
-        I[emotion_utils.py]
-        J[model_utils.py]
-        K[chart_utils.py]
-        L[session_utils.py]
-        M[smoothing_utils.py]
-        N[gradcam_utils.py]
-        O[export_utils.py]
-        P[config.py]
-    end
-
-    subgraph API ["FastAPI Server"]
-        Q[api_server.py] --> R[/predict]
-        Q --> S[/predict-file]
-        Q --> T[/health]
-    end
-
-    subgraph Model ["ML Model"]
-        U[emotion_model.h5<br/>(TensorFlow/Keras)]
-        V[train.py]
-        W[inference.py]
-        X[webcam_inference.py]
-    end
-
-    UI --> Utils
-    Utils --> Model
-    API --> Model
-    Utils --> U
+## System Architecture
+```
+User Interface Options
+    ├── Streamlit Dashboard (streamlit_app.py + pages/)
+    │     ├── 🎥 Live Camera (WebRTC + OpenCV)
+    │     ├── 🖼️ Image Analysis (upload)
+    │     ├── 📊 Analytics Dashboard
+    │     ├── 🏋️ Train Model (GUI)
+    │     ├── 🧠 Model Inspector
+    │     ├── 🎯 Emotion Game
+    │     └── 📖 About
+    │
+    ├── FastAPI REST API (api_server.py)
+    │     ├── GET  /health
+    │     ├── POST /predict
+    │     └── POST /predict-file
+    │
+    └── CLI Scripts
+          ├── webcam_inference.py
+          └── inference.py
+                │
+                ▼
+     CNN Model (emotion_model.h5)
+     + Haar Cascade (face detection)
 ```
 
-## Key Patterns
+## Component Diagram
+```
+[Input Image] → [Face Detection] → [Preprocessing] → [CNN Model] → [Emotion Output]
+   │                OpenCV             resize 48×48     .h5 file       Label + %
+   │                Haar              grayscale        ~1.2M params    + Probabilities
+   │                Cascade           normalize [0,1]                   + Bounding Box
+   │
+   └── Streamlit session_state stores prediction history
+```
 
-- **7 emotions**: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise (FER2013 order)
-- **Model**: TensorFlow 2.12 Keras model, 48×48 grayscale input, trained on FER2013
-- **Dual interfaces**: Streamlit for interactive dashboard, FastAPI for programmatic access
-- **Temporal smoothing**: `EmotionSmoother` applies sliding window across frames for stable predictions
-- **Grad-CAM**: GradCAM heatmap visualization for model explainability
-- **Configuration**: All emotion mappings, colors, emojis, and valence/arousal values centralized in `utils/config.py`
+## Request Lifecycle (API)
+1. HTTP request → FastAPI router → Pydantic validation
+2. Lazy-load model + face cascade if not already loaded
+3. Decode image (base64 or file)
+4. Convert to grayscale, detect faces
+5. Predict emotion for each face ROI
+6. Return JSON: {success, faces_detected, results, summary, processing_time_ms}
