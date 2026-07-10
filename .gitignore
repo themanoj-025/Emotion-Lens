@@ -69,4 +69,6 @@ mlruns/
 # Streamlit secrets (NEVER COMMIT)
 .streamlit/secrets.toml
 
+.gemini/
+
 CLAUDE.md
