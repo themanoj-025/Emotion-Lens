@@ -41,7 +41,8 @@ env/
 *.ipynb
 
 # VSCode
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # Datasets
 train/
@@ -70,5 +71,6 @@ mlruns/
 .streamlit/secrets.toml
 
 .gemini/
+.cursorrules
 
 CLAUDE.md
