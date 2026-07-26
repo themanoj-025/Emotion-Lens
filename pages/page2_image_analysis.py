@@ -9,20 +9,17 @@ import numpy as np
 from PIL import Image
 import pandas as pd
 import io
-import os
 import time
 import json
 from collections import Counter
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 
 from utils.model_utils import (
     load_model_cached, load_face_cascade, EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME
 )
 from utils.emotion_utils import (
     predict_from_image, draw_detection_result, generate_emotion_summary,
-    compute_positivity_score, image_to_base64, anonymize_faces,
-    render_mood_music_card
+    compute_positivity_score, anonymize_faces, render_mood_music_card
 )
 from utils.session_utils import add_prediction
 
@@ -47,7 +44,7 @@ def show():
     if model is None or face_cascade is None:
         return
 
-    # ─── Upload Controls ──────────────────────────────────────
+    # Upload Controls
     col1, col2 = st.columns([2, 1])
     
     with col1:
@@ -70,7 +67,7 @@ def show():
             help="Automatically detect faces in images. Disable to use full image.",
         )
     
-    # ─── Privacy Mode ────────────────────────────────────────
+    # Privacy Mode
     st.markdown("---")
     privacy_col1, privacy_col2 = st.columns([1, 2])
     
@@ -124,7 +121,7 @@ def show():
         st.warning(f"⚠️ Maximum 10 images supported. Showing first 10 of {len(uploaded_files)}.")
         uploaded_files = uploaded_files[:10]
 
-    # ─── Process Images ───────────────────────────────────────
+    # Process Images
     results_data = []
     
     for idx, uploaded_file in enumerate(uploaded_files):
@@ -181,7 +178,7 @@ def show():
             for r in face_results:
                 add_prediction(r['emotion'], r['confidence'], r['probabilities'])
 
-    # ─── Display Results ──────────────────────────────────────
+    # Display Results
     st.markdown("---")
     st.markdown(f"### 📊 Results — {len(results_data)} image(s) processed")
     
@@ -199,7 +196,7 @@ def show():
             summary_parts.append(f"{emoji} {emotion}: {count}")
         st.success(f"🎯 Detected: {' | '.join(summary_parts)}")
 
-    # ─── Individual Results ───────────────────────────────────
+    # Individual Results
     for idx, data in enumerate(results_data):
         with st.expander(f"📷 {data['filename']}", expanded=(idx == 0)):
             if data['fallback']:
@@ -273,7 +270,7 @@ def show():
                 # Mood music suggestion
                 render_mood_music_card(r['emotion'], r['confidence'])
 
-    # ─── Export Options ───────────────────────────────────────
+    # Export Options
     st.markdown("---")
     st.markdown("### 📥 Export Results")
     

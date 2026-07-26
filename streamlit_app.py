@@ -1,5 +1,5 @@
 """
-EmotionLens 🎭 — Real-time facial emotion intelligence powered by CNN
+EmotionLens 🎭 — Real-time facial emotion intelligence using a CNN.
 Multi-page Streamlit dashboard for face emotion detection.
 """
 
@@ -25,7 +25,7 @@ ensure_model_on_cloud()
 with open("assets/style.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# ─── Sidebar Navigation ───────────────────────────────────────
+# Sidebar Navigation
 st.sidebar.markdown(
     """
     <div style="text-align: center; padding: 1rem 0;">
@@ -84,7 +84,7 @@ if dark_mode != st.session_state.get('dark_mode'):
     st.session_state.dark_mode = dark_mode
     st.rerun()
 
-# ─── API Server Info ─────────────────────────────────────────
+# API Server Info
 st.sidebar.markdown("---")
 with st.sidebar.expander("🌐 API Server", expanded=False):
     st.markdown(
@@ -131,13 +131,13 @@ st.sidebar.markdown(
     """
     <div style="text-align: center; padding: 1rem 0; color: #8B949E; font-size: 0.7rem;">
         EmotionLens 🎭 v1.0<br>
-        Powered by CNN • FER2013
+        CNN • FER2013
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-# ─── Page Router ──────────────────────────────────────────────
+# Page Router
 if page == "🎥 Live Camera":
     from pages.page1_live_camera import show
     show()

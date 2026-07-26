@@ -1,7 +1,7 @@
 # MEMORY.md — Emotion-Lens
 
 ## Project Overview
-**EmotionLens** is a production-grade deep learning application that detects and classifies facial expressions into **7 emotions**: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise. Powered by a CNN trained on FER2013 dataset (~62% validation accuracy).
+**EmotionLens** is a production-grade deep learning application that detects and classifies facial expressions into **7 emotions**: Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise. The model uses a CNN trained on the FER2013 dataset (~62% validation accuracy).
 
 ## Business Purpose
 Provide an accessible, open-source facial emotion recognition system with both interactive (Streamlit UI) and programmatic (FastAPI) interfaces.

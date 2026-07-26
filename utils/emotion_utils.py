@@ -262,7 +262,7 @@ def image_to_base64(pil_image):
     return img_str
 
 
-# ─── Grad-CAM ─────────────────────────────────────────────────────
+# Grad-CAM
 # Cache for the last conv layer index and gradient model to avoid rebuilding
 _GRADCAM_CACHE = {}
 
@@ -277,7 +277,6 @@ def _get_last_conv_layer_idx(model):
 
 def _build_grad_model(model):
     """Build and cache the gradient model for Grad-CAM."""
-    import tensorflow as tf
     from tensorflow.keras.models import Model as KerasModel
     
     model_id = id(model)
@@ -334,7 +333,7 @@ def compute_gradcam(model, preprocessed_input, target_class_idx):
         return None
 
 
-# ─── Face Anonymizer ────────────────────────────────────────────
+# Face Anonymizer
 
 def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate=False):
     """
@@ -381,7 +380,7 @@ def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate
     return image_bgr
 
 
-# ─── Mood Music Sync ──────────────────────────────────────────
+# Mood Music Sync
 
 def render_mood_music_card(emotion, confidence=None):
     """

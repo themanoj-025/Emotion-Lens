@@ -1,9 +1,7 @@
 """Reusable Plotly chart builders with the global dark theme."""
 from __future__ import annotations
 import plotly.graph_objects as go
-import plotly.express as px
 import pandas as pd
-import numpy as np
 from collections import Counter
 from utils.config import EMOTIONS, EMOTION_CONFIG
 

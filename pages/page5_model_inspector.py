@@ -9,14 +9,12 @@ import cv2
 from PIL import Image
 import io
 import plotly.graph_objects as go
-import plotly.express as px
 import matplotlib.pyplot as plt
 
 from utils.model_utils import (
-    load_model_cached, load_face_cascade, get_model_summary,
-    EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME,
+    load_model_cached, get_model_summary, EMOTION_CONFIG,
+    PLOTLY_THEME,
 )
-from utils.emotion_utils import predict_emotion, preprocess_face, compute_gradcam
 
 # Set matplotlib dark theme
 plt.style.use('dark_background')
@@ -39,7 +37,7 @@ def show():
     if model is None:
         return
 
-    # ─── Tabs ─────────────────────────────────────────────────
+    # Tabs
     tab1, tab2, tab3, tab4 = st.tabs([
         "📋 Architecture", "📊 Parameters", "🎨 Feature Maps", "🔥 Grad-CAM"
     ])

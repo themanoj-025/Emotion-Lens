@@ -6,15 +6,15 @@ Import from here instead of hardcoding values across pages.
 from __future__ import annotations
 from typing import Final
 
-# ─── Emotion Labels (MUST match FER2013 training order) ─────
+# Emotion Labels (MUST match FER2013 training order)
 # Softmax index 0 = Angry, index 6 = Surprise
 EMOTIONS: Final = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 
-# ─── Model Paths ────────────────────────────────────────────
+# Model Paths
 MODEL_PATH: Final = 'emotion_model.h5'
 IMG_SIZE: Final = (48, 48)
 
-# ─── Emotion Config (color, bg, emoji, valence, arousal) ───
+# Emotion Config (color, bg, emoji, valence, arousal)
 # valence: -1.0 (negative) to +1.0 (positive)
 # arousal: 0.0 (calm) to 1.0 (excited)
 EMOTION_CONFIG: Final = {
@@ -27,13 +27,13 @@ EMOTION_CONFIG: Final = {
     'Surprise': {'color': '#FBBF24', 'bg': '#1E1808', 'emoji': '😲', 'valence':  0.3, 'arousal':  0.9},
 }
 
-# ─── Operational Constants ──────────────────────────────────
+# Operational Constants
 SMOOTHING_WINDOW: Final = 5      # frames for temporal smoothing
 MAX_HISTORY:      Final = 300    # max prediction records in session
 GAME_COUNTDOWN:   Final = 10     # seconds per game round
 
 
-# ─── Helper Functions ───────────────────────────────────────
+# Helper Functions
 
 def positivity_score(probs: list[float]) -> float:
     """Returns −1.0 (most negative) to +1.0 (most positive).
@@ -53,7 +53,7 @@ def emotion_index(emotion: str) -> int:
     return EMOTIONS.index(emotion)
 
 
-# ─── Mood Music Sync Config ─────────────────────────────────
+# Mood Music Sync Config
 MOOD_MUSIC: Final = {
     'Happy':    {'genre': 'Pop / Upbeat',   'query': 'happy upbeat pop playlist 2024'},
     'Sad':      {'genre': 'Melancholic',     'query': 'melancholic indie sad songs'},
@@ -64,7 +64,7 @@ MOOD_MUSIC: Final = {
     'Neutral':  {'genre': 'Lo-fi',           'query': 'lofi hip hop study beats'},
 }
 
-# ─── Plotly Dark Theme (import in every page that uses Plotly) ──
+# Plotly Dark Theme (import in every page that uses Plotly)
 PLOTLY_LAYOUT: Final = dict(
     paper_bgcolor='#161B22',
     plot_bgcolor='#0D1117',
@@ -75,7 +75,7 @@ PLOTLY_LAYOUT: Final = dict(
     yaxis=dict(gridcolor='rgba(139,148,158,0.12)', linecolor='rgba(139,148,158,0.2)', zerolinecolor='rgba(139,148,158,0.12)'),
 )
 
-# ─── Game Badges ────────────────────────────────────────────
+# Game Badges
 BADGES: Final = {
     '😊 Smile Master':  lambda s: s.get('Happy_count', 0) >= 10,
     '🎭 Method Actor':  lambda s: s.get('perfect_rounds', 0) >= 5,

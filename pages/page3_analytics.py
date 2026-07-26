@@ -7,17 +7,14 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import plotly.express as px
 from plotly.subplots import make_subplots
 from datetime import datetime
-import json
-from collections import Counter
 
 from utils.model_utils import EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME
 from utils.session_utils import (
-    get_prediction_dataframe, get_emotion_distribution,
-    export_predictions_csv, export_predictions_json,
-    format_session_duration, reset_session,
+    get_prediction_dataframe, export_predictions_csv,
+    export_predictions_json, format_session_duration,
+    reset_session,
 )
 from utils.emotion_utils import compute_positivity_score, render_mood_music_card
 
@@ -37,7 +34,7 @@ def show():
 
     df = get_prediction_dataframe()
 
-    # ─── Top Metrics ──────────────────────────────────────────
+    # Top Metrics
     st.markdown("### 📈 Key Metrics")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -73,7 +70,7 @@ def show():
         st.info("📭 No predictions recorded yet. Use the **Live Camera** or **Image Analysis** pages to collect data.")
         return
 
-    # ─── Charts ───────────────────────────────────────────────
+    # Charts
     st.markdown("---")
     
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
@@ -99,7 +96,7 @@ def show():
     with tab6:
         _render_timeline_replay(df)
 
-    # ─── Raw Data & Export ────────────────────────────────────
+    # Raw Data & Export
     st.markdown("---")
     st.markdown("### 📋 Raw Data & Export")
     
@@ -447,7 +444,7 @@ def _render_timeline_replay(df):
         unsafe_allow_html=True,
     )
     
-    # ─── Controls ────────────────────────────────────────────
+    # Controls
     rec_col1, rec_col2, rec_col3 = st.columns([1, 1, 1])
     
     currently_recording = st.session_state.timeline_recording
@@ -489,7 +486,7 @@ def _render_timeline_replay(df):
             selected_recording = None
             st.markdown("<p style='color:#8B949E; padding-top:1.8rem;'>No recordings yet</p>", unsafe_allow_html=True)
     
-    # ─── Recording Progress ──────────────────────────────────
+    # Recording Progress
     if currently_recording:
         elapsed = (datetime.now() - st.session_state.timeline_recording_start).total_seconds()
         remaining = max(0, st.session_state.timeline_recording_end - elapsed)
@@ -521,7 +518,7 @@ def _render_timeline_replay(df):
         
         return  # Don't show playback while recording
     
-    # ─── Playback Mode ───────────────────────────────────────
+    # Playback Mode
     if selected_recording is not None and st.session_state.timeline_recordings:
         recording = st.session_state.timeline_recordings[selected_recording]
         _render_playback_view(recording)
@@ -609,7 +606,7 @@ def _render_playback_view(recording):
         df_rec['timestamp'] = pd.to_datetime(df_rec['timestamp'])
         df_rec = df_rec.sort_values('timestamp')
     
-    # ─── Recording Summary ───────────────────────────────────
+    # Recording Summary
     st.markdown("---")
     col_s1, col_s2, col_s3, col_s4 = st.columns(4)
     
@@ -631,7 +628,7 @@ def _render_playback_view(recording):
         mood = "😊" if avg_pos > 0.3 else "😟" if avg_pos < -0.3 else "😐"
         st.metric("💚 Mood", f"{mood} {avg_pos:+.2f}")
     
-    # ─── Playback Speed Control ──────────────────────────────
+    # Playback Speed Control
     st.markdown("---")
     play_col1, play_col2 = st.columns([1, 3])
     
@@ -652,7 +649,7 @@ def _render_playback_view(recording):
         with restart_col:
             restart_button = st.button("⏹️ Reset", use_container_width=True)
     
-    # ─── Animated Chart with Frames ──────────────────────────
+    # Animated Chart with Frames
     if count < 2:
         st.info("Need at least 2 data points for playback.")
         return
@@ -822,7 +819,7 @@ def _render_playback_view(recording):
     
     st.plotly_chart(fig, use_container_width=True)
     
-    # ─── Emotion Distribution for This Recording ─────────────
+    # Emotion Distribution for This Recording
     st.markdown("---")
     st.markdown("### 📊 Recording Breakdown")
     
@@ -872,7 +869,7 @@ def _render_playback_view(recording):
         )
         st.plotly_chart(fig_conf, use_container_width=True)
     
-    # ─── Delete Recording Button ─────────────────────────────
+    # Delete Recording Button
     if st.button("🗑️ Delete This Recording", type="secondary", use_container_width=True):
         idx = st.session_state.timeline_recordings.index(recording)
         st.session_state.timeline_recordings.pop(idx)

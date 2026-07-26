@@ -7,7 +7,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import json
-from io import StringIO, BytesIO
+from io import StringIO
 
 
 def init_session_state():

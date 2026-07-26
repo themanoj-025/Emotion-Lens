@@ -29,7 +29,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-# ─── FastAPI imports ──────────────────────────────────────────
+# FastAPI imports
 try:
     from fastapi import FastAPI, File, UploadFile, HTTPException, Body, Form
     from fastapi.middleware.cors import CORSMiddleware
@@ -38,14 +38,14 @@ except ImportError:
     print("❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
     sys.exit(1)
 
-# ─── TensorFlow / model imports ──────────────────────────────
+# TensorFlow / model imports
 try:
     from tensorflow.keras.models import load_model
 except ImportError:
     print("❌ TensorFlow is not installed. Install with: pip install tensorflow")
     sys.exit(1)
 
-# ─── Logging ──────────────────────────────────────────────────
+# Logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -53,13 +53,13 @@ logging.basicConfig(
 )
 logger = logging.getLogger("emotion-api")
 
-# ─── Constants ────────────────────────────────────────────────
+# Constants
 EMOTIONS = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise']
 MODEL_PATH = 'emotion_model.h5'
 HOST = os.environ.get("API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("API_PORT", "8000"))
 
-# ─── Pydantic Models ──────────────────────────────────────────
+# Pydantic Models
 
 class PredictRequest(BaseModel):
     """Request body for base64 image prediction."""
@@ -94,11 +94,11 @@ class HealthResponse(BaseModel):
     emotions: List[str]
 
 
-# ─── App Initialization ──────────────────────────────────────
+# App Initialization
 
 app = FastAPI(
     title="EmotionLens 🎭 API",
-    description="Real-time facial emotion detection API powered by CNN (FER2013). "
+    description="Real-time facial emotion detection API using a CNN trained on FER2013. "
                 "Accepts base64 images or file uploads and returns emotion predictions.",
     version="1.0.0",
     docs_url="/docs",
@@ -120,7 +120,7 @@ app.add_middleware(
 )
 
 
-# ─── Security Headers ────────────────────────────────────────────────────
+# Security Headers
 
 @app.middleware("http")
 async def add_security_headers(request, call_next):
@@ -134,7 +134,7 @@ async def add_security_headers(request, call_next):
     response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
     return response
 
-# ─── Model Loading (lazy, on first request) ──────────────────
+# Model Loading (lazy, on first request)
 
 _model = None
 _face_cascade = None
@@ -261,7 +261,7 @@ def generate_summary(results: List[EmotionResult]) -> str:
     return f"Group: {', '.join(parts)}"
 
 
-# ─── Endpoints ────────────────────────────────────────────────
+# Endpoints
 
 @app.get("/", tags=["Info"])
 async def root():
@@ -378,7 +378,7 @@ async def predict_from_file(
     )
 
 
-# ─── CLI Entry Point ─────────────────────────────────────────
+# CLI Entry Point
 
 if __name__ == "__main__":
     import uvicorn

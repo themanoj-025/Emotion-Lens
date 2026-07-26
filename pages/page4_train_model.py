@@ -4,7 +4,6 @@ Provides controls for dataset selection, hyperparameters, and training progress.
 """
 
 import streamlit as st
-import numpy as np
 import os
 from io import StringIO
 
@@ -15,7 +14,6 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropou
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, Callback
 
-from utils.model_utils import EMOTIONS
 
 # Set matplotlib for plots
 import matplotlib.pyplot as plt
@@ -35,7 +33,7 @@ def show():
         unsafe_allow_html=True,
     )
 
-    # ─── Dataset Source ───────────────────────────────────────
+    # Dataset Source
     st.markdown("### 📁 Dataset Source")
     
     dataset_source = st.radio(
@@ -56,7 +54,7 @@ def show():
             st.error(f"❌ Path does not exist: {local_path}")
             local_path = None
 
-    # ─── Architecture Selection ───────────────────────────────
+    # Architecture Selection
     st.markdown("### 🧠 Architecture")
     
     arch_type = st.selectbox(
@@ -65,7 +63,7 @@ def show():
         help="Standard is the default 3-block CNN. Lightweight is faster. Deep has more capacity.",
     )
 
-    # ─── Hyperparameters ──────────────────────────────────────
+    # Hyperparameters
     st.markdown("### ⚙️ Hyperparameters")
     
     col1, col2 = st.columns(2)
@@ -96,7 +94,7 @@ def show():
             help="Fraction of neurons to drop during training (regularization).",
         )
 
-    # ─── Data Augmentation ────────────────────────────────────
+    # Data Augmentation
     st.markdown("### 🔄 Data Augmentation")
     
     col1, col2, col3 = st.columns(3)
@@ -118,7 +116,7 @@ def show():
             help="Random zoom range.",
         )
 
-    # ─── Model Save ───────────────────────────────────────────
+    # Model Save
     st.markdown("### 💾 Save Options")
     
     model_name = st.text_input(
@@ -131,7 +129,7 @@ def show():
     if not model_name.endswith('.h5'):
         model_name += '.h5'
 
-    # ─── Train Button ─────────────────────────────────────────
+    # Train Button
     st.markdown("---")
     
     train_disabled = (dataset_source == "Local Folder" and local_path is None)
@@ -377,7 +375,7 @@ def _run_training(dataset_source, local_path, arch_type, epochs, batch_size,
             verbose=0,
         )
         
-        # ─── Training Complete ────────────────────────────────
+        # Training Complete
         progress_bar.progress(1.0)
         
         # Save the model

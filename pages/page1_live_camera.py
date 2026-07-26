@@ -6,21 +6,18 @@ Uses streamlit-webrtc for browser-native camera access with frame processing.
 import streamlit as st
 import numpy as np
 import cv2
-import time
 from PIL import Image
 from utils.model_utils import (
     load_model_cached, load_face_cascade, 
     EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME
 )
 from utils.emotion_utils import (
-    predict_emotion, draw_detection_result, apply_temporal_smoothing, 
-    compute_positivity_score, preprocess_face,
+    predict_emotion, apply_temporal_smoothing, compute_positivity_score, 
     compute_gradcam, apply_gradcam_overlay,
     render_mood_music_card
 )
 from utils.session_utils import add_prediction, add_snapshot
 import plotly.graph_objects as go
-import plotly.express as px
 
 
 def show():
@@ -29,7 +26,7 @@ def show():
         <div style="text-align: center; margin-bottom: 1rem;">
             <h1>🎥 Live Emotion Camera</h1>
             <p style="color: #8B949E; font-size: 1rem;">
-                Real-time facial emotion detection powered by CNN
+                Real-time facial emotion detection using a CNN
             </p>
         </div>
         """,
@@ -61,7 +58,7 @@ def show():
     if 'frame_count' not in st.session_state:
         st.session_state.frame_count = 0
 
-    # ─── Controls ─────────────────────────────────────────────
+    # Controls
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
     
     with col1:
@@ -103,7 +100,7 @@ def show():
         locked = st.session_state.locked_prediction
         st.info(f"🔒 Frame Locked: {EMOTION_CONFIG[locked['emotion']]['emoji']} {locked['emotion']} ({locked['confidence']*100:.1f}%) — press Unlock to release")
 
-    # ─── WebRTC Implementation ────────────────────────────────
+    # WebRTC Implementation
     st.markdown("---")
     
     # Try streamlit-webrtc first, fallback to OpenCV
@@ -115,7 +112,7 @@ def show():
     else:
         _render_opencv_fallback(model, face_cascade, enable_gradcam)
 
-    # ─── Emotion Dashboard Area ───────────────────────────────
+    # Emotion Dashboard Area
     st.markdown("---")
     
     current_pred = st.session_state.get('current_prediction', None)
@@ -164,7 +161,7 @@ def show():
             unsafe_allow_html=True,
         )
 
-    # ─── Snapshot Gallery ─────────────────────────────────────
+    # Snapshot Gallery
     if st.session_state.get('snapshots'):
         st.markdown("---")
         st.markdown("### 📸 Snapshot Gallery")
@@ -184,7 +181,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
     st.info("📷 WebRTC mode enabled. Click 'Start' above when ready.")
     
     try:
-        from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, WebRtcMode
+        from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
         import av
 
         class EmotionVideoProcessor(VideoProcessorBase):

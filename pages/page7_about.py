@@ -4,12 +4,10 @@ Page 7: 📖 About — Project information, dataset details, tech stack, and doc
 
 import streamlit as st
 import os
-import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 
-from utils.model_utils import EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME, is_model_available, load_model_cached
+from utils.model_utils import EMOTION_CONFIG, PLOTLY_THEME, is_model_available, load_model_cached
 
 
 def show():
@@ -18,14 +16,14 @@ def show():
         <div style="text-align: center; margin-bottom: 1rem;">
             <h1>📖 About EmotionLens 🎭</h1>
             <p style="color: #8B949E; font-size: 1rem;">
-                Real-time facial emotion intelligence powered by CNN
+                Real-time facial emotion intelligence using a CNN
             </p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # ─── Overview ─────────────────────────────────────────────
+    # Overview
     st.markdown("## 🎯 Project Overview")
     
     st.markdown(
@@ -43,8 +41,8 @@ def show():
             😠 Angry, 🤢 Disgust, 😨 Fear, 😊 Happy, 😐 Neutral, 😢 Sad, and 😲 Surprise.
         </p>
         <p>
-            Powered by a <strong>Convolutional Neural Network (CNN)</strong> trained on the 
-            <strong>FER2013 dataset</strong>, the system achieves approximately <strong>62% validation accuracy</strong>.
+            The system uses a <strong>Convolutional Neural Network (CNN)</strong> trained on the 
+            <strong>FER2013 dataset</strong>, achieving approximately <strong>62% validation accuracy</strong>.
         </p>
         <p>
             This application features a multi-page Streamlit dashboard with real-time webcam 
@@ -55,7 +53,7 @@ def show():
         unsafe_allow_html=True,
     )
 
-    # ─── Model Architecture ───────────────────────────────────
+    # Model Architecture
     st.markdown("## 🧠 Model Architecture")
     
     col1, col2 = st.columns([3, 2])
@@ -119,7 +117,7 @@ def show():
         
         st.plotly_chart(fig, use_container_width=True)
 
-    # ─── FER2013 Dataset ──────────────────────────────────────
+    # FER2013 Dataset
     st.markdown("## 📊 FER2013 Dataset")
     
     st.markdown(
@@ -174,7 +172,7 @@ def show():
     
     st.plotly_chart(fig, use_container_width=True)
 
-    # ─── Performance ──────────────────────────────────────────
+    # Performance
     st.markdown("## 📉 Performance")
     
     col1, col2 = st.columns(2)
@@ -208,7 +206,7 @@ def show():
         unsafe_allow_html=True,
     )
 
-    # ─── Tech Stack ──────────────────────────────────────────
+    # Tech Stack
     st.markdown("## 🛠️ Tech Stack")
     
     tech_stack = {
@@ -229,7 +227,7 @@ def show():
         for tech, desc in tech_stack.items()
     ]))
 
-    # ─── GitHub README ────────────────────────────────────────
+    # GitHub README
     st.markdown("## 📖 README")
     
     if os.path.exists("README.md"):
@@ -241,7 +239,7 @@ def show():
     else:
         st.info("README.md not found in the project root.")
 
-    # ─── Author & License ─────────────────────────────────────
+    # Author & License
     st.markdown("---")
     
     st.markdown(
@@ -252,7 +250,7 @@ def show():
             color: #8B949E;
         ">
             <h3 style="color: #00D4AA; margin-bottom: 1rem;">EmotionLens 🎭</h3>
-            <p>Built with ❤️ using TensorFlow, Streamlit, and OpenCV</p>
+            <p>Built using TensorFlow, Streamlit, and OpenCV</p>
             <p style="font-size: 0.9rem;">
                 FER2013 dataset courtesy of ICML 2013 Workshop on Challenges in Representation Learning<br>
                 Model architecture based on standard CNN for facial expression recognition

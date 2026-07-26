@@ -13,7 +13,7 @@ from PIL import Image
 import pandas as pd
 
 from utils.model_utils import (
-    load_model_cached, load_face_cascade, EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME
+    load_model_cached, load_face_cascade, EMOTIONS, EMOTION_CONFIG
 )
 from utils.emotion_utils import predict_emotion
 
@@ -37,7 +37,7 @@ def show():
     if model is None or face_cascade is None:
         return
 
-    # ─── Game Stats ──────────────────────────────────────────
+    # Game Stats
     game_score = st.session_state.get('game_score', 0)
     high_score = st.session_state.get('game_high_score', 0)
     
@@ -50,7 +50,7 @@ def show():
         game_history = st.session_state.get('game_history', [])
         st.metric("🎮 Games Played", len(game_history))
 
-    # ─── Game Mode Selection ─────────────────────────────────
+    # Game Mode Selection
     st.markdown("---")
     mode = st.radio(
         "Select Game Mode",
@@ -64,7 +64,7 @@ def show():
     else:
         _render_guess_emotion_mode(model)
 
-    # ─── Leaderboard ─────────────────────────────────────────
+    # Leaderboard
     if game_history:
         st.markdown("---")
         st.markdown("### 🏆 Leaderboard")
@@ -82,7 +82,7 @@ def show():
                 hide_index=True,
             )
 
-    # ─── Achievements ────────────────────────────────────────
+    # Achievements
     st.markdown("---")
     st.markdown("### 🏅 Achievements")
     

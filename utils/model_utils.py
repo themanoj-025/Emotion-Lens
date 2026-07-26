@@ -7,7 +7,6 @@ and automatic model download for Streamlit Cloud deployment.
 import os
 import streamlit as st
 import cv2
-import numpy as np
 from tensorflow.keras.models import load_model
 
 # Emotion mapping - must match FER2013 training order
@@ -79,7 +78,7 @@ def is_model_available():
     return os.path.exists(MODEL_PATH)
 
 
-# ─── Model Auto-Download (for Streamlit Cloud) ──────────────────
+# Model Auto-Download (for Streamlit Cloud)
 
 # Add URLs to pre-trained model files here to enable auto-download on Streamlit Cloud.
 # Example:
