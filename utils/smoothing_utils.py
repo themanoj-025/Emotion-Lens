@@ -1,4 +1,5 @@
 """Temporal smoothing to reduce flickering in live detection."""
+
 from __future__ import annotations
 from collections import deque
 import numpy as np

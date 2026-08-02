@@ -7,7 +7,12 @@ import os
 import pandas as pd
 import plotly.graph_objects as go
 
-from utils.model_utils import EMOTION_CONFIG, PLOTLY_THEME, is_model_available, load_model_cached
+from utils.model_utils import (
+    EMOTION_CONFIG,
+    PLOTLY_THEME,
+    is_model_available,
+    load_model_cached,
+)
 
 
 def show():
@@ -25,7 +30,7 @@ def show():
 
     # Overview
     st.markdown("## 🎯 Project Overview")
-    
+
     st.markdown(
         """
         <div style="
@@ -55,9 +60,9 @@ def show():
 
     # Model Architecture
     st.markdown("## 🧠 Model Architecture")
-    
+
     col1, col2 = st.columns([3, 2])
-    
+
     with col1:
         st.markdown(
             """
@@ -76,50 +81,52 @@ def show():
             - **Total Parameters**: ~1.2M
             """
         )
-    
+
     with col2:
         # Simple architecture visualization
         layers = [
-            ('Input', '48×48×1', '#3498DB'),
-            ('Conv2D', '32', '#2ECC71'),
-            ('MaxPool', '24×24', '#3498DB'),
-            ('Conv2D', '64', '#2ECC71'),
-            ('MaxPool', '12×12', '#3498DB'),
-            ('Conv2D', '128', '#2ECC71'),
-            ('MaxPool', '6×6', '#3498DB'),
-            ('Flatten', '4608', '#9B59B6'),
-            ('Dense', '1024', '#E74C3C'),
-            ('Output', '7', '#F5A623'),
+            ("Input", "48×48×1", "#3498DB"),
+            ("Conv2D", "32", "#2ECC71"),
+            ("MaxPool", "24×24", "#3498DB"),
+            ("Conv2D", "64", "#2ECC71"),
+            ("MaxPool", "12×12", "#3498DB"),
+            ("Conv2D", "128", "#2ECC71"),
+            ("MaxPool", "6×6", "#3498DB"),
+            ("Flatten", "4608", "#9B59B6"),
+            ("Dense", "1024", "#E74C3C"),
+            ("Output", "7", "#F5A623"),
         ]
-        
+
         fig = go.Figure()
         for i, (name, dim, color) in enumerate(layers):
-            fig.add_trace(go.Bar(
-                x=[1],
-                y=[1],
-                name=f"{name} ({dim})",
-                marker_color=color,
-                text=f"<b>{name}</b><br>{dim}",
-                textposition='inside',
-                hovertemplate=f"<b>{name}</b><br>Dimension: {dim}<extra></extra>",
-            ))
-        
+            fig.add_trace(
+                go.Bar(
+                    x=[1],
+                    y=[1],
+                    name=f"{name} ({dim})",
+                    marker_color=color,
+                    text=f"<b>{name}</b><br>{dim}",
+                    textposition="inside",
+                    hovertemplate=f"<b>{name}</b><br>Dimension: {dim}<extra></extra>",
+                )
+            )
+
         fig.update_layout(
-            barmode='stack',
+            barmode="stack",
             height=400,
             showlegend=True,
-            legend=dict(font=dict(size=10, color='#8B949E')),
+            legend=dict(font=dict(size=10, color="#8B949E")),
             xaxis=dict(visible=False),
             yaxis=dict(visible=False),
             margin=dict(l=10, r=10, t=10, b=10),
             **PLOTLY_THEME,
         )
-        
+
         st.plotly_chart(fig, use_container_width=True)
 
     # FER2013 Dataset
     st.markdown("## 📊 FER2013 Dataset")
-    
+
     st.markdown(
         """
         The **FER2013** (Facial Expression Recognition 2013) dataset was introduced in the 
@@ -132,60 +139,66 @@ def show():
         - **3,589** validation/test examples per split
         """
     )
-    
+
     # Class distribution chart
     st.markdown("### 📈 Class Distribution")
-    
+
     # Approximate FER2013 training distribution
     distribution = {
-        'Angry': 3995,
-        'Disgust': 436,
-        'Fear': 4097,
-        'Happy': 7215,
-        'Neutral': 4965,
-        'Sad': 4830,
-        'Surprise': 3171,
+        "Angry": 3995,
+        "Disgust": 436,
+        "Fear": 4097,
+        "Happy": 7215,
+        "Neutral": 4965,
+        "Sad": 4830,
+        "Surprise": 3171,
     }
-    
-    colors = [EMOTION_CONFIG.get(e, {}).get('color', '#95A5A6') for e in distribution.keys()]
-    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in distribution.keys()]
-    
-    fig = go.Figure(data=[
-        go.Bar(
-            x=emoji_labels,
-            y=list(distribution.values()),
-            marker_color=colors,
-            text=[f"{v:,} ({v/28709*100:.1f}%)" for v in distribution.values()],
-            textposition='outside',
-            hovertemplate='<b>%{x}</b><br>Count: %{y:,}<br>Percentage: %{customdata:.1f}%<extra></extra>',
-            customdata=[v/28709*100 for v in distribution.values()],
-        )
-    ])
-    
+
+    colors = [
+        EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in distribution.keys()
+    ]
+    emoji_labels = [
+        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in distribution.keys()
+    ]
+
+    fig = go.Figure(
+        data=[
+            go.Bar(
+                x=emoji_labels,
+                y=list(distribution.values()),
+                marker_color=colors,
+                text=[f"{v:,} ({v / 28709 * 100:.1f}%)" for v in distribution.values()],
+                textposition="outside",
+                hovertemplate="<b>%{x}</b><br>Count: %{y:,}<br>Percentage: %{customdata:.1f}%<extra></extra>",
+                customdata=[v / 28709 * 100 for v in distribution.values()],
+            )
+        ]
+    )
+
     fig.update_layout(
         title="FER2013 Training Set Class Distribution",
-        yaxis=dict(title="Sample Count", gridcolor='#30363D'),
+        yaxis=dict(title="Sample Count", gridcolor="#30363D"),
         height=400,
         margin=dict(l=20, r=20, t=40, b=20),
         **PLOTLY_THEME,
     )
-    
+
     st.plotly_chart(fig, use_container_width=True)
 
     # Performance
     st.markdown("## 📉 Performance")
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.metric("Validation Accuracy", "~62%", delta="Standard for FER2013 CNNs")
-    
+
     with col2:
         if is_model_available():
             model = load_model_cached()
             if model:
                 st.metric("Model Size (params)", f"{model.count_params():,}")
-    
+
     st.markdown(
         """
         <div style="
@@ -208,7 +221,7 @@ def show():
 
     # Tech Stack
     st.markdown("## 🛠️ Tech Stack")
-    
+
     tech_stack = {
         "Python": "3.8+",
         "TensorFlow": "Deep learning framework",
@@ -221,19 +234,23 @@ def show():
         "Matplotlib": "Static plot generation",
         "KaggleHub": "Dataset download",
     }
-    
-    st.table(pd.DataFrame([
-        {"Technology": tech, "Description": desc}
-        for tech, desc in tech_stack.items()
-    ]))
+
+    st.table(
+        pd.DataFrame(
+            [
+                {"Technology": tech, "Description": desc}
+                for tech, desc in tech_stack.items()
+            ]
+        )
+    )
 
     # GitHub README
     st.markdown("## 📖 README")
-    
+
     if os.path.exists("README.md"):
         with open("README.md", "r") as f:
             readme_content = f.read()
-        
+
         with st.expander("📄 View Project README"):
             st.markdown(readme_content)
     else:
@@ -241,7 +258,7 @@ def show():
 
     # Author & License
     st.markdown("---")
-    
+
     st.markdown(
         """
         <div style="
@@ -276,6 +293,3 @@ def show():
         """,
         unsafe_allow_html=True,
     )
-
-
-

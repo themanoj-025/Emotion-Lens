@@ -1,11 +1,14 @@
 """Grad-CAM heatmap generation for CNN emotion model."""
+
 from __future__ import annotations
 import numpy as np
 import cv2
 import tensorflow as tf
 
 
-def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str = None) -> np.ndarray:
+def make_gradcam_heatmap(
+    model, img_array: np.ndarray, last_conv_layer_name: str = None
+) -> np.ndarray:
     """Generate Grad-CAM heatmap for the top predicted class.
 
     Args:
@@ -22,7 +25,7 @@ def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str
     # Auto-detect last conv layer if not specified
     if last_conv_layer_name is None:
         for layer in reversed(model.layers):
-            if 'conv' in layer.name.lower():
+            if "conv" in layer.name.lower():
                 last_conv_layer_name = layer.name
                 break
         if last_conv_layer_name is None:
@@ -31,7 +34,7 @@ def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str
     # Build gradient model
     grad_model = tf.keras.models.Model(
         inputs=model.inputs,
-        outputs=[model.get_layer(last_conv_layer_name).output, model.output]
+        outputs=[model.get_layer(last_conv_layer_name).output, model.output],
     )
 
     with tf.GradientTape() as tape:
@@ -50,7 +53,9 @@ def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str
     return heatmap
 
 
-def overlay_gradcam(original_img_gray: np.ndarray, heatmap: np.ndarray, alpha: float = 0.5) -> np.ndarray:
+def overlay_gradcam(
+    original_img_gray: np.ndarray, heatmap: np.ndarray, alpha: float = 0.5
+) -> np.ndarray:
     """Overlay Grad-CAM heatmap on original face image. Returns BGR image.
 
     Args:
@@ -63,7 +68,9 @@ def overlay_gradcam(original_img_gray: np.ndarray, heatmap: np.ndarray, alpha: f
     """
     h, w = original_img_gray.shape[:2]
     heatmap_resized = cv2.resize(heatmap, (w, h))
-    heatmap_colored = cv2.applyColorMap((heatmap_resized * 255).astype('uint8'), cv2.COLORMAP_JET)
+    heatmap_colored = cv2.applyColorMap(
+        (heatmap_resized * 255).astype("uint8"), cv2.COLORMAP_JET
+    )
     original_bgr = cv2.cvtColor(original_img_gray, cv2.COLOR_GRAY2BGR)
     superimposed = cv2.addWeighted(original_bgr, 1 - alpha, heatmap_colored, alpha, 0)
     return superimposed

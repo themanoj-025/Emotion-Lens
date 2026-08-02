@@ -72,15 +72,18 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("### 📊 Session Stats")
 col1, col2 = st.sidebar.columns(2)
 with col1:
-    st.metric("Predictions", st.session_state.get('total_predictions', 0))
+    st.metric("Predictions", st.session_state.get("total_predictions", 0))
 with col2:
     from utils.session_utils import format_session_duration
+
     st.metric("Duration", format_session_duration())
 
 # Dark mode toggle
 st.sidebar.markdown("---")
-dark_mode = st.sidebar.toggle("🌙 Dark Mode", value=st.session_state.get('dark_mode', True))
-if dark_mode != st.session_state.get('dark_mode'):
+dark_mode = st.sidebar.toggle(
+    "🌙 Dark Mode", value=st.session_state.get("dark_mode", True)
+)
+if dark_mode != st.session_state.get("dark_mode"):
     st.session_state.dark_mode = dark_mode
     st.rerun()
 
@@ -112,6 +115,7 @@ with st.sidebar.expander("🌐 API Server", expanded=False):
     )
     if st.button("🔄 Check API Health", use_container_width=True):
         import requests
+
         try:
             r = requests.get("http://localhost:8000/health", timeout=3)
             if r.status_code == 200:
@@ -140,22 +144,29 @@ st.sidebar.markdown(
 # Page Router
 if page == "🎥 Live Camera":
     from pages.page1_live_camera import show
+
     show()
 elif page == "🖼️ Image Analysis":
     from pages.page2_image_analysis import show
+
     show()
 elif page == "📊 Analytics":
     from pages.page3_analytics import show
+
     show()
 elif page == "🏋️ Train Model":
     from pages.page4_train_model import show
+
     show()
 elif page == "🧠 Model Inspector":
     from pages.page5_model_inspector import show
+
     show()
 elif page == "🎯 Emotion Game":
     from pages.page6_emotion_game import show
+
     show()
 elif page == "📖 About":
     from pages.page7_about import show
+
     show()
