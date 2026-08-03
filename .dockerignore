@@ -1,0 +1,48 @@
+# ── Emotion-Lens — .dockerignore ───────────────────────────────────────
+
+# VCS metadata
+.git
+.gitignore
+.gitattributes
+
+# Python caches / artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# IDE / editor config
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# CI / agent config
+.github/
+.gemini/
+.cursorrules
+AGENTS.md
+AGENTS_FIX.md
+PROJECT_ANALYSIS.md
+
+# Logs & scratch
+*.log
+logs/
