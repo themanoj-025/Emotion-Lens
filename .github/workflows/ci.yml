@@ -48,110 +48,110 @@ jobs:
       - name: Verify emotion config
         run: |
           python -c "
-from utils.config import EMOTIONS, EMOTION_CONFIG, PLOTLY_LAYOUT, positivity_score
-assert len(EMOTIONS) == 7, 'EMOTIONS must have 7 entries'
-assert len(EMOTION_CONFIG) == 7, 'EMOTION_CONFIG must have 7 entries'
-for e in EMOTIONS:
-    assert e in EMOTION_CONFIG, f'{e} missing from EMOTION_CONFIG'
-    assert 'color' in EMOTION_CONFIG[e], f'{e} missing color'
-    assert 'emoji' in EMOTION_CONFIG[e], f'{e} missing emoji'
-# Test positivity_score
-ps = positivity_score([0.5]*7)
-assert -1.0 <= ps <= 1.0, f'positivity_score out of range: {ps}'
-print('✅ Emotion config valid')
-"
+          from utils.config import EMOTIONS, EMOTION_CONFIG, PLOTLY_LAYOUT, positivity_score
+          assert len(EMOTIONS) == 7, 'EMOTIONS must have 7 entries'
+          assert len(EMOTION_CONFIG) == 7, 'EMOTION_CONFIG must have 7 entries'
+          for e in EMOTIONS:
+              assert e in EMOTION_CONFIG, f'{e} missing from EMOTION_CONFIG'
+              assert 'color' in EMOTION_CONFIG[e], f'{e} missing color'
+              assert 'emoji' in EMOTION_CONFIG[e], f'{e} missing emoji'
+          # Test positivity_score
+          ps = positivity_score([0.5]*7)
+          assert -1.0 <= ps <= 1.0, f'positivity_score out of range: {ps}'
+          print('✅ Emotion config valid')
+          "
 
       - name: Verify model_utils
         run: |
           python -c "
-from utils.model_utils import EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME, \
-    is_model_available, MODEL_PATH, MODEL_DOWNLOAD_URLS, try_download_model, \
-    ensure_model_on_cloud
-assert isinstance(MODEL_DOWNLOAD_URLS, list)
-print(f'✅ Model utils OK — model_path={MODEL_PATH}')
-"
+          from utils.model_utils import EMOTIONS, EMOTION_CONFIG, PLOTLY_THEME, \
+              is_model_available, MODEL_PATH, MODEL_DOWNLOAD_URLS, try_download_model, \
+              ensure_model_on_cloud
+          assert isinstance(MODEL_DOWNLOAD_URLS, list)
+          print(f'✅ Model utils OK — model_path={MODEL_PATH}')
+          "
 
       - name: Verify emotion_utils (no-model tests)
         run: |
           python -c "
-from utils.emotion_utils import compute_positivity_score, generate_emotion_summary, \
-    image_to_base64, preprocess_face, EMOTIONS
-import numpy as np
-from PIL import Image
-# Test preprocess_face
-roi = np.zeros((96, 96), dtype='uint8')
-processed = preprocess_face(roi)
-assert processed.shape == (1, 48, 48, 1), f'preprocess_face shape: {processed.shape}'
-# Test positivity score
-ps = compute_positivity_score([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
-assert ps == 1.0, f'Happy should give 1.0, got {ps}'
-# Test generate_emotion_summary
-summary = generate_emotion_summary([{'emotion': 'Happy', 'confidence': 0.9}])
-assert 'Happy' in summary
-print('✅ Emotion utils valid')
-"
+          from utils.emotion_utils import compute_positivity_score, generate_emotion_summary, \
+              image_to_base64, preprocess_face, EMOTIONS
+          import numpy as np
+          from PIL import Image
+          # Test preprocess_face
+          roi = np.zeros((96, 96), dtype='uint8')
+          processed = preprocess_face(roi)
+          assert processed.shape == (1, 48, 48, 1), f'preprocess_face shape: {processed.shape}'
+          # Test positivity score
+          ps = compute_positivity_score([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0])
+          assert ps == 1.0, f'Happy should give 1.0, got {ps}'
+          # Test generate_emotion_summary
+          summary = generate_emotion_summary([{'emotion': 'Happy', 'confidence': 0.9}])
+          assert 'Happy' in summary
+          print('✅ Emotion utils valid')
+          "
 
       - name: Verify session_utils
         run: |
           python -c "
-from utils.session_utils import init_session_state, format_session_duration, \
-    get_prediction_dataframe, get_emotion_distribution
-# init_session_state requires streamlit runtime
-print('✅ Session utils import OK')
-"
+          from utils.session_utils import init_session_state, format_session_duration, \
+              get_prediction_dataframe, get_emotion_distribution
+          # init_session_state requires streamlit runtime
+          print('✅ Session utils import OK')
+          "
 
       - name: Verify smoothing_utils
         run: |
           python -c "
-from utils.smoothing_utils import EmotionSmoother
-smoother = EmotionSmoother(window=5)
-result = smoother.update([0.1]*7)
-assert len(result) == 7
-emotion, conf, probs = smoother.smoothed_emotion([0.2]*7)
-assert len(probs) == 7
-print('✅ Smoothing utils valid')
-"
+          from utils.smoothing_utils import EmotionSmoother
+          smoother = EmotionSmoother(window=5)
+          result = smoother.update([0.1]*7)
+          assert len(result) == 7
+          emotion, conf, probs = smoother.smoothed_emotion([0.2]*7)
+          assert len(probs) == 7
+          print('✅ Smoothing utils valid')
+          "
 
       - name: Verify gradcam_utils
         run: |
           python -c "
-from utils.gradcam_utils import make_gradcam_heatmap, overlay_gradcam
-import numpy as np
-print('✅ GradCAM utils import OK')
-"
+          from utils.gradcam_utils import make_gradcam_heatmap, overlay_gradcam
+          import numpy as np
+          print('✅ GradCAM utils import OK')
+          "
 
       - name: Verify export_utils
         run: |
           python -c "
-from utils.export_utils import predictions_to_dataframe, export_predictions_csv, \
-    export_predictions_json, export_session_report
-import pandas as pd
-# Test with empty data
-assert export_predictions_csv([]) is None
-assert export_predictions_json([]) is None
-assert export_session_report([]) is None
-# Test with sample data
-sample = [{'emotion': 'Happy', 'confidence': 0.9, 'probabilities': [0.0]*7, 'timestamp': 'now', 'source': 'test'}]
-csv_out = export_predictions_csv(sample)
-assert csv_out is not None and 'Happy' in csv_out
-json_out = export_predictions_json(sample)
-assert json_out is not None and 'Happy' in json_out
-report = export_session_report(sample)
-assert report is not None and 'Happy' in report
-df = predictions_to_dataframe(sample)
-assert not df.empty
-print('✅ Export utils valid')
-"
+          from utils.export_utils import predictions_to_dataframe, export_predictions_csv, \
+              export_predictions_json, export_session_report
+          import pandas as pd
+          # Test with empty data
+          assert export_predictions_csv([]) is None
+          assert export_predictions_json([]) is None
+          assert export_session_report([]) is None
+          # Test with sample data
+          sample = [{'emotion': 'Happy', 'confidence': 0.9, 'probabilities': [0.0]*7, 'timestamp': 'now', 'source': 'test'}]
+          csv_out = export_predictions_csv(sample)
+          assert csv_out is not None and 'Happy' in csv_out
+          json_out = export_predictions_json(sample)
+          assert json_out is not None and 'Happy' in json_out
+          report = export_session_report(sample)
+          assert report is not None and 'Happy' in report
+          df = predictions_to_dataframe(sample)
+          assert not df.empty
+          print('✅ Export utils valid')
+          "
 
       - name: Verify chart_utils
         run: |
           python -c "
-from utils.chart_utils import emotion_bar_chart, emotion_radar_chart, emotion_pie
-fig1 = emotion_bar_chart([0.1]*7)
-fig2 = emotion_radar_chart([0.1]*7)
-fig3 = emotion_pie([{'emotion': 'Happy'}, {'emotion': 'Sad'}])
-print('✅ Chart utils valid')
-"
+          from utils.chart_utils import emotion_bar_chart, emotion_radar_chart, emotion_pie
+          fig1 = emotion_bar_chart([0.1]*7)
+          fig2 = emotion_radar_chart([0.1]*7)
+          fig3 = emotion_pie([{'emotion': 'Happy'}, {'emotion': 'Sad'}])
+          print('✅ Chart utils valid')
+          "
 
   # ─── Streamlit Cloud Deployment Checks ────────────────────
   deploy-check:
@@ -239,12 +239,12 @@ print('✅ Chart utils valid')
       - name: Validate Python version compatibility
         run: |
           python -c "
-import sys
-ver = sys.version_info
-print(f'Python {ver.major}.{ver.minor}.{ver.micro}')
-assert ver.major == 3 and ver.minor >= 9, 'Streamlit Cloud supports Python 3.9+'
-print('✅ Python version compatible')
-"
+          import sys
+          ver = sys.version_info
+          print(f'Python {ver.major}.{ver.minor}.{ver.micro}')
+          assert ver.major == 3 and ver.minor >= 9, 'Streamlit Cloud supports Python 3.9+'
+          print('✅ Python version compatible')
+          "
 
       - name: Check for common Streamlit Cloud pitfalls
         run: |
@@ -303,31 +303,31 @@ print('✅ Python version compatible')
       - name: Verify all page modules can be imported (AST-level)
         run: |
           python -c "
-import ast, sys
-
-pages = [
-    'pages.page1_live_camera',
-    'pages.page2_image_analysis',
-    'pages.page3_analytics',
-    'pages.page4_train_model',
-    'pages.page5_model_inspector',
-    'pages.page6_emotion_game',
-    'pages.page7_about',
-]
-
-for page in pages:
-    # Convert module path to file path
-    filepath = page.replace('.', '/') + '.py'
-    try:
-        with open(filepath, encoding='utf-8') as f:
-            ast.parse(f.read())
-        print(f'✅ {page} — syntax OK')
-    except SyntaxError as e:
-        print(f'❌ {page} — SYNTAX ERROR: {e}')
-        sys.exit(1)
-
-print('All page modules compile cleanly.')
-"
+          import ast, sys
+            
+          pages = [
+              'pages.page1_live_camera',
+              'pages.page2_image_analysis',
+              'pages.page3_analytics',
+              'pages.page4_train_model',
+              'pages.page5_model_inspector',
+              'pages.page6_emotion_game',
+              'pages.page7_about',
+          ]
+            
+          for page in pages:
+              # Convert module path to file path
+              filepath = page.replace('.', '/') + '.py'
+              try:
+                  with open(filepath, encoding='utf-8') as f:
+                      ast.parse(f.read())
+                  print(f'✅ {page} — syntax OK')
+              except SyntaxError as e:
+                  print(f'❌ {page} — SYNTAX ERROR: {e}')
+                  sys.exit(1)
+            
+          print('All page modules compile cleanly.')
+          "
 
   # ─── Docker Build & Validate ─────────────────────────────
   docker:
