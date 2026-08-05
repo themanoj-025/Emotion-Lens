@@ -40,7 +40,7 @@ jobs:
       - name: Install system deps (OpenCV)
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev
+          sudo apt-get install -y -qq libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -295,7 +295,7 @@ jobs:
       - name: Install system deps
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev
+          sudo apt-get install -y -qq libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev
 
       - name: Install dependencies
         run: pip install -r requirements.txt
