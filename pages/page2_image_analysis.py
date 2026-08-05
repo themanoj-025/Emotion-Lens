@@ -64,7 +64,7 @@ def show():
         )
 
     with col2:
-        batch_mode = st.checkbox(
+        st.checkbox(
             "📋 Batch Mode (process all automatically)",
             value=True,
             help="When enabled, all uploaded images are processed immediately.",

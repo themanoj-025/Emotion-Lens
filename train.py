@@ -119,7 +119,7 @@ def main():
 
     print(f"\nStarting Training for {args.epochs} Epochs...")
 
-    history = model.fit(
+    model.fit(
         train_generator,
         steps_per_epoch=train_generator.n // train_generator.batch_size,
         epochs=args.epochs,

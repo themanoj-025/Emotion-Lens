@@ -76,7 +76,7 @@ def show():
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
     with col1:
-        start_camera = st.button(
+        st.button(
             "▶ Start Camera", type="primary", use_container_width=True
         )
 
@@ -98,7 +98,7 @@ def show():
             )
 
     with col3:
-        lock_btn = st.button(
+        st.button(
             "🔒 Lock Frame",
             use_container_width=True,
             disabled=st.session_state.current_prediction is None,

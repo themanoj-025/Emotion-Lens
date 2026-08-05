@@ -374,7 +374,7 @@ def _render_positivity_analysis(df):
         else:
             positivity_scores.append(0)
 
-    df_viz = df.tail(100).copy()
+    df.tail(100).copy()
     scores = positivity_scores[-100:]
 
     # Color mapping
@@ -727,11 +727,11 @@ def _render_playback_view(recording):
         st.markdown("<p style='padding-top:0.5rem;'></p>", unsafe_allow_html=True)
         play_btn_col, restart_col = st.columns(2)
         with play_btn_col:
-            play_button = st.button(
+            st.button(
                 "▶️ Play Animation", type="primary", use_container_width=True
             )
         with restart_col:
-            restart_button = st.button("⏹️ Reset", use_container_width=True)
+            st.button("⏹️ Reset", use_container_width=True)
 
     # Animated Chart with Frames
     if count < 2:
