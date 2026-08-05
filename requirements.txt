@@ -10,7 +10,7 @@ streamlit==1.58.0
 
 # Visualization
 matplotlib==3.8.2
-plotly==5.18.0
+plotly==6.9.0
 
 # Utils
 pandas==3.0.4
