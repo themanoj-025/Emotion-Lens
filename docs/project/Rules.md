@@ -1,11 +1,11 @@
 # Rules — EmotionLens: Coding Standards & AI-Agent Operating Rules
 
-| Field | Value |
+|Field|Value|
 |---|---|
-| Version | v0.1 |
-| Last Updated | 2026-08-06 |
-| Owner | Engineering Lead |
-| Status | In Review |
+|Version|v0.1|
+|Last Updated|2026-08-06|
+|Owner|Engineering Lead|
+|Status|In Review|
 
 ---
 
@@ -50,14 +50,14 @@ assets/style.css
 
 - Coverage ≥ 50% (UI-heavy project; core utils higher).
 - MUST have tests: preprocessing, model load, API endpoints, Grad-CAM.
-- See [Testing.md](Testing.md).
+- See [Testing.md](../technical/Testing.md).
 
 ## 5. AI Agent Operating Rules
 
 - Always read Tracker.md and ImplementationPlan.md before starting.
 - Never mark a task 🟢 Done without tests passing.
-- Never invent requirements not in PRD.md/TechSpec.md — flag ambiguity.
-- Never commit secrets; env vars per SecurityAndCompliance.md.
+- Never invent requirements not in ../product/PRD.md/../technical/TechSpec.md — flag ambiguity.
+- Never commit secrets; env vars per ../technical/SecurityAndCompliance.md.
 - Never persist camera frames.
 - State conflicts rather than silently picking one.
 
@@ -70,17 +70,17 @@ assets/style.css
 
 ## 7. Documentation Rules
 
-- New endpoints → API.md same PR.
-- New pages → AppFlow.md same PR.
+- New endpoints → ../technical/API.md same PR.
+- New pages → ../design/AppFlow.md same PR.
 
 ## 8. Prohibited Patterns
 
-| Anti-pattern | Why |
+|Anti-pattern|Why|
 |---|---|
-| Persisting camera frames | Privacy |
-| Committing large model binaries | Repo bloat |
-| Blanket except | Hides failures |
-| Hardcoded model path | Portability |
+|Persisting camera frames|Privacy|
+|Committing large model binaries|Repo bloat|
+|Blanket except|Hides failures|
+|Hardcoded model path|Portability|
 
 ## 9. Escalation Rules
 
@@ -89,18 +89,18 @@ assets/style.css
 
 ## 10. Related Documents
 
-| Document | Relationship |
+|Document|Relationship|
 |---|---|
-| [Testing.md](Testing.md) | Test requirements |
-| [SecurityAndCompliance.md](SecurityAndCompliance.md) | Privacy |
-| [PRD.md](PRD.md) | Requirements |
-| [TechSpec.md](TechSpec.md) | Architecture |
-| [AppFlow.md](AppFlow.md) | Flows |
-| [Design.md](Design.md) | Design |
-| [Schema.md](Schema.md) | Data |
-| [ImplementationPlan.md](ImplementationPlan.md) | Tasks |
-| [Tracker.md](Tracker.md) | Status |
-| [API.md](API.md) | Contract |
-| [Deployment.md](Deployment.md) | Env vars |
-| [Glossary.md](Glossary.md) | Vocabulary |
-| [RiskRegister.md](RiskRegister.md) | Risks |
+|[Testing.md](../technical/Testing.md)|Test requirements|
+|[SecurityAndCompliance.md](../technical/SecurityAndCompliance.md)|Privacy|
+|[PRD.md](../product/PRD.md)|Requirements|
+|[TechSpec.md](../technical/TechSpec.md)|Architecture|
+|[AppFlow.md](../design/AppFlow.md)|Flows|
+|[Design.md](../design/Design.md)|Design|
+|[Schema.md](../technical/Schema.md)|Data|
+|[ImplementationPlan.md](ImplementationPlan.md)|Tasks|
+|[Tracker.md](Tracker.md)|Status|
+|[API.md](../technical/API.md)|Contract|
+|[Deployment.md](../technical/Deployment.md)|Env vars|
+|[Glossary.md](../reference/Glossary.md)|Vocabulary|
+|[RiskRegister.md](RiskRegister.md)|Risks|

@@ -1,11 +1,11 @@
 # Design — EmotionLens: Design System & UX Principles
 
-| Field | Value |
+|Field|Value|
 |---|---|
-| Version | v0.1 |
-| Last Updated | 2026-08-06 |
-| Owner | Design Lead |
-| Status | In Review |
+|Version|v0.1|
+|Last Updated|2026-08-06|
+|Owner|Design Lead|
+|Status|In Review|
 
 ---
 
@@ -24,26 +24,26 @@
 
 ## 3. Color System
 
-| Token | Hex | Usage | Contrast (AA) |
+|Token|Hex|Usage|Contrast (AA)|
 |---|---|---|---|
-| bg | `#0E1117` | Streamlit dark bg | — |
-| surface | `#262730` | cards | — |
-| text | `#FAFAFA` | body | 15:1 |
-| accent | `#FF4B4B` | Streamlit red CTAs | 5.2:1 |
-| emotion-happy | `#22C55E` | Happy badge | 5:1 |
-| emotion-sad | `#3B82F6` | Sad badge | 5.8:1 |
-| emotion-anger | `#EF4444` | Angry badge | 5.5:1 |
-| emotion-neutral | `#94A3B8` | Neutral badge | 7:1 |
+|bg|`#0E1117`|Streamlit dark bg|—|
+|surface|`#262730`|cards|—|
+|text|`#FAFAFA`|body|15:1|
+|accent|`#FF4B4B`|Streamlit red CTAs|5.2:1|
+|emotion-happy|`#22C55E`|Happy badge|5:1|
+|emotion-sad|`#3B82F6`|Sad badge|5.8:1|
+|emotion-anger|`#EF4444`|Angry badge|5.5:1|
+|emotion-neutral|`#94A3B8`|Neutral badge|7:1|
 
 ## 4. Typography Scale
 
-| Token | Font | Size | Weight | Line-height | Usage |
+|Token|Font|Size|Weight|Line-height|Usage|
 |---|---|---|---|---|---|
-| display | system sans | 28px | 700 | 1.2 | page titles |
-| heading | system sans | 20px | 600 | 1.3 | sections |
-| body | system sans | 14px | 400 | 1.5 | content |
-| emotion-label | system sans | 16px | 700 | 1.3 | overlay labels |
-| caption | system sans | 12px | 400 | 1.4 | meta |
+|display|system sans|28px|700|1.2|page titles|
+|heading|system sans|20px|600|1.3|sections|
+|body|system sans|14px|400|1.5|content|
+|emotion-label|system sans|16px|700|1.3|overlay labels|
+|caption|system sans|12px|400|1.4|meta|
 
 ## 5. Spacing & Grid
 
@@ -92,18 +92,18 @@ Dark theme default (Streamlit dark).
 
 ## 12. Related Documents
 
-| Document | Relationship |
+|Document|Relationship|
 |---|---|
-| [AppFlow.md](AppFlow.md) | Screens |
-| [PRD.md](PRD.md) | UX goals |
-| [TechSpec.md](TechSpec.md) | Stack |
-| [Schema.md](Schema.md) | Session data |
-| [ImplementationPlan.md](ImplementationPlan.md) | Tasks |
-| [Tracker.md](Tracker.md) | Status |
-| [Rules.md](Rules.md) | Standards |
-| [API.md](API.md) | Contracts |
-| [SecurityAndCompliance.md](SecurityAndCompliance.md) | Privacy |
-| [Testing.md](Testing.md) | UI tests |
-| [Deployment.md](Deployment.md) | Deploy |
-| [Glossary.md](Glossary.md) | Vocabulary |
-| [RiskRegister.md](RiskRegister.md) | Risks |
+|[AppFlow.md](AppFlow.md)|Screens|
+|[PRD.md](../product/PRD.md)|UX goals|
+|[TechSpec.md](../technical/TechSpec.md)|Stack|
+|[Schema.md](../technical/Schema.md)|Session data|
+|[ImplementationPlan.md](../project/ImplementationPlan.md)|Tasks|
+|[Tracker.md](../project/Tracker.md)|Status|
+|[Rules.md](../project/Rules.md)|Standards|
+|[API.md](../technical/API.md)|Contracts|
+|[SecurityAndCompliance.md](../technical/SecurityAndCompliance.md)|Privacy|
+|[Testing.md](../technical/Testing.md)|UI tests|
+|[Deployment.md](../technical/Deployment.md)|Deploy|
+|[Glossary.md](../reference/Glossary.md)|Vocabulary|
+|[RiskRegister.md](../project/RiskRegister.md)|Risks|
