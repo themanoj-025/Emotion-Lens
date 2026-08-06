@@ -1,11 +1,11 @@
 # Schema — EmotionLens: Data Model
 
-|Field|Value|
-|---|---|
-|Version|v0.1|
-|Last Updated|2026-08-06|
-|Owner|Data Engineer|
-|Status|In Review|
+| Field | Value |
+| --- | --- |
+| Version | v0.1 |
+| Last Updated | 2026-08-06 |
+| Owner | Data Engineer |
+| Status | In Review |
 
 ---
 
@@ -44,31 +44,31 @@ erDiagram
 ## 2. Collection Definitions
 
 ### TBL-session
-|Field|Type|Nullable|Default|Constraints|Description|
-|---|---|---|---|---|---|
-|session_id|string PK|No|—|unique|Streamlit session|
-|started_at|timestamp|No|now()|—|session start|
-|page|string|Yes|home|—|current page|
+| Field | Type | Nullable | Default | Constraints | Description |
+| --- | --- | --- | --- | --- | --- |
+| session_id | string PK | No | — | unique | Streamlit session |
+| started_at | timestamp | No | now() | — | session start |
+| page | string | Yes | home | — | current page |
 
 ### TBL-prediction
-|Field|Type|Nullable|Default|Constraints|Description|
-|---|---|---|---|---|---|
-|prediction_id|string PK|No|—|unique|pred id|
-|session_id|string FK|No|—|→ session|parent|
-|emotion|string|No|—|7 classes|top emotion|
-|probabilities|json|No|—|7 floats|class probs|
-|confidence|float|No|—|0..1|top prob|
-|created_at|timestamp|No|now()|—|when|
+| Field | Type | Nullable | Default | Constraints | Description |
+| --- | --- | --- | --- | --- | --- |
+| prediction_id | string PK | No | — | unique | pred id |
+| session_id | string FK | No | — | → session | parent |
+| emotion | string | No | — | 7 classes | top emotion |
+| probabilities | json | No | — | 7 floats | class probs |
+| confidence | float | No | — | 0..1 | top prob |
+| created_at | timestamp | No | now() | — | when |
 
 ### TBL-training_run
-|Field|Type|Nullable|Default|Constraints|Description|
-|---|---|---|---|---|---|
-|run_id|string PK|No|—|unique|run id|
-|session_id|string FK|No|—|→ session|owner|
-|architecture|json|No|—|conv blocks etc|config|
-|epochs|int|No|—|> 0|epochs|
-|val_accuracy|float|Yes|—|0..1|result|
-|status|enum|No|running|running/done/failed|state|
+| Field | Type | Nullable | Default | Constraints | Description |
+| --- | --- | --- | --- | --- | --- |
+| run_id | string PK | No | — | unique | run id |
+| session_id | string FK | No | — | → session | owner |
+| architecture | json | No | — | conv blocks etc | config |
+| epochs | int | No | — | > 0 | epochs |
+| val_accuracy | float | Yes | — | 0..1 | result |
+| status | enum | No | running | running/done/failed | state |
 
 ## 3. Relationships
 
@@ -77,18 +77,18 @@ erDiagram
 
 ## 4. Indexes
 
-|Table|Index|Columns|Type|Reason|
-|---|---|---|---|---|
-|prediction|idx_pred_time|(created_at)|btree|analytics trends|
-|prediction|idx_pred_emotion|(emotion)|btree|distribution|
+| Table | Index | Columns | Type | Reason |
+| --- | --- | --- | --- | --- |
+| prediction | idx_pred_time | (created_at) | btree | analytics trends |
+| prediction | idx_pred_emotion | (emotion) | btree | distribution |
 
 ## 5. Enums / Constants
 
-|Enum|Allowed values|
-|---|---|
-|emotion|angry, disgust, fear, happy, neutral, sad, surprise|
-|training_run.status|running, done, failed|
-|image size|48×48 grayscale|
+| Enum | Allowed values |
+| --- | --- |
+| emotion | angry, disgust, fear, happy, neutral, sad, surprise |
+| training_run.status | running, done, failed |
+| image size | 48×48 grayscale |
 
 ## 6. Data Lifecycle
 
@@ -110,35 +110,35 @@ N/A — no DB; schema version in analytics file header.
 
 ## 9. Data Validation Rules
 
-|Field|Enforced where|
-|---|---|
-|probabilities|sum ≈ 1 (app)|
-|emotion|enum (app)|
-|image input|48×48 grayscale (app)|
+| Field | Enforced where |
+| --- | --- |
+| probabilities | sum ≈ 1 (app) |
+| emotion | enum (app) |
+| image input | 48×48 grayscale (app) |
 
 ## 10. Sensitive Data Map
 
-|Field|Sensitivity|Encrypted at rest?|Masked in logs?|
-|---|---|---|---|
-|webcam frames (transient)|biometric-ish|no (in-memory)|not persisted|
-|uploaded images|personal|no|session-scoped|
-|emotion predictions|none|no|no|
-|model file|internal|no|—|
+| Field | Sensitivity | Encrypted at rest? | Masked in logs? |
+| --- | --- | --- | --- |
+| webcam frames (transient) | biometric-ish | no (in-memory) | not persisted |
+| uploaded images | personal | no | session-scoped |
+| emotion predictions | none | no | no |
+| model file | internal | no | — |
 
 ## 11. Related Documents
 
-|Document|Relationship|
-|---|---|
-|[API.md](API.md)|Prediction payloads|
-|[TechSpec.md](TechSpec.md)|Components|
-|[PRD.md](../product/PRD.md)|Requirements|
-|[AppFlow.md](../design/AppFlow.md)|Flows|
-|[Design.md](../design/Design.md)|Display data|
-|[ImplementationPlan.md](../project/ImplementationPlan.md)|Tasks|
-|[Tracker.md](../project/Tracker.md)|Status|
-|[Rules.md](../project/Rules.md)|Standards|
-|[SecurityAndCompliance.md](SecurityAndCompliance.md)|Biometric data|
-|[Testing.md](Testing.md)|Data tests|
-|[Deployment.md](Deployment.md)|Deploy|
-|[Glossary.md](../reference/Glossary.md)|Vocabulary|
-|[RiskRegister.md](../project/RiskRegister.md)|Risks|
+| Document | Relationship |
+| --- | --- |
+| [API.md](API.md) | Prediction payloads |
+| [TechSpec.md](TechSpec.md) | Components |
+| [PRD.md](../product/PRD.md) | Requirements |
+| [AppFlow.md](../design/AppFlow.md) | Flows |
+| [Design.md](../design/Design.md) | Display data |
+| [ImplementationPlan.md](../project/ImplementationPlan.md) | Tasks |
+| [Tracker.md](../project/Tracker.md) | Status |
+| [Rules.md](../project/Rules.md) | Standards |
+| [SecurityAndCompliance.md](SecurityAndCompliance.md) | Biometric data |
+| [Testing.md](Testing.md) | Data tests |
+| [Deployment.md](Deployment.md) | Deploy |
+| [Glossary.md](../reference/Glossary.md) | Vocabulary |
+| [RiskRegister.md](../project/RiskRegister.md) | Risks |

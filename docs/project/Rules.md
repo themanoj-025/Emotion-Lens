@@ -1,11 +1,11 @@
 # Rules — EmotionLens: Coding Standards & AI-Agent Operating Rules
 
-|Field|Value|
-|---|---|
-|Version|v0.1|
-|Last Updated|2026-08-06|
-|Owner|Engineering Lead|
-|Status|In Review|
+| Field | Value |
+| --- | --- |
+| Version | v0.1 |
+| Last Updated | 2026-08-06 |
+| Owner | Engineering Lead |
+| Status | In Review |
 
 ---
 
@@ -75,12 +75,12 @@ assets/style.css
 
 ## 8. Prohibited Patterns
 
-|Anti-pattern|Why|
-|---|---|
-|Persisting camera frames|Privacy|
-|Committing large model binaries|Repo bloat|
-|Blanket except|Hides failures|
-|Hardcoded model path|Portability|
+| Anti-pattern | Why |
+| --- | --- |
+| Persisting camera frames | Privacy |
+| Committing large model binaries | Repo bloat |
+| Blanket except | Hides failures |
+| Hardcoded model path | Portability |
 
 ## 9. Escalation Rules
 
@@ -89,18 +89,18 @@ assets/style.css
 
 ## 10. Related Documents
 
-|Document|Relationship|
-|---|---|
-|[Testing.md](../technical/Testing.md)|Test requirements|
-|[SecurityAndCompliance.md](../technical/SecurityAndCompliance.md)|Privacy|
-|[PRD.md](../product/PRD.md)|Requirements|
-|[TechSpec.md](../technical/TechSpec.md)|Architecture|
-|[AppFlow.md](../design/AppFlow.md)|Flows|
-|[Design.md](../design/Design.md)|Design|
-|[Schema.md](../technical/Schema.md)|Data|
-|[ImplementationPlan.md](ImplementationPlan.md)|Tasks|
-|[Tracker.md](Tracker.md)|Status|
-|[API.md](../technical/API.md)|Contract|
-|[Deployment.md](../technical/Deployment.md)|Env vars|
-|[Glossary.md](../reference/Glossary.md)|Vocabulary|
-|[RiskRegister.md](RiskRegister.md)|Risks|
+| Document | Relationship |
+| --- | --- |
+| [Testing.md](../technical/Testing.md) | Test requirements |
+| [SecurityAndCompliance.md](../technical/SecurityAndCompliance.md) | Privacy |
+| [PRD.md](../product/PRD.md) | Requirements |
+| [TechSpec.md](../technical/TechSpec.md) | Architecture |
+| [AppFlow.md](../design/AppFlow.md) | Flows |
+| [Design.md](../design/Design.md) | Design |
+| [Schema.md](../technical/Schema.md) | Data |
+| [ImplementationPlan.md](ImplementationPlan.md) | Tasks |
+| [Tracker.md](Tracker.md) | Status |
+| [API.md](../technical/API.md) | Contract |
+| [Deployment.md](../technical/Deployment.md) | Env vars |
+| [Glossary.md](../reference/Glossary.md) | Vocabulary |
+| [RiskRegister.md](RiskRegister.md) | Risks |

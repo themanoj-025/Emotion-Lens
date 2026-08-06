@@ -43,10 +43,10 @@ python webcam_inference.py
 ```
 
 ### Environment Variables (API server only)
-|Variable|Default|Description|
-|---|---|---|
-|`API_HOST`|`0.0.0.0`|FastAPI bind address|
-|`API_PORT`|`8000`|FastAPI server port|
+| Variable | Default | Description |
+| --- | --- | --- |
+| `API_HOST` | `0.0.0.0` | FastAPI bind address |
+| `API_PORT` | `8000` | FastAPI server port |
 
 ## Code Style
 
