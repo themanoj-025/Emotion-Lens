@@ -112,7 +112,7 @@ def _predict_single_face(model, face_roi, bbox):
             "probabilities": all_probs.tolist(),
             "bbox": (x, y, w, h),
         }
-    except Exception as e:
+    except Exception:
         return None
 
 

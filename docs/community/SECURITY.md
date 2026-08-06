@@ -60,7 +60,7 @@ The FastAPI server (`api_server.py`) currently has:
 ## Environment Variables
 
 | Variable | Sensitivity | Notes |
-|---|---|---|
+| --- | --- | --- |
 | `API_HOST` | Low | Bind address (default: `0.0.0.0`). Change to `127.0.0.1` for local-only access. |
 | `API_PORT` | Low | Server port (default: `8000`). |
 

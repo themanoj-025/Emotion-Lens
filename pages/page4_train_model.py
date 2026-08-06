@@ -444,7 +444,7 @@ def _run_training(
         ]
 
         # Single fit call - efficient, allows TF to optimize the full training run
-        history = model.fit(
+        model.fit(
             train_generator,
             steps_per_epoch=steps_per_epoch,
             epochs=epochs,
