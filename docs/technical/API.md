@@ -66,6 +66,20 @@ N/A — no auth in v1 (public local/cloud inference).
 
 - v1 flat paths; version prefix planned.
 
+## Request Flow (v1 is public — no auth)
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant API as FastAPI
+    participant M as CNN Model
+    C->>API: POST /predict (base64 image)
+    API->>API: validate input (Pydantic)
+    API->>M: run inference (3 conv blocks)
+    M-->>API: emotion scores + confidence
+    API-->>C: JSON prediction + optional Grad-CAM
+```
+
 ## 8. Related Documents
 
 | Document | Relationship |

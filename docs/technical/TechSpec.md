@@ -129,6 +129,22 @@ N/A — fully local/self-contained except optional Streamlit Cloud hosting.
 | Webcam permission | Graceful degradation |
 | FER2013 accuracy ceiling | Transparent docs |
 
+## Deployment Topology
+
+```mermaid
+graph TD
+    USER[Browser] --> UI[Streamlit dashboard]
+    USER --> API[FastAPI inference service]
+    API --> DETECT[OpenCV Haar cascade]
+    DETECT --> CNN[TensorFlow CNN: 3 conv blocks]
+    CNN --> RESULT[Emotions + confidence + Grad-CAM]
+    API --> UI
+    subgraph Deploy
+        UI --> SC[Streamlit Cloud]
+        API --> API_C[API container / Docker]
+    end
+```
+
 ## 11. Related Documents
 
 | Document | Relationship |
