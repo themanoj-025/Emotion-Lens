@@ -1,163 +1,266 @@
-# EmotionLens — Face Emotion Detection
+<p align="center">
+  <img src="https://img.shields.io/badge/EmotionLens-Face%20Emotion%20Detection-purple?style=for-the-badge" alt="EmotionLens Logo" />
+</p>
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue?style=flat&logo=python)](https://python.org)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange?style=flat&logo=tensorflow)](https://tensorflow.org)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.36+-red?style=flat&logo=streamlit)](https://streamlit.io)
-[![OpenCV](https://img.shields.io/badge/OpenCV-4.x-green?style=flat&logo=opencv)](https://opencv.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-teal?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/license-MIT-brightgreen?style=flat)](LICENSE)
+<h1 align="center">😃 EmotionLens</h1>
 
-A real-time facial emotion recognition system that detects 7 emotions (Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise) from images, video streams, and webcam feeds. Uses a CNN trained on FER2013 dataset, deployed via Streamlit web app and FastAPI inference server.
+<p align="center">
+  <strong>Real-Time Facial Emotion Recognition System</strong>
+</p>
 
----
-
-## Overview
-
-**EmotionLens** is a computer vision application for facial expression classification. It provides three interfaces: a Streamlit web app (interactive UI with live camera, image upload, analytics, training, and gamified challenges), a FastAPI REST API for programmatic inference, and a local webcam inference script.
-
-### Features
-
-- **Live webcam detection** with face bounding boxes, emotion labels, and real-time probability charts
-- **Image analysis** with drag-and-drop upload, batch processing, and radar charts
-- **Analytics dashboard** with emotion distribution, trends, heatmaps, and session summaries
-- **Model training UI** with configurable architectures, hyperparameters, and live progress
-- **Model inspector** with layer-by-layer architecture, feature maps, and Grad-CAM visualization
-- **Emotion challenge game** with two modes and achievement badges
-- **REST API** with endpoints for base64 and file upload prediction
-
-### Architecture
-
-```
-User Interface Options
-    ├── Streamlit App (streamlit_app.py + pages/)
-    │     ├── Live Camera
-    │     ├── Image Analysis
-    │     ├── Analytics
-    │     ├── Train Model
-    │     ├── Model Inspector
-    │     └── Emotion Game
-    ├── FastAPI Server (api_server.py)
-    │     ├── GET  /health       → Health check
-    │     ├── POST /predict      → Predict from base64 image
-    │     └── POST /predict-file → Predict from uploaded file
-    └── Webcam Script (webcam_inference.py)
-                ↓
-          CNN Model (emotion_model.h5)
-```
-
-### Tech Stack
-
-| Category | Technology |
-|---|---|
-| **Language** | Python 3.8+ |
-| **Web UI** | Streamlit |
-| **API Framework** | FastAPI |
-| **Deep Learning** | TensorFlow / Keras (CNN) |
-| **Computer Vision** | OpenCV (Haar Cascade) |
-| **Visualization** | Plotly, Matplotlib |
-| **Deployment** | Streamlit Cloud, Docker |
-
-### Model Architecture
-
-The default CNN has 3 convolutional blocks (32→64→128 filters) with max pooling, dropout, and a dense top. Total parameters: ~1.2M. Validation accuracy: ~62% (standard for FER2013 dataset).
+<p align="center">
+  <a href="https://github.com/themanoj-025/Emotion-Lens/actions"><img src="https://img.shields.io/github/actions/workflow/status/themanoj-025/Emotion-Lens/ci.yml?style=flat-square&label=CI" alt="CI Status" /></a>
+  <a href="https://github.com/themanoj-025/Emotion-Lens/blob/main/LICENSE"><img src="https://img.shields.io/github/license/themanoj-025/Emotion-Lens?style=flat-square" alt="License" /></a>
+  <a href="https://github.com/themanoj-025/Emotion-Lens/stargazers"><img src="https://img.shields.io/github/stars/themanoj-025/Emotion-Lens?style=social" alt="Stars" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/Python-3.8+-blue?style=flat-square" alt="Python" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/TensorFlow-2.x-orange?style=flat-square" alt="TensorFlow" /></a>
+</p>
 
 ---
 
-## Installation
+<p align="center">
+  <strong>Detect emotions from faces in real-time.</strong>
+  <br />
+  Live webcam, image upload, analytics dashboard, model training UI, and gamified challenges.
+</p>
+
+---
+
+## ✨ Features
+
+| Feature | Description |
+|---------|-------------|
+| 📹 **Live Webcam Detection** | Real-time emotion recognition with face bounding boxes |
+| 🖼️ **Image Analysis** | Drag-and-drop upload with batch processing |
+| 📊 **Analytics Dashboard** | Emotion distribution, trends, and heatmaps |
+| 🎓 **Model Training UI** | Train CNN models in-app with configurable hyperparameters |
+| 🔍 **Model Inspector** | Layer-by-layer architecture, feature maps, Grad-CAM |
+| 🎮 **Emotion Challenge** | Gamified emotion recognition game with badges |
+| 🔌 **REST API** | FastAPI endpoints for programmatic inference |
+
+---
+
+## 🎯 Detected Emotions
+
+| Emotion | Emoji | Description |
+|---------|-------|-------------|
+| Angry | 😠 | Anger, frustration |
+| Disgust | 🤢 | Disgust, revulsion |
+| Fear | 😨 | Fear, anxiety |
+| Happy | 😄 | Joy, happiness |
+| Neutral | 😐 | Neutral expression |
+| Sad | 😢 | Sadness, sorrow |
+| Surprise | 😲 | Surprise, amazement |
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - Python 3.8+
-- Webcam (for live camera features)
-- Trained model file (`emotion_model.h5`)
+- Webcam (for live features)
 
-### Setup
+### Installation
 
 ```bash
+# Clone the repository
 git clone https://github.com/themanoj-025/Emotion-Lens.git
 cd Emotion-Lens
+
+# Install dependencies
 pip install -r requirements.txt
+
 # Train or download a model
-python train.py  # or download pre-trained weights
+python train.py
 ```
 
-### Usage
+### Run the App
 
 ```bash
-# Streamlit dashboard
+# Streamlit dashboard (recommended)
 streamlit run streamlit_app.py
 
-# API server (sidecar)
+# API server
 python api_server.py
 
 # Webcam inference (CLI)
 python webcam_inference.py
 ```
 
-### API Endpoints
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      User Interface                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │  Streamlit   │  │   FastAPI    │  │   Webcam     │          │
+│  │  Dashboard   │  │   REST API   │  │   Script     │          │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘          │
+│         │                 │                 │                   │
+│         └─────────────────┼─────────────────┘                   │
+│                           │                                     │
+│                           ▼                                     │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              Inference Engine (inference.py)              │   │
+│  │  • Model loading & caching                               │   │
+│  │  • Face detection (Haar Cascade)                          │   │
+│  │  • Preprocessing & prediction                             │   │
+│  │  • Grad-CAM visualization                                 │   │
+│  └───────────────────────┬──────────────────────────────────┘   │
+│                          │                                      │
+│                          ▼                                      │
+│  ┌──────────────────────────────────────────────────────────┐   │
+│  │              CNN Model (emotion_model.h5)                 │   │
+│  │  3 conv blocks (32→64→128) + Dense + Softmax             │   │
+│  │  ~1.2M parameters | ~62% validation accuracy             │   │
+│  └──────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📋 Streamlit App Pages
+
+| Page | Description |
+|------|-------------|
+| 📹 **Live Camera** | Real-time webcam emotion detection |
+| 🖼️ **Image Analysis** | Upload images for emotion analysis |
+| 📊 **Analytics** | Emotion distribution and trends |
+| 🎓 **Train Model** | Train CNN with custom settings |
+| 🔍 **Model Inspector** | View model architecture and features |
+| 🎮 **Emotion Game** | Gamified emotion recognition |
+| ℹ️ **About** | Project information |
+
+---
+
+## 📁 Project Structure
+
+```
+Emotion-Lens/
+├── streamlit_app.py              # Main dashboard
+├── api_server.py                 # FastAPI REST API
+├── inference.py                  # Core inference engine
+├── train.py                      # Model training
+├── webcam_inference.py           # Webcam detection
+├── pages/                        # Streamlit pages
+│   ├── page1_live_camera.py
+│   ├── page2_image_analysis.py
+│   ├── page3_analytics.py
+│   ├── page4_train_model.py
+│   ├── page5_model_inspector.py
+│   ├── page6_emotion_game.py
+│   └── page7_about.py
+├── utils/
+│   ├── model_utils.py            # Model loading
+│   ├── emotion_utils.py          # Prediction & Grad-CAM
+│   └── session_utils.py          # Session state
+├── assets/
+│   └── style.css                 # Custom theme
+├── requirements.txt
+└── Dockerfile
+```
+
+---
+
+## 📡 API Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/health` | Health check |
+| `POST` | `/predict` | Predict from base64 image |
+| `POST` | `/predict-file` | Predict from uploaded file |
+
+### Example Usage
 
 ```bash
 # Health check
 curl http://localhost:8000/health
 
 # Predict from file
-curl -X POST http://localhost:8000/predict-file -F "file=@face.jpg"
+curl -X POST http://localhost:8000/predict-file \
+  -F "file=@face.jpg"
 
 # Predict from base64
 curl -X POST http://localhost:8000/predict \
   -H "Content-Type: application/json" \
-  -d '{"image": "'"$(base64 -w0 face.jpg)"'"}'
-```
-
-### Dataset
-
-Trained on FER2013 dataset (ICML 2013 Workshop) — 35,887 grayscale 48x48 face images across 7 emotion categories.
-
----
-
-## Project Structure
-
-```
-├── streamlit_app.py              # Main entry point & sidebar navigation
-├── api_server.py                 # FastAPI REST API server
-├── inference.py                  # Core inference engine
-├── train.py                      # Model training script
-├── webcam_inference.py           # Real-time webcam detection
-├── assets/style.css              # Custom theme styles
-├── utils/
-│   ├── model_utils.py            # Model loading and caching
-│   ├── emotion_utils.py          # Preprocessing, prediction, Grad-CAM
-│   └── session_utils.py          # Session state management
-├── pages/
-│   ├── page1_live_camera.py      # Real-time webcam UI
-│   ├── page2_image_analysis.py   # Image upload analysis
-│   ├── page3_analytics.py        # Emotion analytics dashboard
-│   ├── page4_train_model.py      # In-app model training
-│   ├── page5_model_inspector.py  # Model architecture viewer
-│   ├── page6_emotion_game.py     # Gamified emotion challenges
-│   └── page7_about.py            # Project information
-└── docs/                         # Architecture documentation
+  -d '{"image": "base64_encoded_image"}'
 ```
 
 ---
 
-## Deployment
-
-### Streamlit Cloud
-
-1. Upload all files including `emotion_model.h5`
-2. `packages.txt` includes system deps: `libgl1-mesa-glx`, `libglib2.0-0`
-3. WebRTC works with built-in STUN servers
-
-### Docker
+## 🐳 Docker
 
 ```bash
+# Build
 docker build -t emotionlens .
+
+# Run
 docker run -p 8501:8501 -p 8000:8000 emotionlens
 ```
 
 ---
 
-## License
+## 📊 Model Details
 
-MIT
+| Property | Value |
+|----------|-------|
+| **Architecture** | CNN (3 conv blocks) |
+| **Input** | 48×48 grayscale images |
+| **Output** | 7 emotion classes |
+| **Parameters** | ~1.2M |
+| **Validation Accuracy** | ~62% |
+| **Dataset** | FER2013 (35,887 images) |
+
+> 💡 **Note:** 62% accuracy is standard for FER2013 — the dataset is intentionally challenging with ambiguous expressions.
+
+---
+
+## 🗺️ Roadmap
+
+- [x] Live webcam detection
+- [x] Image upload analysis
+- [x] Analytics dashboard
+- [x] Model training UI
+- [x] Model inspector
+- [x] Emotion game
+- [x] REST API
+- [x] Docker support
+- [ ] Multi-face tracking
+- [ ] Video file analysis
+- [ ] Emotion history
+- [ ] Custom model upload
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.
+
+---
+
+## 🙏 Acknowledgements
+
+- [FER2013 Dataset](https://www.kaggle.com/datasets/msambare/fer2013) - Emotion dataset
+- [TensorFlow](https://www.tensorflow.org/) - Deep learning framework
+- [OpenCV](https://opencv.org/) - Computer vision
+- [Streamlit](https://streamlit.io/) - Dashboard framework
+- [FastAPI](https://fastapi.tiangolo.com/) - REST API framework
+
+---
+
+<p align="center">
+  Made with ❤️ by <a href="https://github.com/themanoj-025">themanoj-025</a>
+</p>
+
+<p align="center">
+  If you find this project useful, please give it a ⭐ star!
+</p>
