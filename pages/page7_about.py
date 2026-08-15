@@ -42,16 +42,16 @@ def show():
             line-height: 1.8;
         ">
         <p>
-            <strong>EmotionLens</strong> is a production-grade deep learning application that 
+            <strong>EmotionLens</strong> is a production-grade deep learning application that
             detects and classifies facial expressions into <strong>7 emotions</strong>:
             😠 Angry, 🤢 Disgust, 😨 Fear, 😊 Happy, 😐 Neutral, 😢 Sad, and 😲 Surprise.
         </p>
         <p>
-            The system uses a <strong>Convolutional Neural Network (CNN)</strong> trained on the 
+            The system uses a <strong>Convolutional Neural Network (CNN)</strong> trained on the
             <strong>FER2013 dataset</strong>, achieving approximately <strong>62% validation accuracy</strong>.
         </p>
         <p>
-            This application features a multi-page Streamlit dashboard with real-time webcam 
+            This application features a multi-page Streamlit dashboard with real-time webcam
             detection, static image analysis, interactive games, model training, and more.
         </p>
         </div>
@@ -68,7 +68,7 @@ def show():
         st.markdown(
             """
             The model is a standard CNN with **3 convolutional blocks**:
-            
+
             1. **Input**: 48×48 grayscale image (1 channel)
             2. **Conv Block 1**: Conv2D (32 filters) → MaxPooling → Dropout (0.25)
             3. **Conv Block 2**: Conv2D (64 filters) → MaxPooling → Dropout (0.25)
@@ -76,7 +76,7 @@ def show():
             5. **Flatten**: Convert 2D features to 1D vector
             6. **Dense**: 1024 units with ReLU activation → Dropout (0.5)
             7. **Output**: 7 units with Softmax activation
-            
+
             - **Optimizer**: Adam
             - **Loss**: Categorical Crossentropy
             - **Total Parameters**: ~1.2M
@@ -130,9 +130,9 @@ def show():
 
     st.markdown(
         """
-        The **FER2013** (Facial Expression Recognition 2013) dataset was introduced in the 
+        The **FER2013** (Facial Expression Recognition 2013) dataset was introduced in the
         ICML 2013 workshop on Challenges in Representation Learning. It consists of:
-        
+
         - **35,887** grayscale images of faces
         - **48×48** pixels resolution
         - **7 emotion categories**
@@ -155,12 +155,8 @@ def show():
         "Surprise": 3171,
     }
 
-    colors = [
-        EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in distribution.keys()
-    ]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in distribution.keys()
-    ]
+    colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in distribution]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in distribution]
 
     fig = go.Figure(
         data=[
@@ -210,9 +206,9 @@ def show():
             margin-top: 1rem;
         ">
             <p style="color: #8B949E; margin: 0;">
-                💡 <strong>Note:</strong> 62% validation accuracy is considered good for the 
-                FER2013 dataset with a simple CNN. The dataset contains challenging, 
-                real-world images with varied lighting, pose, and occlusion. State-of-the-art 
+                💡 <strong>Note:</strong> 62% validation accuracy is considered good for the
+                FER2013 dataset with a simple CNN. The dataset contains challenging,
+                real-world images with varied lighting, pose, and occlusion. State-of-the-art
                 models achieve ~73% using ensembles and attention mechanisms.
             </p>
         </div>
@@ -238,10 +234,7 @@ def show():
 
     st.table(
         pd.DataFrame(
-            [
-                {"Technology": tech, "Description": desc}
-                for tech, desc in tech_stack.items()
-            ]
+            [{"Technology": tech, "Description": desc} for tech, desc in tech_stack.items()]
         )
     )
 

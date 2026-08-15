@@ -188,9 +188,7 @@ def _build_model(arch_type, input_shape=(48, 48, 1), num_classes=7, dropout_rate
     model = Sequential()
 
     if arch_type == "Lightweight (2 Conv blocks)":
-        model.add(
-            Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=input_shape)
-        )
+        model.add(Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=input_shape))
         model.add(BatchNormalization())
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(dropout_rate))
@@ -216,9 +214,7 @@ def _build_model(arch_type, input_shape=(48, 48, 1), num_classes=7, dropout_rate
             model.add(Dropout(dropout_rate if i < 4 else 0.5))
 
     else:  # Standard (3 Conv blocks)
-        model.add(
-            Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=input_shape)
-        )
+        model.add(Conv2D(32, kernel_size=(3, 3), activation="relu", input_shape=input_shape))
         model.add(MaxPooling2D(pool_size=(2, 2)))
         model.add(Dropout(dropout_rate))
 
@@ -353,16 +349,10 @@ def _run_training(
 
                 # Update metrics display
                 current_loss = history_data["loss"][-1] if history_data["loss"] else 0
-                current_acc = (
-                    history_data["accuracy"][-1] if history_data["accuracy"] else 0
-                )
-                current_val_loss = (
-                    history_data["val_loss"][-1] if history_data["val_loss"] else 0
-                )
+                current_acc = history_data["accuracy"][-1] if history_data["accuracy"] else 0
+                current_val_loss = history_data["val_loss"][-1] if history_data["val_loss"] else 0
                 current_val_acc = (
-                    history_data["val_accuracy"][-1]
-                    if history_data["val_accuracy"]
-                    else 0
+                    history_data["val_accuracy"][-1] if history_data["val_accuracy"] else 0
                 )
 
                 metrics_placeholder.markdown(
@@ -397,9 +387,7 @@ def _run_training(
                 if (epoch + 1) % 5 == 0 or (epoch + 1) == self.total_epochs:
                     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-                    axes[0].plot(
-                        history_data["loss"], label="Training Loss", color="#FF6B6B"
-                    )
+                    axes[0].plot(history_data["loss"], label="Training Loss", color="#FF6B6B")
                     axes[0].plot(
                         history_data["val_loss"],
                         label="Validation Loss",
@@ -459,9 +447,7 @@ def _run_training(
         # Save the model
         model.save(model_name)
 
-        status_placeholder.success(
-            f"✅ Training complete! Model saved as '{model_name}'"
-        )
+        status_placeholder.success(f"✅ Training complete! Model saved as '{model_name}'")
 
         # Final metrics
         final_val_acc = history_data["val_accuracy"][-1]
@@ -506,9 +492,7 @@ def _run_training(
         st.markdown("### 🔀 Next Steps")
         step_col1, step_col2, step_col3 = st.columns(3)
         with step_col1:
-            st.page_link(
-                "streamlit_app.py", label="🎥 Test with Live Camera", icon="🎥"
-            )
+            st.page_link("streamlit_app.py", label="🎥 Test with Live Camera", icon="🎥")
         with step_col2:
             st.page_link("streamlit_app.py", label="🖼️ Try Image Analysis", icon="🖼️")
         with step_col3:

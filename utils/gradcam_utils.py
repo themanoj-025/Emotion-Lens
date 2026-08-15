@@ -69,9 +69,7 @@ def overlay_gradcam(
     """
     h, w = original_img_gray.shape[:2]
     heatmap_resized = cv2.resize(heatmap, (w, h))
-    heatmap_colored = cv2.applyColorMap(
-        (heatmap_resized * 255).astype("uint8"), cv2.COLORMAP_JET
-    )
+    heatmap_colored = cv2.applyColorMap((heatmap_resized * 255).astype("uint8"), cv2.COLORMAP_JET)
     original_bgr = cv2.cvtColor(original_img_gray, cv2.COLOR_GRAY2BGR)
     superimposed = cv2.addWeighted(original_bgr, 1 - alpha, heatmap_colored, alpha, 0)
     return superimposed

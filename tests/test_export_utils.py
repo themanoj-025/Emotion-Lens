@@ -4,8 +4,6 @@ import csv
 import io
 import json
 
-import pandas as pd
-
 from utils.export_utils import (
     export_predictions_csv,
     export_predictions_json,

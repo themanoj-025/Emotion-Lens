@@ -17,9 +17,7 @@ LAYOUT_BASE = dict(
 )
 
 
-def emotion_bar_chart(
-    probs: list[float], title: str = "Emotion Probabilities"
-) -> go.Figure:
+def emotion_bar_chart(probs: list[float], title: str = "Emotion Probabilities") -> go.Figure:
     """Horizontal bar chart — 7 emotions with their individual colors."""
     fig = go.Figure()
     for emotion, prob in zip(EMOTIONS, probs):
@@ -46,9 +44,7 @@ def emotion_bar_chart(
     return fig
 
 
-def emotion_radar_chart(
-    probs: list[float], title: str = "Emotion Profile"
-) -> go.Figure:
+def emotion_radar_chart(probs: list[float], title: str = "Emotion Profile") -> go.Figure:
     """Radar/Spider chart for emotion probabilities."""
     fig = go.Figure(
         go.Scatterpolar(
@@ -143,9 +139,7 @@ def valence_arousal_scatter(predictions: list[dict]) -> go.Figure:
             x=valences,
             y=arousals,
             mode="markers",
-            marker=dict(
-                color=colors, size=8, opacity=0.7, line=dict(color="#0D1117", width=1)
-            ),
+            marker=dict(color=colors, size=8, opacity=0.7, line=dict(color="#0D1117", width=1)),
             text=emotions,
             hovertemplate="<b>%{text}</b><br>Valence: %{x:.1f}, Arousal: %{y:.1f}<extra></extra>",
         )

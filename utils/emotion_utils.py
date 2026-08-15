@@ -80,9 +80,7 @@ def predict_from_image(model, face_cascade, image, detect_faces=True):
 
         if len(faces) == 0:
             # Fallback: use the whole image
-            results.append(
-                _predict_single_face(model, gray, (0, 0, gray.shape[1], gray.shape[0]))
-            )
+            results.append(_predict_single_face(model, gray, (0, 0, gray.shape[1], gray.shape[0])))
             results[-1]["fallback"] = True
             return results
 
@@ -150,9 +148,7 @@ def draw_detection_result(image, result):
     cv2.rectangle(image, (x, y - th - 15), (x + tw + 10, y), bgr_color, -1)
 
     # Label text
-    cv2.putText(
-        image, label, (x + 5, y - 5), font, font_scale, (255, 255, 255), thickness
-    )
+    cv2.putText(image, label, (x + 5, y - 5), font, font_scale, (255, 255, 255), thickness)
 
     # Confidence bar below face
     bar_width = int(w * confidence)
@@ -197,9 +193,7 @@ def compute_positivity_score(probabilities):
         "Surprise": 0.3,
     }
 
-    score = sum(
-        probabilities[i] * weights[emotion] for i, emotion in enumerate(EMOTIONS)
-    )
+    score = sum(probabilities[i] * weights[emotion] for i, emotion in enumerate(EMOTIONS))
     return np.clip(score, -1.0, 1.0)
 
 
@@ -372,10 +366,8 @@ def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate
         # Ensure kernel size is odd and not larger than face
         kx = min(kernel_size[0] if kernel_size[0] % 2 == 1 else kernel_size[0] + 1, w)
         ky = min(kernel_size[1] if kernel_size[1] % 2 == 1 else kernel_size[1] + 1, h)
-        if kx < 3:
-            kx = 3
-        if ky < 3:
-            ky = 3
+        kx = max(kx, 3)
+        ky = max(ky, 3)
         if kx % 2 == 0:
             kx += 1
         if ky % 2 == 0:
@@ -423,10 +415,10 @@ def render_mood_music_card(emotion, confidence=None):
     # Build search URLs
     import urllib.parse
 
-    spotify_url = (
-        f"https://open.spotify.com/search/{urllib.parse.quote(music['spotify'])}"
+    spotify_url = f"https://open.spotify.com/search/{urllib.parse.quote(music['spotify'])}"
+    youtube_url = (
+        f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
     )
-    youtube_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
 
     st.markdown(
         f"""

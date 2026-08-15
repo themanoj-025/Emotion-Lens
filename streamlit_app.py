@@ -81,9 +81,7 @@ with col2:
 
 # Dark mode toggle
 st.sidebar.markdown("---")
-dark_mode = st.sidebar.toggle(
-    "🌙 Dark Mode", value=st.session_state.get("dark_mode", True)
-)
+dark_mode = st.sidebar.toggle("🌙 Dark Mode", value=st.session_state.get("dark_mode", True))
 if dark_mode != st.session_state.get("dark_mode"):
     st.session_state.dark_mode = dark_mode
     st.rerun()
@@ -94,18 +92,18 @@ with st.sidebar.expander("🌐 API Server", expanded=False):
     st.markdown(
         """
         **REST API** for external apps to consume the emotion model.
-        
+
         ```bash
         # Start the server
         python api_server.py
         ```
-        
+
         **Endpoints:**
         - `POST /predict` — base64 image → emotion JSON
         - `POST /predict-file` — upload image file → emotion JSON
         - `GET  /health` — server status
         - `GET  /docs` — Swagger UI
-        
+
         **Quick test:**
         ```bash
         curl -X POST http://localhost:8000/predict \\

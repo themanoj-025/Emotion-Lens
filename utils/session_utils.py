@@ -59,9 +59,9 @@ def add_prediction(emotion, confidence, all_probs):
         {
             "emotion": emotion,
             "confidence": float(confidence),
-            "probabilities": all_probs.tolist()
-            if hasattr(all_probs, "tolist")
-            else list(all_probs),
+            "probabilities": (
+                all_probs.tolist() if hasattr(all_probs, "tolist") else list(all_probs)
+            ),
             "timestamp": datetime.now().isoformat(),
         }
     )
