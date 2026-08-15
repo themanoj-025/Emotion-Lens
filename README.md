@@ -286,3 +286,11 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 <p align="center">
   If you find this project useful, please give it a ⭐ star!
 </p>
+---
+
+## ⭐ Star History
+
+[![Last Commit](https://img.shields.io/github/last-commit/themanoj-025/Emotion-Lens?style=flat-square)](https://github.com/themanoj-025/Emotion-Lens)
+[![Contributors](https://img.shields.io/github/contributors/themanoj-025/Emotion-Lens?style=flat-square)](https://github.com/themanoj-025/Emotion-Lens/graphs/contributors)
+
+[![Star History Chart](https://api.star-history.com/svg?repos=themanoj-025/Emotion-Lens&type=Date)](https://star-history.com/#Emotion-Lens&Date)
