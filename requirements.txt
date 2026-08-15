@@ -1,0 +1,22 @@
+# Core ML
+tensorflow==2.21.0
+numpy==2.4.6
+opencv-python-headless==5.0.0.93
+pillow==10.1.0
+kagglehub>=1.0.2
+
+# Streamlit
+streamlit==1.61.1
+
+# Visualization
+
+matplotlib==3.11.1
+plotly==6.9.0
+
+
+# Utils
+pandas==3.0.5
+scikit-learn==1.9.0
+scipy==1.17.1
+requests==2.31.0
+protobuf==7.35.1
