@@ -329,6 +329,22 @@ jobs:
           print('All page modules compile cleanly.')
           "
 
+  # ─── Unit Tests ──────────────────────────────────────────
+  tests:
+    runs-on: ubuntu-latest
+    needs: [lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - name: Install test dependencies (pure-logic, no TensorFlow)
+        run: pip install pytest numpy pandas
+
+      - name: Run unit tests
+        run: pytest tests/ -v
+
   # ─── Docker Build & Validate ─────────────────────────────
   docker:
     runs-on: ubuntu-latest

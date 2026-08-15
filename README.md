@@ -31,6 +31,7 @@
 - [✨ Features](#-features)
 - [🎯 Detected Emotions](#-detected-emotions)
 - [🚀 Quick Start](#-quick-start)
+- [🧪 Testing](#-testing)
 - [🏗️ Architecture](#️-architecture)
 - [📋 Streamlit App Pages](#-streamlit-app-pages)
 - [📁 Project Structure](#-project-structure)
@@ -109,6 +110,15 @@ python api_server.py
 # Webcam inference (CLI)
 python webcam_inference.py
 ```
+
+## 🧪 Testing
+
+```bash
+pip install pytest numpy pandas
+pytest tests/
+```
+
+Unit tests cover the pure-logic modules (config, temporal smoothing, exports) and run without TensorFlow or a trained model. CI runs them on every push via the `tests` job.
 
 ---
 
