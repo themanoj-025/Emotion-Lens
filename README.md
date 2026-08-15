@@ -26,6 +26,28 @@
 
 ---
 
+## 📋 Table of Contents
+
+- [✨ Features](#-features)
+- [🎯 Detected Emotions](#-detected-emotions)
+- [🚀 Quick Start](#-quick-start)
+- [🏗️ Architecture](#️-architecture)
+- [📋 Streamlit App Pages](#-streamlit-app-pages)
+- [📁 Project Structure](#-project-structure)
+- [📡 API Endpoints](#-api-endpoints)
+- [🐳 Docker](#-docker)
+- [📊 Model Details](#-model-details)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+- [🙏 Acknowledgements](#-acknowledgements)
+
+---
+
+> 📸 **Screenshot placeholder:** Add a GIF of live webcam detection with face bounding boxes.
+
+---
+
 ## ✨ Features
 
 | Feature | Description |
