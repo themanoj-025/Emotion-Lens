@@ -331,9 +331,7 @@ def _render_feature_maps_tab(model):
 
     # Get conv layers
     conv_layers = [
-        (i, layer)
-        for i, layer in enumerate(model.layers)
-        if "conv2d" in layer.name.lower()
+        (i, layer) for i, layer in enumerate(model.layers) if "conv2d" in layer.name.lower()
     ]
 
     if not conv_layers:
@@ -341,9 +339,7 @@ def _render_feature_maps_tab(model):
         return
 
     # Layer selector
-    layer_options = [
-        f"Layer {i}: {l.name} (filters: {l.filters})" for i, l in conv_layers
-    ]
+    layer_options = [f"Layer {i}: {l.name} (filters: {l.filters})" for i, l in conv_layers]
     selected_layer_idx = st.select_slider(
         "Select convolutional layer to visualize",
         options=list(range(len(layer_options))),
@@ -357,9 +353,7 @@ def _render_feature_maps_tab(model):
     # Create a submodel that outputs the activations of the selected conv layer
     from tensorflow.keras.models import Model as KerasModel
 
-    activation_model = KerasModel(
-        inputs=model.input, outputs=model.layers[layer_idx].output
-    )
+    activation_model = KerasModel(inputs=model.input, outputs=model.layers[layer_idx].output)
     activations = activation_model.predict(img_input, verbose=0)[0]
 
     st.markdown(f"#### Feature Maps for Layer: {conv_layer.name}")
@@ -484,9 +478,9 @@ def _render_gradcam_tab(model):
                 ">
                     <h4 style="color: #00D4AA; margin: 0 0 0.5rem 0;">🔍 Interpretation</h4>
                     <p style="color: #E6EDF3; margin: 0;">
-                        The red/orange regions show where the CNN focused most for predicting 
-                        <strong>{EMOTION_CONFIG.get(emotion, {}).get("emoji", "")} {emotion}</strong>. 
-                        Look at the mouth, eyes, and brow areas — these facial features are most 
+                        The red/orange regions show where the CNN focused most for predicting
+                        <strong>{EMOTION_CONFIG.get(emotion, {}).get("emoji", "")} {emotion}</strong>.
+                        Look at the mouth, eyes, and brow areas — these facial features are most
                         important for emotion classification.
                     </p>
                 </div>

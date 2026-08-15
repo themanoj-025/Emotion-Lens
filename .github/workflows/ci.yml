@@ -3,6 +3,20 @@ name: EmotionLens CI
 on: [push, pull_request]
 
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run pre-commit hooks
+        run: |
+          pip install pre-commit
+          pre-commit run --all-files
+
   # ─── Lint & Validate ──────────────────────────────────────
   lint:
     runs-on: ubuntu-latest
@@ -304,7 +318,7 @@ jobs:
         run: |
           python -c "
           import ast, sys
-            
+
           pages = [
               'pages.page1_live_camera',
               'pages.page2_image_analysis',
@@ -314,7 +328,7 @@ jobs:
               'pages.page6_emotion_game',
               'pages.page7_about',
           ]
-            
+
           for page in pages:
               # Convert module path to file path
               filepath = page.replace('.', '/') + '.py'
@@ -325,7 +339,7 @@ jobs:
               except SyntaxError as e:
                   print(f'❌ {page} — SYNTAX ERROR: {e}')
                   sys.exit(1)
-            
+
           print('All page modules compile cleanly.')
           "
 

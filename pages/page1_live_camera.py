@@ -56,9 +56,7 @@ def show():
         return
 
     if face_cascade is None:
-        st.error(
-            "❌ Face cascade classifier failed to load. OpenCV may be misconfigured."
-        )
+        st.error("❌ Face cascade classifier failed to load. OpenCV may be misconfigured.")
         return
 
     # Initialize state variables
@@ -77,9 +75,7 @@ def show():
     col1, col2, col3, col4 = st.columns([1, 1, 1, 1])
 
     with col1:
-        st.button(
-            "▶ Start Camera", type="primary", use_container_width=True
-        )
+        st.button("▶ Start Camera", type="primary", use_container_width=True)
 
     with col2:
         snapshot_btn = st.button(
@@ -180,9 +176,7 @@ def show():
         _render_positivity_gauge(positivity)
 
     else:
-        st.info(
-            "👆 Press **▶ Start Camera** above to begin real-time emotion detection."
-        )
+        st.info("👆 Press **▶ Start Camera** above to begin real-time emotion detection.")
         st.markdown(
             """
             <div style="text-align: center; padding: 3rem; color: #8B949E;">
@@ -235,26 +229,18 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
                 for x, y, w, h in faces:
                     try:
                         face_roi = gray[y : y + h, x : x + w]
-                        emotion, confidence, probs = predict_emotion(
-                            self.model, face_roi
-                        )
+                        emotion, confidence, probs = predict_emotion(self.model, face_roi)
                         config = EMOTION_CONFIG.get(emotion, {})
 
                         # Draw bounding box
                         hex_color = config.get("color", "#FFFFFF").lstrip("#")
-                        bgr_color = tuple(
-                            int(hex_color[i : i + 2], 16) for i in (4, 2, 0)
-                        )
+                        bgr_color = tuple(int(hex_color[i : i + 2], 16) for i in (4, 2, 0))
                         cv2.rectangle(img, (x, y), (x + w, y + h), bgr_color, 2)
 
                         # Label with background
                         label = f"{config.get('emoji', '')} {emotion} {confidence * 100:.0f}%"
-                        (tw, th), _ = cv2.getTextSize(
-                            label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2
-                        )
-                        cv2.rectangle(
-                            img, (x, y - th - 15), (x + tw + 10, y), bgr_color, -1
-                        )
+                        (tw, th), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)
+                        cv2.rectangle(img, (x, y - th - 15), (x + tw + 10, y), bgr_color, -1)
                         cv2.putText(
                             img,
                             label,
@@ -268,12 +254,8 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
                         # Confidence bar
                         bar_w = int(w * confidence)
                         bar_y = y + h + 8
-                        cv2.rectangle(
-                            img, (x, bar_y), (x + w, bar_y + 6), (50, 50, 50), -1
-                        )
-                        cv2.rectangle(
-                            img, (x, bar_y), (x + bar_w, bar_y + 6), bgr_color, -1
-                        )
+                        cv2.rectangle(img, (x, bar_y), (x + w, bar_y + 6), (50, 50, 50), -1)
+                        cv2.rectangle(img, (x, bar_y), (x + bar_w, bar_y + 6), bgr_color, -1)
 
                         self.last_result = {
                             "emotion": emotion,
@@ -308,9 +290,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
                                 target = int(np.argmax(result["probabilities"]))
                                 heatmap = compute_gradcam(self.model, roi_input, target)
                                 if heatmap is not None:
-                                    apply_gradcam_overlay(
-                                        img, (fx, fy, fw, fh), heatmap
-                                    )
+                                    apply_gradcam_overlay(img, (fx, fy, fw, fh), heatmap)
                         except Exception:
                             pass
 
@@ -331,9 +311,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
         ctx = webrtc_streamer(
             key="emotion-detection-webrtc",
             video_processor_factory=EmotionVideoProcessor,
-            rtc_configuration={
-                "iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]
-            },
+            rtc_configuration={"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]},
             media_stream_constraints={"video": True, "audio": False},
             async_processing=True,
         )
@@ -347,9 +325,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
 
             # Record prediction periodically (every 10th frame)
             if ctx.video_processor.frame_count % 10 == 0:
-                add_prediction(
-                    result["emotion"], result["confidence"], result["probabilities"]
-                )
+                add_prediction(result["emotion"], result["confidence"], result["probabilities"])
 
             st.session_state.current_prediction = result
 
@@ -365,9 +341,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
 
 def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
     """Fallback: OpenCV-based camera (works locally)."""
-    st.warning(
-        "📹 Using OpenCV fallback (WebRTC unavailable). Local webcam access may vary."
-    )
+    st.warning("📹 Using OpenCV fallback (WebRTC unavailable). Local webcam access may vary.")
 
     run = st.checkbox("Enable OpenCV Camera Feed", value=False)
     FRAME_WINDOW = st.image([])
@@ -400,9 +374,7 @@ def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
                     bgr_color = tuple(int(hex_color[i : i + 2], 16) for i in (4, 2, 0))
 
                     cv2.rectangle(frame, (x, y), (x + w, y + h), bgr_color, 2)
-                    label = (
-                        f"{config.get('emoji', '')} {emotion} {confidence * 100:.0f}%"
-                    )
+                    label = f"{config.get('emoji', '')} {emotion} {confidence * 100:.0f}%"
                     cv2.putText(
                         frame,
                         label,
@@ -473,9 +445,7 @@ def _render_dominant_emotion_card(result):
     """Render a large dominant emotion display card."""
     emotion = result["emotion"]
     confidence = result["confidence"]
-    config = EMOTION_CONFIG.get(
-        emotion, {"color": "#95A5A6", "emoji": "❓", "bg": "#1A1F20"}
-    )
+    config = EMOTION_CONFIG.get(emotion, {"color": "#95A5A6", "emoji": "❓", "bg": "#1A1F20"})
 
     st.markdown(
         f"""

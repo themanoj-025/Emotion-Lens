@@ -1,9 +1,9 @@
 """Tests for EmotionLens 🎭 config module — pure-logic constants and helpers."""
 
 from utils.config import (
-    EMOTIONS,
-    EMOTION_CONFIG,
     BADGES,
+    EMOTION_CONFIG,
+    EMOTIONS,
     MOOD_MUSIC,
     emotion_index,
     positivity_score,

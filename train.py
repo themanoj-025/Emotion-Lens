@@ -8,15 +8,11 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Train Face Emotion Detection CNN Model"
-    )
+    parser = argparse.ArgumentParser(description="Train Face Emotion Detection CNN Model")
     parser.add_argument(
         "--epochs", type=int, default=50, help="Number of training epochs (default: 50)"
     )
-    parser.add_argument(
-        "--batch_size", type=int, default=64, help="Batch size (default: 64)"
-    )
+    parser.add_argument("--batch_size", type=int, default=64, help="Batch size (default: 64)")
     parser.add_argument(
         "--model_name",
         type=str,
@@ -112,9 +108,7 @@ def main():
     num_classes = 7
     model.add(Dense(num_classes, activation="softmax"))
 
-    model.compile(
-        loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"]
-    )
+    model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     model.summary()
 

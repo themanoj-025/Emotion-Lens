@@ -78,9 +78,7 @@ def show():
             df_display = df.sort_values("score", ascending=False).head(10)
             df_display["rank"] = range(1, len(df_display) + 1)
             st.dataframe(
-                df_display[
-                    ["rank", "mode", "score", "correct", "total", "timestamp"]
-                ].rename(
+                df_display[["rank", "mode", "score", "correct", "total", "timestamp"]].rename(
                     columns={
                         "rank": "#",
                         "mode": "Mode",
@@ -104,8 +102,7 @@ def show():
         "Poker Face 😐": game_score >= 25,
         "Emotion Pro 🎭": len(game_history) >= 5,
         "Perfect Score 💯": any(
-            g.get("correct", 0) == g.get("total", 0) and g.get("total", 0) > 0
-            for g in game_history
+            g.get("correct", 0) == g.get("total", 0) and g.get("total", 0) > 0 for g in game_history
         ),
     }
 
@@ -115,9 +112,7 @@ def show():
             if unlocked:
                 st.success(f"✅ {badge}")
             else:
-                st.markdown(
-                    f"<p style='color: #30363D;'>🔒 {badge}</p>", unsafe_allow_html=True
-                )
+                st.markdown(f"<p style='color: #30363D;'>🔒 {badge}</p>", unsafe_allow_html=True)
 
 
 def _render_make_this_face_mode(model, face_cascade):
@@ -201,9 +196,7 @@ def _render_make_this_face_mode(model, face_cascade):
         )
 
         # Timer
-        timer_color = (
-            "#FF6B6B" if remaining < 3 else "#F5A623" if remaining < 6 else "#00D4AA"
-        )
+        timer_color = "#FF6B6B" if remaining < 3 else "#F5A623" if remaining < 6 else "#00D4AA"
         st.markdown(
             f"""
             <div style="text-align: center;">
@@ -236,13 +229,9 @@ def _render_make_this_face_mode(model, face_cascade):
                             config = EMOTION_CONFIG.get(emotion, {})
 
                             hex_color = config.get("color", "#FFFFFF").lstrip("#")
-                            bgr_color = tuple(
-                                int(hex_color[i : i + 2], 16) for i in (4, 2, 0)
-                            )
+                            bgr_color = tuple(int(hex_color[i : i + 2], 16) for i in (4, 2, 0))
                             cv2.rectangle(frame, (x, y), (x + w, y + h), bgr_color, 2)
-                            label = (
-                                f"{config.get('emoji', '')} {emotion} {conf * 100:.0f}%"
-                            )
+                            label = f"{config.get('emoji', '')} {emotion} {conf * 100:.0f}%"
                             cv2.putText(
                                 frame,
                                 label,
@@ -283,13 +272,9 @@ def _render_make_this_face_mode(model, face_cascade):
                         )
 
                         st.session_state.game_score += total_score
-                        if (
-                            st.session_state.game_score
-                            > st.session_state.game_high_score
-                        ):
-                            st.session_state.game_high_score = (
-                                st.session_state.game_score
-                            )
+                        st.session_state.game_high_score = max(
+                            st.session_state.game_high_score, st.session_state.game_score
+                        )
 
                         st.session_state.game_history.append(
                             {
@@ -320,9 +305,7 @@ def _render_make_this_face_mode(model, face_cascade):
                             }
                         )
                     else:
-                        st.error(
-                            "❌ No face detected! Make sure you're visible in the camera."
-                        )
+                        st.error("❌ No face detected! Make sure you're visible in the camera.")
                         st.session_state.game_history.append(
                             {
                                 "mode": "Make This Face!",
@@ -339,9 +322,7 @@ def _render_make_this_face_mode(model, face_cascade):
                     st.session_state.game_active = False
                     st.session_state.game_target = None
 
-                    if st.button(
-                        "🔄 Next Round", type="primary", use_container_width=True
-                    ):
+                    if st.button("🔄 Next Round", type="primary", use_container_width=True):
                         st.session_state.game_target = random.choice(EMOTIONS)
                         st.session_state.game_start_time = time.time()
                         st.session_state.game_active = True
@@ -373,9 +354,7 @@ def _render_make_this_face_mode(model, face_cascade):
 
         # Time's up check
         if remaining <= 0 and not st.session_state.game_round_over:
-            st.error(
-                f"⏰ Time's up! The target was {EMOTION_CONFIG[target]['emoji']} {target}"
-            )
+            st.error(f"⏰ Time's up! The target was {EMOTION_CONFIG[target]['emoji']} {target}")
             st.session_state.game_history.append(
                 {
                     "mode": "Make This Face!",
@@ -455,18 +434,14 @@ def _render_guess_emotion_mode(model):
 
         if reveal < 100:
             # Show partially blurred
-            blend = cv2.addWeighted(
-                img_array, reveal / 100, blurred, 1 - reveal / 100, 0
-            )
+            blend = cv2.addWeighted(img_array, reveal / 100, blurred, 1 - reveal / 100, 0)
             st.image(
                 blend,
                 use_container_width=True,
                 caption="🔍 Can you identify the emotion?",
             )
         else:
-            st.image(
-                pil_image, use_container_width=True, caption="Full image revealed!"
-            )
+            st.image(pil_image, use_container_width=True, caption="Full image revealed!")
 
         # User guesses
         st.markdown("#### Your Guess:")
@@ -485,16 +460,12 @@ def _render_guess_emotion_mode(model):
             face_cascade = load_face_cascade()
 
             with st.spinner("🤖 AI is analyzing..."):
-                results = predict_from_image(
-                    model, face_cascade, pil_image, detect_faces=True
-                )
+                results = predict_from_image(model, face_cascade, pil_image, detect_faces=True)
 
             if results:
                 ai_emotion = results[0]["emotion"]
                 ai_conf = results[0]["confidence"]
-                ai_config = EMOTION_CONFIG.get(
-                    ai_emotion, {"emoji": "❓", "color": "#95A5A6"}
-                )
+                ai_config = EMOTION_CONFIG.get(ai_emotion, {"emoji": "❓", "color": "#95A5A6"})
 
                 # Compare
                 is_correct = user_guess == ai_emotion
@@ -558,8 +529,9 @@ def _render_guess_emotion_mode(model):
                 if is_correct:
                     score = int(ai_conf * 100)
                     st.session_state.game_score += score
-                    if st.session_state.game_score > st.session_state.game_high_score:
-                        st.session_state.game_high_score = st.session_state.game_score
+                    st.session_state.game_high_score = max(
+                        st.session_state.game_high_score, st.session_state.game_score
+                    )
 
                     st.success(
                         f"🎉 You scored **{score}** points! Total: **{st.session_state.game_score}**"
@@ -586,6 +558,4 @@ def _render_guess_emotion_mode(model):
                     }
                 )
             else:
-                st.error(
-                    "❌ No face detected in the image. Please try a different image."
-                )
+                st.error("❌ No face detected in the image. Please try a different image.")

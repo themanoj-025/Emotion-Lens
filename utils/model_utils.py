@@ -117,8 +117,7 @@ def try_download_model() -> bool:
             if resp.status_code != 200:
                 continue
             with open(MODEL_PATH, "wb") as f:
-                for chunk in resp.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                f.writelines(resp.iter_content(chunk_size=8192))
             if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100000:
                 st.success(
                     f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
@@ -171,9 +170,7 @@ def get_model_summary(model):
         layer_dict = {
             "name": layer.name,
             "type": layer.__class__.__name__,
-            "output_shape": str(layer.output_shape)
-            if hasattr(layer, "output_shape")
-            else "—",
+            "output_shape": str(layer.output_shape) if hasattr(layer, "output_shape") else "—",
             "params": layer.count_params(),
         }
         layers_info.append(layer_dict)

@@ -34,9 +34,7 @@ try:
     from fastapi.middleware.cors import CORSMiddleware
     from pydantic import BaseModel
 except ImportError:
-    print(
-        "❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart"
-    )
+    print("❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
     sys.exit(1)
 
 # TensorFlow / model imports
@@ -140,9 +138,7 @@ async def add_security_headers(request, call_next):
     response.headers["Permissions-Policy"] = (
         "camera=(), microphone=(), geolocation=(), interest-cohort=()"
     )
-    response.headers["Content-Security-Policy"] = (
-        "default-src 'none'; frame-ancestors 'none';"
-    )
+    response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
     return response
 
 
@@ -228,9 +224,7 @@ def process_image(model, cascade, img_bgr, detect_faces=True):
         if len(faces) == 0:
             # Fallback: use full image
             emotion, conf, probs = predict_face(model, gray)
-            results.append(
-                EmotionResult(emotion=emotion, confidence=conf, probabilities=probs)
-            )
+            results.append(EmotionResult(emotion=emotion, confidence=conf, probabilities=probs))
             return results, 1  # 1 result from full-image fallback
 
         for x, y, w, h in faces:
@@ -249,9 +243,7 @@ def process_image(model, cascade, img_bgr, detect_faces=True):
                 logger.warning(f"Error predicting face at ({x},{y}): {e}")
     else:
         emotion, conf, probs = predict_face(model, gray)
-        results.append(
-            EmotionResult(emotion=emotion, confidence=conf, probabilities=probs)
-        )
+        results.append(EmotionResult(emotion=emotion, confidence=conf, probabilities=probs))
 
     return results, len(results)
 
@@ -304,9 +296,7 @@ async def health_check():
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,
-        model_path=os.path.abspath(MODEL_PATH)
-        if os.path.exists(MODEL_PATH)
-        else "NOT FOUND",
+        model_path=os.path.abspath(MODEL_PATH) if os.path.exists(MODEL_PATH) else "NOT FOUND",
         emotions=EMOTIONS,
     )
 
@@ -328,9 +318,7 @@ async def predict_from_base64(request: PredictRequest = Body(...)):
 
     model, cascade = get_model()
     if model is None:
-        raise HTTPException(
-            status_code=503, detail="Model not loaded. Check server logs."
-        )
+        raise HTTPException(status_code=503, detail="Model not loaded. Check server logs.")
     if cascade is None:
         raise HTTPException(status_code=503, detail="Face cascade not loaded.")
 
@@ -408,7 +396,8 @@ async def predict_from_file(
 if __name__ == "__main__":
     import uvicorn
 
-    print(f"""
+    print(
+        f"""
 ╔══════════════════════════════════════════════════════════╗
 ║              EmotionLens 🎭  API Server                  ║
 ╠══════════════════════════════════════════════════════════╣
@@ -421,6 +410,7 @@ if __name__ == "__main__":
 ║  Model: {MODEL_PATH:<46}║
 ║  Emotions: {", ".join(EMOTIONS)}  ║
 ╚══════════════════════════════════════════════════════════╝
-    """)
+    """
+    )
 
     uvicorn.run(app, host=HOST, port=PORT)

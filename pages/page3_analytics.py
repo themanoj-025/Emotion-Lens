@@ -152,9 +152,7 @@ def _render_distribution_chart(df):
 
     dist = df["emotion"].value_counts()
     colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in dist.index]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in dist.index
-    ]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in dist.index]
 
     col1, col2 = st.columns(2)
 
@@ -218,12 +216,8 @@ def _render_timeline_chart(df):
     df_time["emotion_num"] = df_time["emotion"].map(emotion_to_num)
 
     # Create scatter trace with color-coded markers
-    colors = [
-        EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in df_time["emotion"]
-    ]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in df_time["emotion"]
-    ]
+    colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in df_time["emotion"]]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in df_time["emotion"]]
 
     fig = go.Figure()
 
@@ -274,9 +268,7 @@ def _render_confidence_chart(df):
     avg_conf = avg_conf.reindex(EMOTIONS, fill_value=0)
 
     colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in avg_conf.index]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in avg_conf.index
-    ]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in avg_conf.index]
 
     fig = go.Figure(
         data=[
@@ -319,9 +311,7 @@ def _render_heatmap(df):
         curr = recent.iloc[i]["emotion"]
         next_e = recent.iloc[i + 1]["emotion"]
         if curr in emotion_order and next_e in emotion_order:
-            transition_matrix[emotion_order.index(curr)][
-                emotion_order.index(next_e)
-            ] += 1
+            transition_matrix[emotion_order.index(curr)][emotion_order.index(next_e)] += 1
 
     # Normalize rows
     row_sums = transition_matrix.sum(axis=1, keepdims=True)
@@ -379,9 +369,7 @@ def _render_positivity_analysis(df):
     scores = positivity_scores[-100:]
 
     # Color mapping
-    colors = [
-        "#FF6B6B" if s < -0.3 else "#F5A623" if s < 0.3 else "#2ECC71" for s in scores
-    ]
+    colors = ["#FF6B6B" if s < -0.3 else "#F5A623" if s < 0.3 else "#2ECC71" for s in scores]
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
@@ -519,16 +507,12 @@ def _render_timeline_replay(df):
             ):
                 # Start recording: mark the current prediction count as the start
                 st.session_state.timeline_recording = True
-                st.session_state.timeline_start_idx = len(
-                    st.session_state.get("predictions", [])
-                )
+                st.session_state.timeline_start_idx = len(st.session_state.get("predictions", []))
                 st.session_state.timeline_recording_start = datetime.now()
                 st.session_state.timeline_recording_end = record_duration
                 st.rerun()
         else:
-            if st.button(
-                "⏹️ Stop Recording", type="secondary", use_container_width=True
-            ):
+            if st.button("⏹️ Stop Recording", type="secondary", use_container_width=True):
                 _save_timeline_recording()
                 st.rerun()
 
@@ -551,9 +535,7 @@ def _render_timeline_replay(df):
 
     # Recording Progress
     if currently_recording:
-        elapsed = (
-            datetime.now() - st.session_state.timeline_recording_start
-        ).total_seconds()
+        elapsed = (datetime.now() - st.session_state.timeline_recording_start).total_seconds()
         remaining = max(0, st.session_state.timeline_recording_end - elapsed)
         progress = min(1.0, elapsed / st.session_state.timeline_recording_end)
 
@@ -643,9 +625,7 @@ def _render_live_recording_chart(predictions_slice):
 
     emotion_to_num = {e: i for i, e in enumerate(EMOTIONS)}
     df_rec["emotion_num"] = df_rec["emotion"].map(emotion_to_num)
-    colors = [
-        EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in df_rec["emotion"]
-    ]
+    colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in df_rec["emotion"]]
 
     fig = go.Figure()
     fig.add_trace(
@@ -655,10 +635,7 @@ def _render_live_recording_chart(predictions_slice):
             mode="lines+markers",
             line=dict(color="#00D4AA", width=2),
             marker=dict(color=colors, size=6),
-            text=[
-                f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}"
-                for e in df_rec["emotion"]
-            ],
+            text=[f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in df_rec["emotion"]],
             hovertemplate="<b>%{text}</b><br>Frame: %{x}<br>Confidence: %{customdata:.1f}%<extra></extra>",
             customdata=df_rec["confidence"] * 100,
         )
@@ -728,9 +705,7 @@ def _render_playback_view(recording):
         st.markdown("<p style='padding-top:0.5rem;'></p>", unsafe_allow_html=True)
         play_btn_col, restart_col = st.columns(2)
         with play_btn_col:
-            st.button(
-                "▶️ Play Animation", type="primary", use_container_width=True
-            )
+            st.button("▶️ Play Animation", type="primary", use_container_width=True)
         with restart_col:
             st.button("⏹️ Reset", use_container_width=True)
 
@@ -765,12 +740,9 @@ def _render_playback_view(recording):
     )
 
     # Add the animated trace (starts empty, filled by frames)
-    colors_full = [
-        EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in plot_data["emotion"]
-    ]
+    colors_full = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in plot_data["emotion"]]
     emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}"
-        for e in plot_data["emotion"]
+        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in plot_data["emotion"]
     ]
 
     fig.add_trace(
@@ -779,9 +751,7 @@ def _render_playback_view(recording):
             y=[plot_data["emotion_num"].iloc[0]],
             mode="lines+markers",
             line=dict(color="#00D4AA", width=3),
-            marker=dict(
-                color=[colors_full[0]], size=10, line=dict(color="white", width=2)
-            ),
+            marker=dict(color=[colors_full[0]], size=10, line=dict(color="white", width=2)),
             name="Journey",
             text=[emoji_labels[0]],
             hovertemplate="<b>%{text}</b><br>Frame: %{x}<br>Confidence: %{customdata:.1f}%<extra></extra>",
@@ -939,9 +909,7 @@ def _render_playback_view(recording):
 
     dist = df_rec["emotion"].value_counts()
     colors = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in dist.index]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in dist.index
-    ]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in dist.index]
 
     col_d1, col_d2 = st.columns(2)
 

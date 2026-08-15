@@ -46,9 +46,7 @@ def main():
         gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect faces in the frame
-        faces = face_classifier.detectMultiScale(
-            gray_frame, scaleFactor=1.3, minNeighbors=5
-        )
+        faces = face_classifier.detectMultiScale(gray_frame, scaleFactor=1.3, minNeighbors=5)
 
         for x, y, w, h in faces:
             # Draw rectangle around the face
@@ -73,9 +71,7 @@ def main():
 
             # Put the predicted emotion text on the bounding box
             label = f"{predicted_emotion} ({confidence * 100:.1f}%)"
-            cv2.putText(
-                frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2
-            )
+            cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
 
         # Show the video feed with the bounding box
         cv2.imshow("Real-time Emotion Detection", frame)

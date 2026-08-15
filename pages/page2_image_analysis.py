@@ -131,9 +131,7 @@ def show():
 
     # Limit to 10 images
     if len(uploaded_files) > 10:
-        st.warning(
-            f"⚠️ Maximum 10 images supported. Showing first 10 of {len(uploaded_files)}."
-        )
+        st.warning(f"⚠️ Maximum 10 images supported. Showing first 10 of {len(uploaded_files)}.")
         uploaded_files = uploaded_files[:10]
 
     # Process Images
@@ -219,9 +217,7 @@ def show():
     for idx, data in enumerate(results_data):
         with st.expander(f"📷 {data['filename']}", expanded=(idx == 0)):
             if data["fallback"]:
-                st.warning(
-                    "⚠️ No faces detected with Haar Cascade. Used full image for prediction."
-                )
+                st.warning("⚠️ No faces detected with Haar Cascade. Used full image for prediction.")
 
             # Show privacy badge if anonymized
             if data.get("anonymized"):
@@ -349,8 +345,7 @@ def show():
                         "emotion": r["emotion"],
                         "confidence": r["confidence"],
                         "probabilities": {
-                            emotion: r["probabilities"][i]
-                            for i, emotion in enumerate(EMOTIONS)
+                            emotion: r["probabilities"][i] for i, emotion in enumerate(EMOTIONS)
                         },
                     }
                 )
