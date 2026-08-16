@@ -357,7 +357,10 @@ jobs:
         run: pip install pytest numpy pandas
 
       - name: Run unit tests
-        run: pytest tests/ -v
+        # python -m pytest puts the repo root on sys.path, which the tests
+        # rely on to import the top-level `utils` package. Bare `pytest`
+        # doesn't, so test collection fails with ModuleNotFoundError.
+        run: python -m pytest tests/ -v
 
   # ─── Docker Build & Validate ─────────────────────────────
   docker:
