@@ -77,6 +77,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
 ENTRYPOINT ["/usr/bin/tini", "--"]
+STOPSIGNAL SIGTERM
 CMD ["streamlit", "run", "streamlit_app.py", \
      "--server.port=8501", \
      "--server.address=0.0.0.0", \
@@ -99,6 +100,7 @@ USER appuser
 
 EXPOSE 8501
 
+STOPSIGNAL SIGTERM
 CMD ["streamlit", "run", "streamlit_app.py", \
      "--server.port=8501", \
      "--server.address=0.0.0.0", \
