@@ -54,6 +54,14 @@ test/
 *.keras
 saved_model/
 
+# Node.js
+node_modules/
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
 # Misc
 .DS_Store
 
