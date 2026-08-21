@@ -33,7 +33,7 @@ from utils.model_utils import (
 from utils.session_utils import add_prediction
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -364,7 +364,7 @@ def show():
             st.rerun()
 
 
-def _render_radar_chart(face_results):
+def _render_radar_chart(face_results) -> None:
     """Render a Plotly radar chart for emotion probabilities."""
     if not face_results:
         st.info("No data")

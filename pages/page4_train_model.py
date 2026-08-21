@@ -27,7 +27,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 plt.style.use("dark_background")
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -183,7 +183,7 @@ def show():
         )
 
 
-def _build_model(arch_type, input_shape=(48, 48, 1), num_classes=7, dropout_rate=0.25):
+def _build_model(arch_type, input_shape=(48, 48, 1), num_classes=7, dropout_rate=0.25) -> None:
     """Build a CNN model based on the selected architecture type."""
     model = Sequential()
 
@@ -331,11 +331,11 @@ def _run_training(
 
         # Custom Keras Callback for live Streamlit updates
         class StreamlitCallback(Callback):
-            def __init__(self, epochs):
+            def __init__(self, epochs) -> None:
                 super().__init__()
                 self.total_epochs = epochs
 
-            def on_epoch_end(self, epoch, logs=None):
+            def on_epoch_end(self, epoch, logs=None) -> None:
                 logs = logs or {}
 
                 # Store metrics

@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
 
-def load_emotion_model(model_path="emotion_model.h5"):
+def load_emotion_model(model_path="emotion_model.h5") -> None:
     """Loads the pre-trained emotion detection model."""
     try:
         model = load_model(model_path)
@@ -20,7 +20,7 @@ def load_emotion_model(model_path="emotion_model.h5"):
         sys.exit(1)
 
 
-def predict_emotion(model, image_path):
+def predict_emotion(model, image_path) -> None:
     """Predicts the emotion of a given image."""
     try:
         # Load image

@@ -11,7 +11,7 @@ import pandas as pd
 import streamlit as st
 
 
-def init_session_state():
+def init_session_state() -> None:
     """
     Initialize all session state variables.
     Safe to call on every page — only sets missing keys.
@@ -41,7 +41,7 @@ def init_session_state():
             st.session_state[key] = value
 
 
-def add_prediction(emotion, confidence, all_probs):
+def add_prediction(emotion, confidence, all_probs) -> None:
     """
     Record a prediction in session state.
 
@@ -68,7 +68,7 @@ def add_prediction(emotion, confidence, all_probs):
     st.session_state.total_predictions += 1
 
 
-def add_snapshot(pil_image, emotion, confidence):
+def add_snapshot(pil_image, emotion, confidence) -> None:
     """Add a snapshot to session state with metadata."""
     if "snapshots" not in st.session_state:
         st.session_state.snapshots = []
@@ -83,7 +83,7 @@ def add_snapshot(pil_image, emotion, confidence):
     )
 
 
-def get_prediction_dataframe():
+def get_prediction_dataframe() -> None:
     """Get predictions as a pandas DataFrame for analysis/export."""
     if not st.session_state.get("predictions"):
         return pd.DataFrame()
@@ -94,7 +94,7 @@ def get_prediction_dataframe():
     return df
 
 
-def get_emotion_distribution():
+def get_emotion_distribution() -> None:
     """Get emotion count distribution from session predictions."""
     df = get_prediction_dataframe()
     if df.empty:
@@ -102,7 +102,7 @@ def get_emotion_distribution():
     return df["emotion"].value_counts().to_dict()
 
 
-def export_predictions_csv():
+def export_predictions_csv() -> None:
     """Export predictions as downloadable CSV content."""
     df = get_prediction_dataframe()
     if df.empty:
@@ -115,14 +115,14 @@ def export_predictions_csv():
     return csv_buffer.getvalue()
 
 
-def export_predictions_json():
+def export_predictions_json() -> None:
     """Export predictions as downloadable JSON content."""
     if not st.session_state.get("predictions"):
         return None
     return json.dumps(st.session_state.predictions, indent=2, default=str)
 
 
-def reset_session():
+def reset_session() -> None:
     """Reset all session data but keep preferences."""
     keys_to_keep = {"model_path", "dark_mode", "game_high_score"}
     for key in list(st.session_state.keys()):
@@ -131,7 +131,7 @@ def reset_session():
     init_session_state()
 
 
-def format_session_duration():
+def format_session_duration() -> None:
     """Return formatted session duration string."""
     if "session_start" not in st.session_state:
         return "00:00:00"

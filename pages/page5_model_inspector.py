@@ -23,7 +23,7 @@ from utils.model_utils import (
 plt.style.use("dark_background")
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -58,7 +58,7 @@ def show():
         _render_gradcam_tab(model)
 
 
-def _render_architecture_tab(model):
+def _render_architecture_tab(model) -> None:
     """Display layer-by-layer architecture breakdown."""
     st.markdown("### 📋 Layer-by-Layer Architecture")
 
@@ -112,7 +112,7 @@ def _render_architecture_tab(model):
     _render_flow_diagram(model)
 
 
-def _render_flow_diagram(model):
+def _render_flow_diagram(model) -> None:
     """Render a visual flow diagram of the model architecture."""
 
     layers_info, _ = get_model_summary(model)
@@ -192,7 +192,7 @@ def _render_flow_diagram(model):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_parameters_tab(model):
+def _render_parameters_tab(model) -> None:
     """Display parameter count metrics and visualization."""
     st.markdown("### 📊 Parameter Count")
 
@@ -301,7 +301,7 @@ def _render_parameters_tab(model):
     st.plotly_chart(fig_pie, use_container_width=True)
 
 
-def _render_feature_maps_tab(model):
+def _render_feature_maps_tab(model) -> None:
     """Visualize feature maps from intermediate convolutional layers."""
     st.markdown("### 🎨 Feature Map Visualizer")
 
@@ -390,7 +390,7 @@ def _render_feature_maps_tab(model):
     plt.close()
 
 
-def _render_gradcam_tab(model):
+def _render_gradcam_tab(model) -> None:
     """Generate Grad-CAM heatmaps for visual explanations."""
     st.markdown("### 🔥 Grad-CAM Heatmap")
 

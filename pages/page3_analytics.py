@@ -22,7 +22,7 @@ from utils.session_utils import (
 )
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -146,7 +146,7 @@ def show():
             st.rerun()
 
 
-def _render_distribution_chart(df):
+def _render_distribution_chart(df) -> None:
     """Render emotion distribution pie and bar charts."""
     st.markdown("#### Emotion Distribution")
 
@@ -199,7 +199,7 @@ def _render_distribution_chart(df):
         st.plotly_chart(fig_bar, use_container_width=True)
 
 
-def _render_timeline_chart(df):
+def _render_timeline_chart(df) -> None:
     """Render emotion over time line chart."""
     st.markdown("#### Emotion Timeline")
 
@@ -260,7 +260,7 @@ def _render_timeline_chart(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_confidence_chart(df):
+def _render_confidence_chart(df) -> None:
     """Render average confidence per emotion bar chart."""
     st.markdown("#### Average Confidence per Emotion")
 
@@ -293,7 +293,7 @@ def _render_confidence_chart(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_heatmap(df):
+def _render_heatmap(df) -> None:
     """Render a confidence heatmap showing prediction patterns."""
     st.markdown("#### Confidence Heatmap (Last 100 Predictions)")
 
@@ -347,7 +347,7 @@ def _render_heatmap(df):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_positivity_analysis(df):
+def _render_positivity_analysis(df) -> None:
     """Render positivity/valence score trends."""
     st.markdown("#### Positivity Score Over Time")
 
@@ -464,7 +464,7 @@ def _render_positivity_analysis(df):
         render_mood_music_card(top_emotion)
 
 
-def _render_timeline_replay(df):
+def _render_timeline_replay(df) -> None:
     """
     🎬 Emotion Timeline Replay — Record a segment of predictions and play it back
     as an animated chart showing the emotional journey over time.
@@ -582,7 +582,7 @@ def _render_timeline_replay(df):
             )
 
 
-def _save_timeline_recording():
+def _save_timeline_recording() -> None:
     """Save the current recording to session state."""
     predictions = st.session_state.get("predictions", [])
     start_idx = st.session_state.timeline_start_idx
@@ -616,7 +616,7 @@ def _save_timeline_recording():
     st.session_state.timeline_recording = False
 
 
-def _render_live_recording_chart(predictions_slice):
+def _render_live_recording_chart(predictions_slice) -> None:
     """Render a live preview of the current recording."""
     df_rec = pd.DataFrame(predictions_slice)
     if "timestamp" in df_rec.columns:
@@ -656,7 +656,7 @@ def _render_live_recording_chart(predictions_slice):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_playback_view(recording):
+def _render_playback_view(recording) -> None:
     """Render the animated playback view for a completed recording."""
     preds = recording["predictions"]
     count = recording["count"]

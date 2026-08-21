@@ -28,7 +28,7 @@ MODEL_PATH = "emotion_model.h5"
 
 
 @st.cache_resource
-def load_model_cached(path=None):
+def load_model_cached(path=None) -> None:
     """
     Load the Keras emotion detection model once, cached for all pages.
 
@@ -57,7 +57,7 @@ def load_model_cached(path=None):
 
 
 @st.cache_resource
-def load_face_cascade():
+def load_face_cascade() -> None:
     """
     Load OpenCV Haar Cascade for face detection (cached).
 
@@ -76,7 +76,7 @@ def load_face_cascade():
         return None
 
 
-def is_model_available():
+def is_model_available() -> None:
     """Check if the model file exists on disk."""
     return os.path.exists(MODEL_PATH)
 
@@ -129,7 +129,7 @@ def try_download_model() -> bool:
     return False
 
 
-def ensure_model_on_cloud():
+def ensure_model_on_cloud() -> None:
     """Run on Streamlit Cloud startup to ensure model is available.
 
     Checks if the model exists. If not, tries to download or prompts
@@ -155,7 +155,7 @@ def ensure_model_on_cloud():
     )
 
 
-def get_model_summary(model):
+def get_model_summary(model) -> None:
     """
     Get model summary as a list of layer dictionaries.
 

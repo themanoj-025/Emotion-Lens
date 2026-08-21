@@ -128,7 +128,7 @@ app.add_middleware(
 
 
 @app.middleware("http")
-async def add_security_headers(request, call_next):
+async def add_security_headers(request, call_next) -> None:
     """Add security headers to every response."""
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
@@ -148,7 +148,7 @@ _model = None
 _face_cascade = None
 
 
-def get_model():
+def get_model() -> None:
     """Lazy-load the Keras model. Returns (model, cascade)."""
     global _model, _face_cascade
 
@@ -170,7 +170,7 @@ def get_model():
     return _model, _face_cascade
 
 
-def preprocess_face(face_roi):
+def preprocess_face(face_roi) -> None:
     """Preprocess a face ROI for model prediction (48×48 grayscale)."""
     roi_resized = cv2.resize(face_roi, (48, 48), interpolation=cv2.INTER_AREA)
     roi_array = roi_resized.astype("float32") / 255.0
@@ -179,7 +179,7 @@ def preprocess_face(face_roi):
     return roi_array
 
 
-def predict_face(model, face_roi):
+def predict_face(model, face_roi) -> None:
     """Predict emotion on a single face ROI."""
     processed = preprocess_face(face_roi)
     predictions = model.predict(processed, verbose=0)[0]
@@ -213,7 +213,7 @@ def decode_base64_image(image_b64: str) -> np.ndarray:
         raise HTTPException(status_code=400, detail=f"Invalid image data: {e}")
 
 
-def process_image(model, cascade, img_bgr, detect_faces=True):
+def process_image(model, cascade, img_bgr, detect_faces=True) -> None:
     """Process an image and return face-level predictions."""
     gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
     results = []
@@ -273,7 +273,7 @@ def generate_summary(results: list[EmotionResult]) -> str:
 
 
 @app.get("/", tags=["Info"])
-async def root():
+async def root() -> None:
     """API root — provides basic info and links."""
     return {
         "service": "EmotionLens 🎭 API",
@@ -290,7 +290,7 @@ async def root():
 
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check():
+async def health_check() -> None:
     """Health check endpoint. Confirms the server and model are operational."""
     model, cascade = get_model()
     return HealthResponse(
@@ -302,7 +302,7 @@ async def health_check():
 
 
 @app.post("/predict", response_model=PredictResponse, tags=["Prediction"])
-async def predict_from_base64(request: PredictRequest = Body(...)):
+async def predict_from_base64(request: PredictRequest = Body(...)) -> None:
     """
     Predict emotions from a base64-encoded image.
 
