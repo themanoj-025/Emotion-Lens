@@ -16,7 +16,7 @@ class EmotionSmoother:
     the element-wise mean, which stabilizes predictions and reduces flickering.
     """
 
-    def __init__(self, window: int = SMOOTHING_WINDOW):
+    def __init__(self, window: int = SMOOTHING_WINDOW) -> None:
         self.window = window
         self._buffer: deque[list[float]] = deque(maxlen=window)
 
@@ -47,6 +47,6 @@ class EmotionSmoother:
         idx = int(np.argmax(smoothed))
         return EMOTIONS[idx], smoothed[idx], smoothed
 
-    def reset(self):
+    def reset(self) -> None:
         """Clear the smoothing buffer."""
         self._buffer.clear()

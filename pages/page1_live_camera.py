@@ -27,7 +27,7 @@ from utils.model_utils import (
 from utils.session_utils import add_prediction, add_snapshot
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -202,7 +202,7 @@ def show():
                 )
 
 
-def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
+def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
     """Render the live camera feed using streamlit-webrtc."""
     st.info("📷 WebRTC mode enabled. Click 'Start' above when ready.")
 
@@ -211,7 +211,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
         from streamlit_webrtc import VideoProcessorBase, webrtc_streamer
 
         class EmotionVideoProcessor(VideoProcessorBase):
-            def __init__(self):
+            def __init__(self) -> None:
                 self.model = model
                 self.face_cascade = face_cascade
                 self.last_result = None
@@ -339,7 +339,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
         _render_opencv_fallback(model, face_cascade, enable_gradcam)
 
 
-def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
+def _render_opencv_fallback(model, face_cascade, enable_gradcam=False) -> None:
     """Fallback: OpenCV-based camera (works locally)."""
     st.warning("📹 Using OpenCV fallback (WebRTC unavailable). Local webcam access may vary.")
 
@@ -441,7 +441,7 @@ def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
         cap.release()
 
 
-def _render_dominant_emotion_card(result):
+def _render_dominant_emotion_card(result) -> None:
     """Render a large dominant emotion display card."""
     emotion = result["emotion"]
     confidence = result["confidence"]
@@ -471,7 +471,7 @@ def _render_dominant_emotion_card(result):
     )
 
 
-def _render_emotion_bars(result):
+def _render_emotion_bars(result) -> None:
     """Render horizontal bar chart for all 7 emotions."""
     probs = result["probabilities"]
 
@@ -510,7 +510,7 @@ def _render_emotion_bars(result):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_emotion_history():
+def _render_emotion_history() -> None:
     """Render a sparkline/line chart of emotion history over time."""
     predictions = st.session_state.get("predictions", [])
 
@@ -562,7 +562,7 @@ def _render_emotion_history():
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_positivity_gauge(positivity):
+def _render_positivity_gauge(positivity) -> None:
     """Render a positivity/valence gauge meter."""
     # Clamp to -1..1
     clamped = max(-1.0, min(1.0, positivity))

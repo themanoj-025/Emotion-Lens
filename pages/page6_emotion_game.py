@@ -22,7 +22,7 @@ from utils.model_utils import (
 )
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -115,7 +115,7 @@ def show():
                 st.markdown(f"<p style='color: #30363D;'>🔒 {badge}</p>", unsafe_allow_html=True)
 
 
-def _render_make_this_face_mode(model, face_cascade):
+def _render_make_this_face_mode(model, face_cascade) -> None:
     """'Make This Face!' — user must mimic a randomly chosen emotion."""
     st.markdown("### 🎭 Make This Face!")
 
@@ -398,7 +398,7 @@ def _render_make_this_face_mode(model, face_cascade):
         )
 
 
-def _render_guess_emotion_mode(model):
+def _render_guess_emotion_mode(model) -> None:
     """'Guess the Emotion' — user sees a face and must guess the emotion."""
     st.markdown("### 🤔 Guess the Emotion")
 

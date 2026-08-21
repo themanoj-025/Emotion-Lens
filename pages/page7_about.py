@@ -16,7 +16,7 @@ from utils.model_utils import (
 )
 
 
-def show():
+def show() -> None:
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
