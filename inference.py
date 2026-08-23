@@ -15,7 +15,7 @@ def load_emotion_model(model_path="emotion_model.h5") -> None:
         model = load_model(model_path)
         print(f"Model loaded successfully from {model_path}")
         return model
-    except (OSError, ValueError, IOError) as e:
+    except (OSError, ValueError) as e:
         print(f"Error loading model: {e}")
         sys.exit(1)
 

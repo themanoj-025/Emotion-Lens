@@ -99,7 +99,7 @@ def show() -> None:
         ]
 
         fig = go.Figure()
-        for i, (name, dim, color) in enumerate(layers):
+        for _i, (name, dim, color) in enumerate(layers):
             fig.add_trace(
                 go.Bar(
                     x=[1],
