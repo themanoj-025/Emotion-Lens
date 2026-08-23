@@ -31,13 +31,23 @@ from PIL import Image
 
 # FastAPI imports
 try:
-    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, UploadFile
+    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
 except ImportError:
     print("❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
     sys.exit(1)
+
+# Rate limiting
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.errors import RateLimitExceeded
+    from slowapi.middleware import SlowAPIMiddleware
+    from slowapi.util import get_remote_address
+except ImportError:
+    print("⚠️  slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
+    Limiter = None
 
 # TensorFlow / model imports
 try:
@@ -166,11 +176,20 @@ app.add_middleware(
         "http://localhost:8501",
         "http://127.0.0.1:8501",
     ],
-    allow_credentials=True,
-    allow_methods=["*"],
+    allow_credentials=True,    allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# Rate limiting
+if Limiter is not None:
+    limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_middleware(SlowAPIMiddleware)
+    logger.info("✓ Rate limiting enabled (60/minute default)")
+else:
+    limiter = None
+    logger.warning("⚠ Rate limiting DISABLED — slowapi not installed")
 
 # Security Headers
 
