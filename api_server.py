@@ -31,7 +31,7 @@ from PIL import Image
 
 # FastAPI imports
 try:
-    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
+    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
