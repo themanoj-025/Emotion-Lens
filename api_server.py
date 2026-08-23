@@ -22,6 +22,7 @@ import base64
 import io
 import logging
 import os
+import secrets
 import sys
 
 import cv2
@@ -30,8 +31,9 @@ from PIL import Image
 
 # FastAPI imports
 try:
-    from fastapi import Body, FastAPI, File, Form, HTTPException, UploadFile
+    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
+    from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
 except ImportError:
     print("❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
@@ -57,6 +59,45 @@ EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 MODEL_PATH = "emotion_model.h5"
 HOST = os.environ.get("API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("API_PORT", "8000"))
+
+# API Key Authentication
+# Set EMOTION_API_KEY env var to enable auth. Leave unset to disable.
+API_KEY = os.environ.get("EMOTION_API_KEY", "")
+security = HTTPBearer(auto_error=False)
+
+
+def verify_api_key(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+):
+    """Verify API key if authentication is configured.
+
+    If EMOTION_API_KEY env var is set, all prediction endpoints
+    require a valid Bearer token matching the configured key.
+    If EMOTION_API_KEY is empty, authentication is disabled (open access).
+    """
+    if not API_KEY:
+        return True
+
+    if credentials is None:
+        raise HTTPException(
+            status_code=401,
+            detail={
+                "error": "Missing API key",
+                "message": "Authentication required. Provide API key via Authorization: Bearer <key> header.",
+            },
+        )
+
+    if not secrets.compare_digest(credentials.credentials, API_KEY):
+        raise HTTPException(
+            status_code=403,
+            detail={
+                "error": "Invalid API key",
+                "message": "The provided API key is invalid.",
+            },
+        )
+
+    return True
+
 
 # Pydantic Models
 
@@ -107,7 +148,14 @@ app = FastAPI(
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
+    dependencies=[Depends(verify_api_key)] if API_KEY else [],
 )
+
+# Log auth status on startup
+if API_KEY:
+    logger.info("✓ API key authentication enabled (EMOTION_API_KEY is set)")
+else:
+    logger.info("⚠ API key authentication DISABLED — set EMOTION_API_KEY env var to enable")
 
 # CORS — restricted to localhost origins
 app.add_middleware(
