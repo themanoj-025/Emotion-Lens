@@ -225,7 +225,7 @@ def _render_make_this_face_mode(model, face_cascade) -> None:
                     for x, y, w, h in faces:
                         face_roi = gray[y : y + h, x : x + w]
                         try:
-                            emotion, conf, probs = predict_emotion(model, face_roi)
+                            emotion, conf, _probs = predict_emotion(model, face_roi)
                             config = EMOTION_CONFIG.get(emotion, {})
 
                             hex_color = config.get("color", "#FFFFFF").lstrip("#")

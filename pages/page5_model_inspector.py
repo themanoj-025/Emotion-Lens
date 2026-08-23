@@ -151,7 +151,7 @@ def _render_flow_diagram(model) -> None:
             x1=width / 2,
             y0=y_pos - 0.3,
             y1=y_pos + 0.3,
-            line=dict(color=box_color, width=2),
+            line={"color": box_color, "width": 2},
             fillcolor=box_color,
             opacity=0.3,
         )
@@ -163,7 +163,7 @@ def _render_flow_diagram(model) -> None:
             y=y_pos,
             text=f"<b>{layer_type}</b><br><span style='font-size:10px'>{label}</span>",
             showarrow=False,
-            font=dict(size=11, color="#E6EDF3"),
+            font={"size": 11, "color": "#E6EDF3"},
             align="center",
         )
 
@@ -175,16 +175,16 @@ def _render_flow_diagram(model) -> None:
                 y0=y_pos - 0.3,
                 x1=0,
                 y1=y_pos - 1.3 + 0.3,
-                line=dict(color="#30363D", width=2, dash="dot"),
+                line={"color": "#30363D", "width": 2, "dash": "dot"},
             )
 
         y_pos -= 1.3
 
     fig.update_layout(
         height=max(300, len(layers_info) * 40),
-        xaxis=dict(range=[-1, 1], showgrid=False, zeroline=False, visible=False),
-        yaxis=dict(range=[y_pos, 0.5], showgrid=False, zeroline=False, visible=False),
-        margin=dict(l=10, r=10, t=10, b=10),
+        xaxis={"range": [-1, 1], "showgrid": False, "zeroline": False, "visible": False},
+        yaxis={"range": [y_pos, 0.5], "showgrid": False, "zeroline": False, "visible": False},
+        margin={"l": 10, "r": 10, "t": 10, "b": 10},
         paper_bgcolor="#0D1117",
         plot_bgcolor="#0D1117",
     )
@@ -264,10 +264,10 @@ def _render_parameters_tab(model) -> None:
     )
 
     fig.update_layout(
-        yaxis=dict(title="Parameters", type="log", gridcolor="#30363D"),
-        xaxis=dict(title="Layer", tickangle=45, tickfont=dict(size=10)),
+        yaxis={"title": "Parameters", "type": "log", "gridcolor": "#30363D"},
+        xaxis={"title": "Layer", "tickangle": 45, "tickfont": {"size": 10}},
         height=400,
-        margin=dict(l=20, r=20, t=20, b=100),
+        margin={"l": 20, "r": 20, "t": 20, "b": 100},
         **PLOTLY_THEME,
     )
 
@@ -285,7 +285,7 @@ def _render_parameters_tab(model) -> None:
             go.Pie(
                 labels=["Convolutional", "Dense", "Other"],
                 values=[conv_params, dense_params, other_params],
-                marker=dict(colors=["#2ECC71", "#E74C3C", "#3498DB"]),
+                marker={"colors": ["#2ECC71", "#E74C3C", "#3498DB"]},
                 textinfo="label+percent",
                 hole=0.4,
             )
@@ -294,7 +294,7 @@ def _render_parameters_tab(model) -> None:
 
     fig_pie.update_layout(
         height=350,
-        margin=dict(l=20, r=20, t=20, b=20),
+        margin={"l": 20, "r": 20, "t": 20, "b": 20},
         **PLOTLY_THEME,
     )
 
@@ -362,7 +362,7 @@ def _render_feature_maps_tab(model) -> None:
     )
 
     # Display original image
-    col1, col2 = st.columns([1, 3])
+    col1, _col2 = st.columns([1, 3])
     with col1:
         st.image(pil_image, caption="Original Image", use_container_width=True)
 

@@ -8,7 +8,7 @@ import tensorflow as tf
 
 
 def make_gradcam_heatmap(
-    model, img_array: np.ndarray, last_conv_layer_name: str = None
+    model, img_array: np.ndarray, last_conv_layer_name: str | None = None
 ) -> np.ndarray:
     """Generate Grad-CAM heatmap for the top predicted class.
 

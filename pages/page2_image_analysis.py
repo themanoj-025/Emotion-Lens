@@ -381,28 +381,28 @@ def _render_radar_chart(face_results) -> None:
                 r=probs + [probs[0]],  # Close the radar
                 theta=EMOTIONS + [EMOTIONS[0]],
                 name=f"Face {i + 1}",
-                line=dict(color=config.get("color", "#00D4AA"), width=2),
+                line={"color": config.get("color", "#00D4AA"), "width": 2},
                 fill="toself",
                 opacity=0.6,
             )
         )
 
     fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[0, 1],
-                tickfont=dict(color="#8B949E"),
-                gridcolor="#30363D",
-            ),
-            angularaxis=dict(
-                tickfont=dict(color="#E6EDF3", size=10),
-                gridcolor="#30363D",
-            ),
-            bgcolor="#161B22",
-        ),
+        polar={
+            "radialaxis": {
+                "visible": True,
+                "range": [0, 1],
+                "tickfont": {"color": "#8B949E"},
+                "gridcolor": "#30363D",
+            },
+            "angularaxis": {
+                "tickfont": {"color": "#E6EDF3", "size": 10},
+                "gridcolor": "#30363D",
+            },
+            "bgcolor": "#161B22",
+        },
         height=300,
-        margin=dict(l=40, r=40, t=20, b=40),
+        margin={"l": 40, "r": 40, "t": 20, "b": 40},
         showlegend=len(face_results) > 1,
         **PLOTLY_THEME,
     )

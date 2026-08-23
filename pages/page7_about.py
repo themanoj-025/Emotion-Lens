@@ -116,10 +116,10 @@ def show() -> None:
             barmode="stack",
             height=400,
             showlegend=True,
-            legend=dict(font=dict(size=10, color="#8B949E")),
-            xaxis=dict(visible=False),
-            yaxis=dict(visible=False),
-            margin=dict(l=10, r=10, t=10, b=10),
+            legend={"font": {"size": 10, "color": "#8B949E"}},
+            xaxis={"visible": False},
+            yaxis={"visible": False},
+            margin={"l": 10, "r": 10, "t": 10, "b": 10},
             **PLOTLY_THEME,
         )
 
@@ -174,9 +174,9 @@ def show() -> None:
 
     fig.update_layout(
         title="FER2013 Training Set Class Distribution",
-        yaxis=dict(title="Sample Count", gridcolor="#30363D"),
+        yaxis={"title": "Sample Count", "gridcolor": "#30363D"},
         height=400,
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         **PLOTLY_THEME,
     )
 

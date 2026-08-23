@@ -494,15 +494,15 @@ def _render_emotion_bars(result) -> None:
 
     fig.update_layout(
         title="📊 All Emotions (Probability Distribution)",
-        xaxis=dict(
-            title="Confidence (%)",
-            range=[0, 100],
-            gridcolor="#30363D",
-            tickfont=dict(color="#8B949E"),
-        ),
-        yaxis=dict(autorange="reversed", tickfont=dict(color="#E6EDF3", size=12)),
+        xaxis={
+            "title": "Confidence (%)",
+            "range": [0, 100],
+            "gridcolor": "#30363D",
+            "tickfont": {"color": "#8B949E"},
+        },
+        yaxis={"autorange": "reversed", "tickfont": {"color": "#E6EDF3", "size": 12}},
         height=350,
-        margin=dict(l=20, r=40, t=40, b=20),
+        margin={"l": 20, "r": 40, "t": 40, "b": 20},
         showlegend=False,
         **PLOTLY_THEME,
     )
@@ -535,26 +535,26 @@ def _render_emotion_history() -> None:
             y=y_values,
             mode="lines+markers",
             name="Emotion",
-            line=dict(color="#00D4AA", width=2),
-            marker=dict(
-                color=[EMOTION_CONFIG[EMOTIONS[int(v)]]["color"] for v in y_values],
-                size=6,
-            ),
+            line={"color": "#00D4AA", "width": 2},
+            marker={
+                "color": [EMOTION_CONFIG[EMOTIONS[int(v)]]["color"] for v in y_values],
+                "size": 6,
+            },
             hovertemplate="Frame %{x}<br>Emotion: %{customdata}<extra></extra>",
             customdata=[p["emotion"] for p in recent],
         )
     )
 
     fig.update_layout(
-        yaxis=dict(
-            tickmode="array",
-            tickvals=list(range(7)),
-            ticktext=[f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
-            gridcolor="#30363D",
-        ),
-        xaxis=dict(title="Frame", gridcolor="#30363D"),
+        yaxis={
+            "tickmode": "array",
+            "tickvals": list(range(7)),
+            "ticktext": [f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
+            "gridcolor": "#30363D",
+        },
+        xaxis={"title": "Frame", "gridcolor": "#30363D"},
         height=250,
-        margin=dict(l=20, r=20, t=10, b=30),
+        margin={"l": 20, "r": 20, "t": 10, "b": 30},
         hovermode="x unified",
         **PLOTLY_THEME,
     )
@@ -577,40 +577,40 @@ def _render_positivity_gauge(positivity) -> None:
         go.Indicator(
             mode="gauge+number+delta",
             value=clamped * 100,
-            number=dict(suffix="%", font=dict(color="#E6EDF3", size=24)),
-            title=dict(text="Positivity Score", font=dict(color="#8B949E", size=14)),
-            delta=dict(reference=0, font=dict(color="#8B949E")),
-            gauge=dict(
-                axis=dict(
-                    range=[-100, 100],
-                    tickfont=dict(color="#8B949E"),
-                    tickvals=[-100, -50, 0, 50, 100],
-                    ticktext=["-100", "-50", "0", "50", "100"],
-                ),
-                bar=dict(color=color, thickness=0.3),
-                bgcolor="#1C2128",
-                borderwidth=1,
-                bordercolor="#30363D",
-                steps=[
-                    dict(range=[-100, -50], color="#2D1515"),
-                    dict(range=[-50, 0], color="#2D1F0A"),
-                    dict(range=[0, 50], color="#0A2D15"),
-                    dict(range=[50, 100], color="#0A3D15"),
+            number={"suffix": "%", "font": {"color": "#E6EDF3", "size": 24}},
+            title={"text": "Positivity Score", "font": {"color": "#8B949E", "size": 14}},
+            delta={"reference": 0, "font": {"color": "#8B949E"}},
+            gauge={
+                "axis": {
+                    "range": [-100, 100],
+                    "tickfont": {"color": "#8B949E"},
+                    "tickvals": [-100, -50, 0, 50, 100],
+                    "ticktext": ["-100", "-50", "0", "50", "100"],
+                },
+                "bar": {"color": color, "thickness": 0.3},
+                "bgcolor": "#1C2128",
+                "borderwidth": 1,
+                "bordercolor": "#30363D",
+                "steps": [
+                    {"range": [-100, -50], "color": "#2D1515"},
+                    {"range": [-50, 0], "color": "#2D1F0A"},
+                    {"range": [0, 50], "color": "#0A2D15"},
+                    {"range": [50, 100], "color": "#0A3D15"},
                 ],
-                threshold=dict(
-                    line=dict(color=color, width=4),
-                    thickness=0.75,
-                    value=clamped * 100,
-                ),
-            ),
+                "threshold": {
+                    "line": {"color": color, "width": 4},
+                    "thickness": 0.75,
+                    "value": clamped * 100,
+                },
+            },
         )
     )
 
     fig.update_layout(
         height=280,
-        margin=dict(l=30, r=30, t=60, b=30),
+        margin={"l": 30, "r": 30, "t": 60, "b": 30},
         paper_bgcolor="#1C2128",
-        font=dict(color="#E6EDF3"),
+        font={"color": "#E6EDF3"},
     )
 
     st.plotly_chart(fig, use_container_width=True)
