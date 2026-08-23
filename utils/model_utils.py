@@ -51,7 +51,7 @@ def load_model_cached(path=None) -> None:
     try:
         model = load_model(path)
         return model
-    except Exception as e:
+    except (OSError, ValueError, IOError) as e:
         st.error(f"❌ Error loading model: {e}")
         return None
 
@@ -71,7 +71,7 @@ def load_face_cascade() -> None:
             st.error("❌ Failed to load face cascade classifier.")
             return None
         return face_cascade
-    except Exception as e:
+    except (OSError, ValueError, IOError) as e:
         st.error(f"❌ Error loading face cascade: {e}")
         return None
 
@@ -123,7 +123,7 @@ def try_download_model() -> bool:
                     f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
                 )
                 return True
-        except Exception:
+        except (OSError, ValueError):
             continue
 
     return False

@@ -498,6 +498,6 @@ def _run_training(
         with step_col3:
             st.page_link("streamlit_app.py", label="🧠 Inspect Model", icon="🧠")
 
-    except Exception as e:
+    except (RuntimeError, OSError, ValueError) as e:
         status_placeholder.error(f"❌ Training failed: {e}")
         st.exception(e)

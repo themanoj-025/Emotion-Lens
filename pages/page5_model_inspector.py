@@ -488,6 +488,6 @@ def _render_gradcam_tab(model) -> None:
                 unsafe_allow_html=True,
             )
 
-        except Exception as e:
+        except (RuntimeError, ValueError, TypeError) as e:
             st.error(f"❌ Grad-CAM failed: {e}")
             st.exception(e)

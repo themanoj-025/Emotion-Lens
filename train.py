@@ -50,7 +50,7 @@ def main() -> None:
             color_mode="grayscale",
             class_mode="categorical",
         )
-    except Exception as e:
+    except (FileNotFoundError, OSError, ValueError) as e:
         print("Could not load training data. Check path.", e)
         train_generator = None
 
@@ -63,7 +63,7 @@ def main() -> None:
             color_mode="grayscale",
             class_mode="categorical",
         )
-    except Exception as e:
+    except (FileNotFoundError, OSError, ValueError) as e:
         print("Could not load testing data. Check path.", e)
         test_generator = None
 
