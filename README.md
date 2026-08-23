@@ -45,7 +45,14 @@
 
 ---
 
-> 📸 **Screenshot placeholder:** Add a GIF of live webcam detection with face bounding boxes.
+## 📸 Screenshots
+
+> _To add screenshots: run `streamlit run streamlit_app.py`, capture your screen, save images to `docs/assets/`, and reference them below._
+>
+> **Suggested screenshots:**
+> - Live webcam detection with face bounding boxes (GIF)
+> - Analytics dashboard with emotion distribution
+> - Model training UI with progress
 
 ---
 
