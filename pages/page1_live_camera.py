@@ -268,7 +268,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
                         if len(self.temporal_buffer) >= 30:
                             self.temporal_buffer.pop(0)
                         self.temporal_buffer.append(self.last_result)
-                    except Exception:
+                    except (ValueError, RuntimeError, TypeError):
                         continue
 
                 # Grad-CAM overlay on detected faces
@@ -291,7 +291,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
                                 heatmap = compute_gradcam(self.model, roi_input, target)
                                 if heatmap is not None:
                                     apply_gradcam_overlay(img, (fx, fy, fw, fh), heatmap)
-                        except Exception:
+                        except (ValueError, RuntimeError, TypeError):
                             pass
 
                 # FPS counter
@@ -333,7 +333,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
         st.error("❌ `streamlit-webrtc` is not installed. Falling back to OpenCV mode.")
         st.info("Install with: `pip install streamlit-webrtc av`")
         _render_opencv_fallback(model, face_cascade, enable_gradcam)
-    except Exception as e:
+    except (RuntimeError, OSError, ValueError) as e:
         st.error(f"❌ WebRTC error: {e}")
         st.info("Falling back to OpenCV mode.")
         _render_opencv_fallback(model, face_cascade, enable_gradcam)
@@ -392,7 +392,7 @@ def _render_opencv_fallback(model, face_cascade, enable_gradcam=False) -> None:
                             "probabilities": probs.tolist(),
                         }
                     )
-                except Exception:
+                except (ValueError, RuntimeError, TypeError):
                     continue
 
             if results_for_frame:
@@ -421,7 +421,7 @@ def _render_opencv_fallback(model, face_cascade, enable_gradcam=False) -> None:
                         heatmap = compute_gradcam(model, roi_input, target)
                         if heatmap is not None:
                             apply_gradcam_overlay(frame, (fx, fy, fw, fh), heatmap)
-                    except Exception:
+                    except (ValueError, RuntimeError, TypeError):
                         pass
 
             # FPS label

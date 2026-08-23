@@ -201,7 +201,7 @@ def decode_base64_image(image_b64: str) -> np.ndarray:
 
     try:
         img_bytes = base64.b64decode(image_b64)
-    except Exception as e:
+    except (ValueError, TypeError) as e:
         raise HTTPException(status_code=400, detail=f"Invalid base64 encoding: {e}")
 
     try:
@@ -209,7 +209,7 @@ def decode_base64_image(image_b64: str) -> np.ndarray:
         # Convert PIL to BGR for OpenCV
         img_array = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
         return img_array
-    except Exception as e:
+    except (OSError, ValueError) as e:
         raise HTTPException(status_code=400, detail=f"Invalid image data: {e}")
 
 
@@ -239,7 +239,7 @@ def process_image(model, cascade, img_bgr, detect_faces=True) -> None:
                         bbox=[int(x), int(y), int(w), int(h)],
                     )
                 )
-            except Exception as e:
+            except (ValueError, RuntimeError) as e:
                 logger.warning(f"Error predicting face at ({x},{y}): {e}")
     else:
         emotion, conf, probs = predict_face(model, gray)
@@ -375,7 +375,7 @@ async def predict_from_file(
         contents = await file.read()
         pil_image = Image.open(io.BytesIO(contents))
         img_bgr = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
-    except Exception as e:
+    except (OSError, ValueError) as e:
         raise HTTPException(status_code=400, detail=f"Invalid image file: {e}")
 
     results, faces_count = process_image(model, cascade, img_bgr, detect_faces)

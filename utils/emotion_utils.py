@@ -110,7 +110,7 @@ def _predict_single_face(model, face_roi, bbox) -> None:
             "probabilities": all_probs.tolist(),
             "bbox": (x, y, w, h),
         }
-    except Exception:
+    except (ValueError, RuntimeError, TypeError):
         return None
 
 
@@ -334,7 +334,7 @@ def compute_gradcam(model, preprocessed_input, target_class_idx) -> None:
         heatmap = heatmap.numpy()
 
         return heatmap
-    except Exception:
+    except (ValueError, RuntimeError, TypeError):
         return None
 
 

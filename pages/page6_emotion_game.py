@@ -244,7 +244,7 @@ def _render_make_this_face_mode(model, face_cascade) -> None:
 
                             detected_emotion = emotion
                             detected_conf = conf
-                        except Exception:
+                        except (ValueError, RuntimeError, TypeError):
                             continue
 
                     st.image(frame, channels="BGR", use_container_width=True)

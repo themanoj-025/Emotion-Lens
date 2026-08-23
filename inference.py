@@ -15,7 +15,7 @@ def load_emotion_model(model_path="emotion_model.h5") -> None:
         model = load_model(model_path)
         print(f"Model loaded successfully from {model_path}")
         return model
-    except Exception as e:
+    except (OSError, ValueError, IOError) as e:
         print(f"Error loading model: {e}")
         sys.exit(1)
 
@@ -59,7 +59,7 @@ def predict_emotion(model, image_path) -> None:
         for i, emotion in enumerate(EMOTIONS):
             print(f" - {emotion}: {predictions[i]:.2%}")
 
-    except Exception as e:
+    except (OSError, ValueError, TypeError) as e:
         print(f"Error during prediction: {e}")
 
 
