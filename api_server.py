@@ -292,7 +292,7 @@ async def root() -> None:
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
 async def health_check() -> None:
     """Health check endpoint. Confirms the server and model are operational."""
-    model, cascade = get_model()
+    model, _cascade = get_model()
     return HealthResponse(
         status="healthy" if model is not None else "unhealthy",
         model_loaded=model is not None,

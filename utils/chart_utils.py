@@ -9,12 +9,12 @@ import plotly.graph_objects as go
 
 from utils.config import EMOTION_CONFIG, EMOTIONS
 
-LAYOUT_BASE = dict(
-    paper_bgcolor="#161B22",
-    plot_bgcolor="#0D1117",
-    font=dict(color="#E6EDF3", family="Space Grotesk, sans-serif", size=12),
-    margin=dict(l=16, r=16, t=32, b=16),
-)
+LAYOUT_BASE = {
+    "paper_bgcolor": "#161B22",
+    "plot_bgcolor": "#0D1117",
+    "font": {"color": "#E6EDF3", "family": "Space Grotesk, sans-serif", "size": 12},
+    "margin": {"l": 16, "r": 16, "t": 32, "b": 16},
+}
 
 
 def emotion_bar_chart(probs: list[float], title: str = "Emotion Probabilities") -> go.Figure:
@@ -52,21 +52,21 @@ def emotion_radar_chart(probs: list[float], title: str = "Emotion Profile") -> g
             theta=EMOTIONS + [EMOTIONS[0]],
             fill="toself",
             fillcolor="rgba(0,212,170,0.15)",
-            line=dict(color="#00D4AA", width=2),
+            line={"color": "#00D4AA", "width": 2},
         )
     )
     fig.update_layout(
         **LAYOUT_BASE,
-        polar=dict(
-            bgcolor="#161B22",
-            radialaxis=dict(
-                visible=True,
-                range=[0, 1],
-                gridcolor="rgba(139,148,158,0.15)",
-                color="#8B949E",
-            ),
-            angularaxis=dict(gridcolor="rgba(139,148,158,0.15)", color="#E6EDF3"),
-        ),
+        polar={
+            "bgcolor": "#161B22",
+            "radialaxis": {
+                "visible": True,
+                "range": [0, 1],
+                "gridcolor": "rgba(139,148,158,0.15)",
+                "color": "#8B949E",
+            },
+            "angularaxis": {"gridcolor": "rgba(139,148,158,0.15)", "color": "#E6EDF3"},
+        },
         title=title,
         height=320,
     )
@@ -87,7 +87,7 @@ def emotion_timeline(predictions: list[dict]) -> go.Figure:
                 x=df["timestamp"],
                 y=ys,
                 name=emotion,
-                line=dict(color=EMOTION_CONFIG[emotion]["color"], width=1.5),
+                line={"color": EMOTION_CONFIG[emotion]["color"], "width": 1.5},
                 hovertemplate=f"<b>{emotion}</b>: %{{y:.1%}}<extra></extra>",
             )
         )
@@ -95,7 +95,7 @@ def emotion_timeline(predictions: list[dict]) -> go.Figure:
         **LAYOUT_BASE,
         title="Emotion Timeline",
         height=300,
-        legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(size=11)),
+        legend={"bgcolor": "rgba(0,0,0,0)", "font": {"size": 11}},
         xaxis_title=None,
         yaxis_tickformat=".0%",
     )
@@ -114,7 +114,7 @@ def emotion_pie(predictions: list[dict]) -> go.Figure:
         go.Pie(
             labels=labels,
             values=values,
-            marker=dict(colors=colors, line=dict(color="#0D1117", width=2)),
+            marker={"colors": colors, "line": {"color": "#0D1117", "width": 2}},
             hole=0.55,
             hovertemplate="<b>%{label}</b>: %{value} (%{percent})<extra></extra>",
         )
@@ -139,13 +139,13 @@ def valence_arousal_scatter(predictions: list[dict]) -> go.Figure:
             x=valences,
             y=arousals,
             mode="markers",
-            marker=dict(color=colors, size=8, opacity=0.7, line=dict(color="#0D1117", width=1)),
+            marker={"color": colors, "size": 8, "opacity": 0.7, "line": {"color": "#0D1117", "width": 1}},
             text=emotions,
             hovertemplate="<b>%{text}</b><br>Valence: %{x:.1f}, Arousal: %{y:.1f}<extra></extra>",
         )
     )
-    fig.add_hline(y=0, line=dict(color="rgba(139,148,158,0.3)", dash="dot"))
-    fig.add_vline(x=0, line=dict(color="rgba(139,148,158,0.3)", dash="dot"))
+    fig.add_hline(y=0, line={"color": "rgba(139,148,158,0.3)", "dash": "dot"})
+    fig.add_vline(x=0, line={"color": "rgba(139,148,158,0.3)", "dash": "dot"})
     fig.update_layout(
         **LAYOUT_BASE,
         title="Valence–Arousal Map",

@@ -11,7 +11,6 @@ from utils.structured_logging import (
     request_id_var,
     set_request_id,
     setup_logger,
-    shutdown,
 )
 
 

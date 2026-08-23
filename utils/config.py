@@ -110,12 +110,12 @@ MOOD_MUSIC: Final = {
 }
 
 # Plotly Dark Theme (import in every page that uses Plotly)
-PLOTLY_LAYOUT: Final = dict(
-    paper_bgcolor="#161B22",
-    plot_bgcolor="#0D1117",
-    font=dict(color="#E6EDF3", family="Space Grotesk, Inter, sans-serif", size=12),
-    margin=dict(l=16, r=16, t=32, b=16),
-    colorway=[
+PLOTLY_LAYOUT: Final = {
+    "paper_bgcolor": "#161B22",
+    "plot_bgcolor": "#0D1117",
+    "font": {"color": "#E6EDF3", "family": "Space Grotesk, Inter, sans-serif", "size": 12},
+    "margin": {"l": 16, "r": 16, "t": 32, "b": 16},
+    "colorway": [
         "#00D4AA",
         "#60A5FA",
         "#4ADE80",
@@ -124,17 +124,17 @@ PLOTLY_LAYOUT: Final = dict(
         "#A855F7",
         "#FF6B6B",
     ],
-    xaxis=dict(
-        gridcolor="rgba(139,148,158,0.12)",
-        linecolor="rgba(139,148,158,0.2)",
-        zerolinecolor="rgba(139,148,158,0.12)",
-    ),
-    yaxis=dict(
-        gridcolor="rgba(139,148,158,0.12)",
-        linecolor="rgba(139,148,158,0.2)",
-        zerolinecolor="rgba(139,148,158,0.12)",
-    ),
-)
+    "xaxis": {
+        "gridcolor": "rgba(139,148,158,0.12)",
+        "linecolor": "rgba(139,148,158,0.2)",
+        "zerolinecolor": "rgba(139,148,158,0.12)",
+    },
+    "yaxis": {
+        "gridcolor": "rgba(139,148,158,0.12)",
+        "linecolor": "rgba(139,148,158,0.2)",
+        "zerolinecolor": "rgba(139,148,158,0.12)",
+    },
+}
 
 # Game Badges
 BADGES: Final = {

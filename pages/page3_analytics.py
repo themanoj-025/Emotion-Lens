@@ -162,16 +162,16 @@ def _render_distribution_chart(df) -> None:
                 go.Pie(
                     labels=emoji_labels,
                     values=dist.values,
-                    marker=dict(colors=colors, line=dict(color="#161B22", width=2)),
+                    marker={"colors": colors, "line": {"color": "#161B22", "width": 2}},
                     textinfo="label+percent",
-                    textfont=dict(color="#E6EDF3", size=12),
+                    textfont={"color": "#E6EDF3", "size": 12},
                     hovertemplate="<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>",
                 )
             ]
         )
         fig_pie.update_layout(
             height=400,
-            margin=dict(l=20, r=20, t=30, b=20),
+            margin={"l": 20, "r": 20, "t": 30, "b": 20},
             **PLOTLY_THEME,
         )
         st.plotly_chart(fig_pie, use_container_width=True)
@@ -191,9 +191,9 @@ def _render_distribution_chart(df) -> None:
         )
         fig_bar.update_layout(
             title="Count per Emotion",
-            yaxis=dict(title="Count", gridcolor="#30363D"),
+            yaxis={"title": "Count", "gridcolor": "#30363D"},
             height=400,
-            margin=dict(l=20, r=20, t=40, b=20),
+            margin={"l": 20, "r": 20, "t": 40, "b": 20},
             **PLOTLY_THEME,
         )
         st.plotly_chart(fig_bar, use_container_width=True)
@@ -226,12 +226,12 @@ def _render_timeline_chart(df) -> None:
             x=df_time["timestamp"],
             y=df_time["emotion_num"],
             mode="lines+markers",
-            line=dict(color="#00D4AA", width=2),
-            marker=dict(
-                color=colors,
-                size=8,
-                line=dict(color="#161B22", width=1),
-            ),
+            line={"color": "#00D4AA", "width": 2},
+            marker={
+                "color": colors,
+                "size": 8,
+                "line": {"color": "#161B22", "width": 1},
+            },
             text=emoji_labels,
             hovertemplate="<b>%{text}</b><br>Time: %{x|%H:%M:%S}<br>Confidence: %{customdata:.1f}%<extra></extra>",
             customdata=df_time["confidence"] * 100,
@@ -239,21 +239,21 @@ def _render_timeline_chart(df) -> None:
     )
 
     fig.update_layout(
-        yaxis=dict(
-            tickmode="array",
-            tickvals=list(range(7)),
-            ticktext=[f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
-            gridcolor="#30363D",
-            title="Emotion",
-        ),
-        xaxis=dict(
-            title="Time",
-            gridcolor="#30363D",
-            tickformat="%H:%M:%S",
-        ),
+        yaxis={
+            "tickmode": "array",
+            "tickvals": list(range(7)),
+            "ticktext": [f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
+            "gridcolor": "#30363D",
+            "title": "Emotion",
+        },
+        xaxis={
+            "title": "Time",
+            "gridcolor": "#30363D",
+            "tickformat": "%H:%M:%S",
+        },
         height=400,
         hovermode="x unified",
-        margin=dict(l=20, r=20, t=30, b=30),
+        margin={"l": 20, "r": 20, "t": 30, "b": 30},
         **PLOTLY_THEME,
     )
 
@@ -284,9 +284,9 @@ def _render_confidence_chart(df) -> None:
     )
 
     fig.update_layout(
-        yaxis=dict(title="Average Confidence (%)", range=[0, 100], gridcolor="#30363D"),
+        yaxis={"title": "Average Confidence (%)", "range": [0, 100], "gridcolor": "#30363D"},
         height=400,
-        margin=dict(l=20, r=20, t=30, b=20),
+        margin={"l": 20, "r": 20, "t": 30, "b": 20},
         **PLOTLY_THEME,
     )
 
@@ -330,17 +330,17 @@ def _render_heatmap(df) -> None:
             zmax=1,
             text=np.round(transition_matrix, 2),
             texttemplate="%{text:.0%}",
-            textfont=dict(size=10, color="#E6EDF3"),
+            textfont={"size": 10, "color": "#E6EDF3"},
             hovertemplate="From: %{y}<br>To: %{x}<br>Probability: %{z:.1%}<extra></extra>",
         )
     )
 
     fig.update_layout(
         title="Emotion Transition Probabilities",
-        xaxis=dict(title="Next Emotion", tickfont=dict(size=10)),
-        yaxis=dict(title="Current Emotion", tickfont=dict(size=10)),
+        xaxis={"title": "Next Emotion", "tickfont": {"size": 10}},
+        yaxis={"title": "Current Emotion", "tickfont": {"size": 10}},
         height=450,
-        margin=dict(l=20, r=20, t=40, b=20),
+        margin={"l": 20, "r": 20, "t": 40, "b": 20},
         **PLOTLY_THEME,
     )
 
@@ -379,8 +379,8 @@ def _render_positivity_analysis(df) -> None:
             y=scores,
             mode="lines+markers",
             name="Positivity Score",
-            line=dict(color="#00D4AA", width=2),
-            marker=dict(color=colors, size=5),
+            line={"color": "#00D4AA", "width": 2},
+            marker={"color": colors, "size": 5},
             hovertemplate="Frame %{x}<br>Score: %{y:+.2f}<extra></extra>",
         ),
         secondary_y=False,
@@ -399,24 +399,24 @@ def _render_positivity_analysis(df) -> None:
                 y=rolling_avg,
                 mode="lines",
                 name=f"{window}-frame Average",
-                line=dict(color="#FFFFFF", width=2, dash="dot"),
+                line={"color": "#FFFFFF", "width": 2, "dash": "dot"},
                 hovertemplate="Frame %{x}<br>Avg Score: %{y:+.2f}<extra></extra>",
             ),
             secondary_y=False,
         )
 
     fig.update_layout(
-        yaxis=dict(
-            title="Positivity Score",
-            range=[-1.1, 1.1],
-            gridcolor="#30363D",
-            tickvals=[-1, -0.5, 0, 0.5, 1],
-            ticktext=["-1.0 😟", "-0.5", "0 😐", "0.5", "1.0 😊"],
-        ),
-        xaxis=dict(title="Frame (recent)", gridcolor="#30363D"),
+        yaxis={
+            "title": "Positivity Score",
+            "range": [-1.1, 1.1],
+            "gridcolor": "#30363D",
+            "tickvals": [-1, -0.5, 0, 0.5, 1],
+            "ticktext": ["-1.0 😟", "-0.5", "0 😐", "0.5", "1.0 😊"],
+        },
+        xaxis={"title": "Frame (recent)", "gridcolor": "#30363D"},
         height=400,
         hovermode="x unified",
-        margin=dict(l=20, r=20, t=30, b=30),
+        margin={"l": 20, "r": 20, "t": 30, "b": 30},
         **PLOTLY_THEME,
     )
 
@@ -633,8 +633,8 @@ def _render_live_recording_chart(predictions_slice) -> None:
             x=list(range(len(df_rec))),
             y=df_rec["emotion_num"],
             mode="lines+markers",
-            line=dict(color="#00D4AA", width=2),
-            marker=dict(color=colors, size=6),
+            line={"color": "#00D4AA", "width": 2},
+            marker={"color": colors, "size": 6},
             text=[f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in df_rec["emotion"]],
             hovertemplate="<b>%{text}</b><br>Frame: %{x}<br>Confidence: %{customdata:.1f}%<extra></extra>",
             customdata=df_rec["confidence"] * 100,
@@ -642,15 +642,15 @@ def _render_live_recording_chart(predictions_slice) -> None:
     )
     fig.update_layout(
         title="🔴 Live Recording Preview",
-        yaxis=dict(
-            tickmode="array",
-            tickvals=list(range(7)),
-            ticktext=[f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
-            gridcolor="#30363D",
-        ),
-        xaxis=dict(title="Frame (since recording started)", gridcolor="#30363D"),
+        yaxis={
+            "tickmode": "array",
+            "tickvals": list(range(7)),
+            "ticktext": [f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
+            "gridcolor": "#30363D",
+        },
+        xaxis={"title": "Frame (since recording started)", "gridcolor": "#30363D"},
         height=300,
-        margin=dict(l=20, r=20, t=40, b=30),
+        margin={"l": 20, "r": 20, "t": 40, "b": 30},
         **PLOTLY_THEME,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -732,7 +732,7 @@ def _render_playback_view(recording) -> None:
             x=list(range(n_frames)),
             y=plot_data["emotion_num"],
             mode="lines",
-            line=dict(color="#30363D", width=1, dash="dot"),
+            line={"color": "#30363D", "width": 1, "dash": "dot"},
             name="Full path",
             hovertemplate="<extra></extra>",
             showlegend=False,
@@ -750,8 +750,8 @@ def _render_playback_view(recording) -> None:
             x=[0],
             y=[plot_data["emotion_num"].iloc[0]],
             mode="lines+markers",
-            line=dict(color="#00D4AA", width=3),
-            marker=dict(color=[colors_full[0]], size=10, line=dict(color="white", width=2)),
+            line={"color": "#00D4AA", "width": 3},
+            marker={"color": [colors_full[0]], "size": 10, "line": {"color": "white", "width": 2}},
             name="Journey",
             text=[emoji_labels[0]],
             hovertemplate="<b>%{text}</b><br>Frame: %{x}<br>Confidence: %{customdata:.1f}%<extra></extra>",
@@ -773,7 +773,7 @@ def _render_playback_view(recording) -> None:
                         x=list(range(n_frames)),  # Full path (faint)
                         y=plot_data["emotion_num"],
                         mode="lines",
-                        line=dict(color="#30363D", width=1, dash="dot"),
+                        line={"color": "#30363D", "width": 1, "dash": "dot"},
                         showlegend=False,
                         hovertemplate="<extra></extra>",
                     ),
@@ -781,12 +781,12 @@ def _render_playback_view(recording) -> None:
                         x=list(range(i)),
                         y=frame_data["emotion_num"],
                         mode="lines+markers",
-                        line=dict(color="#00D4AA", width=3),
-                        marker=dict(
-                            color=frame_colors,
-                            size=8,
-                            line=dict(color="white", width=1.5),
-                        ),
+                        line={"color": "#00D4AA", "width": 3},
+                        marker={
+                            "color": frame_colors,
+                            "size": 8,
+                            "line": {"color": "white", "width": 1.5},
+                        },
                         name="Journey",
                         text=frame_emojis,
                         hovertemplate="<b>%{text}</b><br>Frame: %{x}<br>Confidence: %{customdata:.1f}%<extra></extra>",
@@ -877,27 +877,27 @@ def _render_playback_view(recording) -> None:
     ]
 
     fig.update_layout(
-        title=dict(
-            text=f"🎬 Emotion Journey — {recording['name']}",
-            font=dict(size=14, color="#E6EDF3"),
-        ),
-        yaxis=dict(
-            tickmode="array",
-            tickvals=list(range(7)),
-            ticktext=[f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
-            gridcolor="#30363D",
-            range=[-0.5, 6.5],
-        ),
-        xaxis=dict(
-            title="Frame (progression)",
-            gridcolor="#30363D",
-            range=[-0.5, n_frames - 0.5],
-        ),
+        title={
+            "text": f"🎬 Emotion Journey — {recording['name']}",
+            "font": {"size": 14, "color": "#E6EDF3"},
+        },
+        yaxis={
+            "tickmode": "array",
+            "tickvals": list(range(7)),
+            "ticktext": [f"{EMOTION_CONFIG[e]['emoji']} {e}" for e in EMOTIONS],
+            "gridcolor": "#30363D",
+            "range": [-0.5, 6.5],
+        },
+        xaxis={
+            "title": "Frame (progression)",
+            "gridcolor": "#30363D",
+            "range": [-0.5, n_frames - 0.5],
+        },
         height=500,
         updatemenus=updatemenus,
         sliders=sliders,
         hovermode="x unified",
-        margin=dict(l=20, r=20, t=60, b=100),
+        margin={"l": 20, "r": 20, "t": 60, "b": 100},
         **PLOTLY_THEME,
     )
 
@@ -919,9 +919,9 @@ def _render_playback_view(recording) -> None:
                 go.Pie(
                     labels=emoji_labels,
                     values=dist.values,
-                    marker=dict(colors=colors, line=dict(color="#161B22", width=2)),
+                    marker={"colors": colors, "line": {"color": "#161B22", "width": 2}},
                     textinfo="label+percent",
-                    textfont=dict(color="#E6EDF3", size=11),
+                    textfont={"color": "#E6EDF3", "size": 11},
                     hovertemplate="<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>",
                 )
             ]
@@ -929,7 +929,7 @@ def _render_playback_view(recording) -> None:
         fig_pie.update_layout(
             title="Emotion Distribution",
             height=350,
-            margin=dict(l=20, r=20, t=40, b=20),
+            margin={"l": 20, "r": 20, "t": 40, "b": 20},
             **PLOTLY_THEME,
         )
         st.plotly_chart(fig_pie, use_container_width=True)
@@ -942,7 +942,7 @@ def _render_playback_view(recording) -> None:
                 x=list(range(len(df_rec))),
                 y=df_rec["confidence"] * 100,
                 mode="lines",
-                line=dict(color="#00D4AA", width=2),
+                line={"color": "#00D4AA", "width": 2},
                 fill="tozeroy",
                 fillcolor="rgba(0, 212, 170, 0.1)",
                 name="Confidence",
@@ -951,10 +951,10 @@ def _render_playback_view(recording) -> None:
         )
         fig_conf.update_layout(
             title="Confidence Over Time",
-            yaxis=dict(title="Confidence (%)", range=[0, 100], gridcolor="#30363D"),
-            xaxis=dict(title="Frame", gridcolor="#30363D"),
+            yaxis={"title": "Confidence (%)", "range": [0, 100], "gridcolor": "#30363D"},
+            xaxis={"title": "Frame", "gridcolor": "#30363D"},
             height=350,
-            margin=dict(l=20, r=20, t=40, b=20),
+            margin={"l": 20, "r": 20, "t": 40, "b": 20},
             **PLOTLY_THEME,
         )
         st.plotly_chart(fig_conf, use_container_width=True)
