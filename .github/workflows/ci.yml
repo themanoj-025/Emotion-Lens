@@ -28,21 +28,14 @@ jobs:
         cache: pip
         with: { python-version: '3.11' }
 
-      - name: Install base linting tools
-        run: pip install pyflakes
+      - name: Install linting tools
+        run: pip install ruff
 
-      - name: Python syntax check (all files)
-        run: |
-          echo "Checking syntax of all Python files..."
-          find . -name '*.py' -not -path './__pycache__/*' -exec python -m py_compile {} \;
-          echo "✅ All files compile cleanly"
+      - name: Lint with ruff
+        run: ruff check . --output-format=github
 
-      - name: Static analysis with pyflakes (warnings only, non-blocking)
-        continue-on-error: true
-        run: |
-          pyflakes streamlit_app.py api_server.py train.py inference.py webcam_inference.py
-          pyflakes utils/ pages/
-          echo "ℹ️  Pyflakes warnings above (non-blocking — many are false positives from Streamlit patterns)"
+      - name: Format check with ruff
+        run: ruff format --check .
 
   # ─── Import & Runtime Checks ──────────────────────────────
   import-check:
