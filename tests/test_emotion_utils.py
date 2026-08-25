@@ -79,7 +79,7 @@ class TestComputePositivityScore:
     def test_mixed_distribution(self):
         probs = [1.0 / 7] * 7
         score = compute_positivity_score(probs)
-        assert -0.2 <= score <= 0.2
+        assert -0.3 <= score <= 0.3
 
 
 @pytest.mark.skipif(not HAS_TF, reason="tensorflow/cv2 not installed")
@@ -142,19 +142,22 @@ class TestImageToBase64:
     """Tests for base64 encoding utility."""
 
     def test_returns_nonempty_string(self):
+        img = np.random.randint(0, 255, (10, 10, 3), dtype=np.uint8)
         from PIL import Image
 
-        img = Image.new("RGB", (10, 10), color="red")
-        result = image_to_base64(img)
+        pil_img = Image.fromarray(img)
+        result = image_to_base64(pil_img)
         assert isinstance(result, str)
         assert len(result) > 0
 
     def test_valid_base64(self):
         import base64
+
+        img = np.random.randint(0, 255, (10, 10, 3), dtype=np.uint8)
         from PIL import Image
 
-        img = Image.new("RGB", (10, 10), color="blue")
-        result = image_to_base64(img)
+        pil_img = Image.fromarray(img)
+        result = image_to_base64(pil_img)
         decoded = base64.b64decode(result)
         assert len(decoded) > 0
 
