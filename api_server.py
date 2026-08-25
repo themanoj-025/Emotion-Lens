@@ -56,13 +56,54 @@ except ImportError:
     print("❌ TensorFlow is not installed. Install with: pip install tensorflow")
     sys.exit(1)
 
-# Logging
+# Structured Logging
+import json
+import threading
+import uuid
+from datetime import UTC, datetime
+from typing import Any as _Any
+
+
+class _StructuredFormatter(logging.Formatter):
+    """JSON structured log formatter for production log aggregation."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        log_entry: dict[str, _Any] = {
+            "timestamp": datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "message": record.getMessage(),
+        }
+        # Include extra fields
+        for key in ("method", "path", "status_code", "duration_ms", "faces_detected"):
+            val = getattr(record, key, None)
+            if val is not None:
+                log_entry[key] = val
+        # Include exception info if present
+        if record.exc_info and record.exc_info[1] is not None:
+            log_entry["exception"] = {
+                "type": type(record.exc_info[1]).__name__,
+                "message": str(record.exc_info[1]),
+            }
+        return json.dumps(log_entry, ensure_ascii=False, default=str)
+
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger("emotion-api")
+
+# Add structured JSON file handler
+try:
+    _log_dir = Path(__file__).resolve().parent / "logs"
+    _log_dir.mkdir(exist_ok=True)
+    _file_handler = logging.FileHandler(_log_dir / "api.log", encoding="utf-8")
+    _file_handler.setFormatter(_StructuredFormatter())
+    logger.addHandler(_file_handler)
+except OSError:
+    pass
 
 # Constants
 EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
