@@ -19,7 +19,7 @@ pandas==3.0.5
 scikit-learn==1.9.0
 scipy==1.17.1
 requests==2.34.2
-protobuf==7.35.1
+protobuf==7.36.0
 
 # API observability
 fastapi>=0.100.0
