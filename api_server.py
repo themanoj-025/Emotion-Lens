@@ -200,6 +200,20 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     dependencies=[Depends(verify_api_key)] if API_KEY else [],
+    openapi_tags=[
+        {
+            "name": "Health",
+            "description": "Service health check endpoints",
+        },
+        {
+            "name": "Prediction",
+            "description": "Emotion prediction from images (base64 or file upload)",
+        },
+        {
+            "name": "Info",
+            "description": "API information and documentation",
+        },
+    ],
 )
 
 # Log auth status on startup
