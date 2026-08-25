@@ -31,7 +31,7 @@ from PIL import Image
 
 # FastAPI imports
 try:
-    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, UploadFile
+    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, Response, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
@@ -61,7 +61,15 @@ import json
 import threading
 import uuid
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any as _Any
+
+try:
+    from prometheus_client import Counter, Histogram, generate_latest
+
+    _PROM_AVAILABLE = True
+except ImportError:
+    _PROM_AVAILABLE = False
 
 
 class _StructuredFormatter(logging.Formatter):
@@ -190,6 +198,24 @@ class HealthResponse(BaseModel):
     emotions: list[str]
 
 
+# ── Prometheus metrics ────────────────────────────────────────────────
+if _PROM_AVAILABLE:
+    EMOTION_REQUEST_COUNT = Counter(
+        "emotionlens_requests_total",
+        "Total HTTP requests",
+        ["method", "endpoint", "status"],
+    )
+    EMOTION_REQUEST_LATENCY = Histogram(
+        "emotionlens_request_duration_seconds",
+        "HTTP request latency in seconds",
+        ["method", "endpoint"],
+        buckets=[0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0],
+    )
+    EMOTION_PREDICTIONS = Counter(
+        "emotionlens_predictions_total", "Total emotion predictions", ["emotion"])
+    EMOTION_FACES_DETECTED = Counter(
+        "emotionlens_faces_detected_total", "Total faces detected")
+
 # App Initialization
 
 app = FastAPI(
@@ -252,6 +278,8 @@ else:
 @app.middleware("http")
 async def add_security_headers(request, call_next) -> None:
     """Add security headers to every response."""
+    import time as _time
+    request.state.start_time = _time.time()
     response = await call_next(request)
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
@@ -261,6 +289,19 @@ async def add_security_headers(request, call_next) -> None:
         "camera=(), microphone=(), geolocation=(), interest-cohort=()"
     )
     response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
+
+    if _PROM_AVAILABLE:
+        import time as _time
+
+        path = request.url.path
+        EMOTION_REQUEST_COUNT.labels(
+            method=request.method, endpoint=path, status=response.status_code
+        ).inc()
+        if hasattr(request.state, "start_time"):
+            EMOTION_REQUEST_LATENCY.labels(method=request.method, endpoint=path).observe(
+                _time.time() - request.state.start_time
+            )
+
     return response
 
 
@@ -450,6 +491,11 @@ async def predict_from_base64(request: PredictRequest = Body(...)) -> None:
     img_bgr = decode_base64_image(request.image)
     results, faces_count = process_image(model, cascade, img_bgr, request.detect_faces)
 
+    if _PROM_AVAILABLE:
+        EMOTION_FACES_DETECTED.inc(faces_count)
+        for r in results:
+            EMOTION_PREDICTIONS.labels(emotion=r.emotion).inc()
+
     elapsed_ms = round((time.time() - start) * 1000, 2)
 
     return PredictResponse(
@@ -502,6 +548,11 @@ async def predict_from_file(
 
     results, faces_count = process_image(model, cascade, img_bgr, detect_faces)
 
+    if _PROM_AVAILABLE:
+        EMOTION_FACES_DETECTED.inc(faces_count)
+        for r in results:
+            EMOTION_PREDICTIONS.labels(emotion=r.emotion).inc()
+
     elapsed_ms = round((time.time() - start) * 1000, 2)
 
     return PredictResponse(
@@ -511,6 +562,14 @@ async def predict_from_file(
         summary=generate_summary(results),
         processing_time_ms=elapsed_ms,
     )
+
+
+@app.get("/metrics", tags=["Info"])
+async def metrics():
+    """Prometheus metrics endpoint."""
+    if not _PROM_AVAILABLE:
+        return {"status": "prometheus_client not installed"}
+    return Response(content=generate_latest(), media_type="text/plain")
 
 
 # CLI Entry Point
