@@ -31,7 +31,7 @@ from PIL import Image
 
 # FastAPI imports
 try:
-    from fastapi import Body, Depends, FastAPI, File, Form, HTTPException, Response, UploadFile
+    from fastapi import APIRouter, Body, Depends, FastAPI, File, Form, HTTPException, Response, UploadFile
     from fastapi.middleware.cors import CORSMiddleware
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
@@ -432,39 +432,11 @@ def generate_summary(results: list[EmotionResult]) -> str:
     return f"Group: {', '.join(parts)}"
 
 
-# Endpoints
+# ── API v1 Router ──────────────────────────────────────────────────────
+v1_router = APIRouter(prefix="/api/v1")
 
 
-@app.get("/", tags=["Info"])
-async def root() -> None:
-    """API root — provides basic info and links."""
-    return {
-        "service": "EmotionLens 🎭 API",
-        "version": "1.0.0",
-        "endpoints": {
-            "GET  /health": "Health check",
-            "POST /predict": "Predict emotion from base64 image",
-            "POST /predict-file": "Predict emotion from uploaded file",
-            "GET  /docs": "Swagger UI documentation",
-            "GET  /redoc": "ReDoc documentation",
-        },
-        "emotions": EMOTIONS,
-    }
-
-
-@app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check() -> None:
-    """Health check endpoint. Confirms the server and model are operational."""
-    model, _cascade = get_model()
-    return HealthResponse(
-        status="healthy" if model is not None else "unhealthy",
-        model_loaded=model is not None,
-        model_path=os.path.abspath(MODEL_PATH) if os.path.exists(MODEL_PATH) else "NOT FOUND",
-        emotions=EMOTIONS,
-    )
-
-
-@app.post("/predict", response_model=PredictResponse, tags=["Prediction"])
+@v1_router.post("/predict", response_model=PredictResponse, tags=["Prediction"])
 async def predict_from_base64(request: PredictRequest = Body(...)) -> None:
     """
     Predict emotions from a base64-encoded image.
@@ -507,7 +479,7 @@ async def predict_from_base64(request: PredictRequest = Body(...)) -> None:
     )
 
 
-@app.post("/predict-file", response_model=PredictResponse, tags=["Prediction"])
+@v1_router.post("/predict-file", response_model=PredictResponse, tags=["Prediction"])
 async def predict_from_file(
     file: UploadFile = File(...),
     detect_faces: bool = Form(
@@ -561,6 +533,41 @@ async def predict_from_file(
         results=results,
         summary=generate_summary(results),
         processing_time_ms=elapsed_ms,
+    )
+
+
+app.include_router(v1_router)
+
+
+# Root / health / metrics (unversioned — for probes and monitoring)
+
+
+@app.get("/", tags=["Info"])
+async def root() -> None:
+    """API root — provides basic info and links."""
+    return {
+        "service": "EmotionLens 🎭 API",
+        "version": "1.0.0",
+        "endpoints": {
+            "GET  /health": "Health check",
+            "POST /predict": "Predict emotion from base64 image",
+            "POST /predict-file": "Predict emotion from uploaded file",
+            "GET  /docs": "Swagger UI documentation",
+            "GET  /redoc": "ReDoc documentation",
+        },
+        "emotions": EMOTIONS,
+    }
+
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+async def health_check() -> None:
+    """Health check endpoint. Confirms the server and model are operational."""
+    model, _cascade = get_model()
+    return HealthResponse(
+        status="healthy" if model is not None else "unhealthy",
+        model_loaded=model is not None,
+        model_path=os.path.abspath(MODEL_PATH) if os.path.exists(MODEL_PATH) else "NOT FOUND",
+        emotions=EMOTIONS,
     )
 
 
