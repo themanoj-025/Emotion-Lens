@@ -9,8 +9,8 @@ jobs:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
-          cache: pip
         with:
+          cache: pip
           python-version: "3.11"
 
       - name: Run pre-commit hooks
@@ -394,8 +394,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-          cache: pip
         with:
+          cache: pip
           python-version: "3.11"
       - name: Install dependencies
         run: |
@@ -411,8 +411,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-          cache: pip
         with:
+          cache: pip
           python-version: "3.11"
       - name: Install security tools
         run: pip install bandit
@@ -434,8 +434,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
-          cache: pip
         with:
+          cache: pip
           python-version: "3.11"
       - name: Install dependencies
         run: |
