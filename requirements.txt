@@ -24,6 +24,6 @@ protobuf==7.36.0
 # API observability
 fastapi>=0.141.1
 uvicorn>=0.23.0
-slowapi>=0.1.9
+slowapi>=0.1.10
 python-multipart>=0.0.6
 prometheus-client>=0.26.0
