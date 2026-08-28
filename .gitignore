@@ -82,3 +82,6 @@ mlruns/
 .cursorrules
 
 CLAUDE.md
+
+# Runtime logs
+logs/
