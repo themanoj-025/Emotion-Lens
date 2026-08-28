@@ -1,0 +1,45 @@
+"""Tests for emotion configuration constants."""
+
+import pytest
+
+from utils.config import EMOTIONS, EMOTION_CONFIG, positivity_score, SMOOTHING_WINDOW
+
+
+class TestEmotions:
+    """Tests for EMOTIONS constant."""
+
+    def test_has_7_emotions(self):
+        assert len(EMOTIONS) == 7
+
+    def test_emotion_names(self):
+        expected = {"Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"}
+        assert set(EMOTIONS) == expected
+
+
+class TestPositivityScore:
+    """Tests for positivity_score function."""
+
+    def test_happy_positive(self):
+        probs = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]
+        assert positivity_score(probs) > 0
+
+    def test_sad_negative(self):
+        probs = [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0]
+        assert positivity_score(probs) < 0
+
+    def test_neutral_zero(self):
+        probs = [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]
+        assert positivity_score(probs) == 0.0
+
+    def test_clipping(self):
+        probs = [1.0] * 7
+        score = positivity_score(probs)
+        assert -1.0 <= score <= 1.0
+
+
+class TestSmoothingWindow:
+    """Tests for SMOOTHING_WINDOW constant."""
+
+    def test_default_window(self):
+        assert SMOOTHING_WINDOW == 5
+        assert isinstance(SMOOTHING_WINDOW, int)
