@@ -2,8 +2,6 @@
 import sys
 from unittest.mock import MagicMock, patch
 
-import numpy as np
-
 # Mock heavy dependencies before import (PIL NOT mocked — needed by other tests)
 sys.modules["tensorflow"] = MagicMock()
 sys.modules["tensorflow.keras"] = MagicMock()
@@ -12,12 +10,12 @@ sys.modules["cv2"] = MagicMock()
 sys.modules["streamlit"] = MagicMock()
 
 from utils.model_utils import (
-    EMOTIONS,
     EMOTION_CONFIG,
+    EMOTIONS,
     MODEL_PATH,
-    load_face_cascade,
-    is_model_available,
     get_model_summary,
+    is_model_available,
+    load_face_cascade,
 )
 
 

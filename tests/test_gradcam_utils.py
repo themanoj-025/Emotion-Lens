@@ -1,7 +1,6 @@
 """Tests for Grad-CAM visualization utilities."""
 
 import numpy as np
-import pytest
 
 from utils.emotion_utils import (
     _get_last_conv_layer_idx,

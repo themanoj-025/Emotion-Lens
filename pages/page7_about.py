@@ -242,7 +242,7 @@ def show() -> None:
     st.markdown("## 📖 README")
 
     if os.path.exists("README.md"):
-        with open("README.md", "r") as f:
+        with open("README.md") as f:
             readme_content = f.read()
 
         with st.expander("📄 View Project README"):

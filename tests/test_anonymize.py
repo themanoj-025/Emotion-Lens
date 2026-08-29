@@ -1,7 +1,6 @@
 """Tests for face anonymization utility."""
 
 import numpy as np
-import pytest
 
 from utils.emotion_utils import anonymize_faces
 

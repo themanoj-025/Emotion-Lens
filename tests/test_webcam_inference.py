@@ -1,7 +1,5 @@
 """Tests for webcam inference module."""
 
-import pytest
-from unittest.mock import MagicMock, patch
 
 from webcam_inference import WebcamProcessor
 

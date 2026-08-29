@@ -1,6 +1,5 @@
 """Tests for EmotionSmoother class."""
 
-import pytest
 
 from utils.smoothing_utils import EmotionSmoother
 

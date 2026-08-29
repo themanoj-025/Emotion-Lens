@@ -1,8 +1,7 @@
 """Tests for model utility constants and helpers."""
 
-import pytest
 
-from utils.model_utils import EMOTIONS, EMOTION_CONFIG, MOOD_MUSIC_MAP
+from utils.model_utils import EMOTION_CONFIG, EMOTIONS, MOOD_MUSIC_MAP
 
 
 class TestEmotions:

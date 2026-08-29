@@ -1,9 +1,8 @@
 """Tests for inference module."""
 
-import pytest
 from unittest.mock import MagicMock, patch
 
-from inference import load_model, load_face_cascade
+from inference import load_face_cascade, load_model
 
 
 class TestLoadModel:

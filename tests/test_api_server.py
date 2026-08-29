@@ -5,7 +5,6 @@ Covers: Pydantic models, summary generation, auth logic.
 NOTE: TensorFlow not available in CI, so we mock the model loading.
 """
 
-import os
 import sys
 from unittest.mock import MagicMock, patch
 
@@ -18,7 +17,6 @@ sys.modules["tensorflow.keras.models"] = MagicMock()
 
 import api_server
 from api_server import EmotionResult, HealthResponse, PredictRequest, PredictResponse, generate_summary
-
 
 # ── Pydantic Model Tests ──────────────────────────────────────────────────
 

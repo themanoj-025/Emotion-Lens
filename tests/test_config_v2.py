@@ -1,8 +1,7 @@
 """Tests for emotion configuration constants."""
 
-import pytest
 
-from utils.config import EMOTIONS, EMOTION_CONFIG, positivity_score, SMOOTHING_WINDOW
+from utils.config import EMOTIONS, SMOOTHING_WINDOW, positivity_score
 
 
 class TestEmotions:

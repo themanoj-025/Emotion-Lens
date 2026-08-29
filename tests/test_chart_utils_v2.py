@@ -1,15 +1,13 @@
 """Tests for Plotly chart builders."""
 
-import pytest
 
 from utils.chart_utils import (
     emotion_bar_chart,
+    emotion_pie,
     emotion_radar_chart,
     emotion_timeline,
-    emotion_pie,
     valence_arousal_scatter,
 )
-from utils.config import EMOTIONS
 
 
 class TestEmotionBarChart:
