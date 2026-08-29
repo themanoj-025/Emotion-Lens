@@ -4,7 +4,6 @@ import sys
 from unittest.mock import MagicMock
 
 import numpy as np
-import pytest
 
 # Mock tensorflow before importing emotion_utils
 sys.modules.setdefault("tensorflow", MagicMock())
@@ -15,16 +14,15 @@ sys.modules.setdefault("tensorflow.keras.preprocessing.image", MagicMock())
 sys.modules.setdefault("cv2", MagicMock())
 
 from utils.config import (
-    EMOTIONS,
-    EMOTION_CONFIG,
-    SMOOTHING_WINDOW,
-    MAX_HISTORY,
-    GAME_COUNTDOWN,
-    positivity_score,
-    emotion_index,
     BADGES,
+    EMOTION_CONFIG,
+    EMOTIONS,
+    GAME_COUNTDOWN,
+    MAX_HISTORY,
+    SMOOTHING_WINDOW,
+    emotion_index,
+    positivity_score,
 )
-
 
 # ── Config Constants ────────────────────────────────────────────────────────
 

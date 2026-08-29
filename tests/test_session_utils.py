@@ -1,8 +1,7 @@
 """Tests for session management utilities."""
 
-import pytest
 
-from utils.session_utils import init_session_state, get_session_history, add_to_history
+from utils.session_utils import add_to_history, get_session_history, init_session_state
 
 
 class TestInitSessionState:

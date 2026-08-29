@@ -58,8 +58,6 @@ except ImportError:
 
 # Structured Logging
 import json
-import threading
-import uuid
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any as _Any

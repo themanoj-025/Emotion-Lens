@@ -1,16 +1,14 @@
 """Tests for emotion detection utilities."""
 
 import numpy as np
-import pytest
 
 from utils.emotion_utils import (
-    preprocess_face,
-    compute_positivity_score,
     apply_temporal_smoothing,
+    compute_positivity_score,
     generate_emotion_summary,
     image_to_base64,
+    preprocess_face,
 )
-from utils.model_utils import EMOTIONS
 
 
 class TestPreprocessFace:
