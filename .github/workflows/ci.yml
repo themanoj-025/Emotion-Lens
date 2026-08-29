@@ -355,13 +355,13 @@ jobs:
         with: { python-version: '${{ matrix.python-version }}' }
 
       - name: Install test dependencies (pure-logic, no TensorFlow)
-        run: pip install pytest numpy pandas
+        run: pip install pytest pytest-cov numpy pandas
 
       - name: Run unit tests
         # python -m pytest puts the repo root on sys.path, which the tests
         # rely on to import the top-level `utils` package. Bare `pytest`
         # doesn't, so test collection fails with ModuleNotFoundError.
-        run: python -m pytest tests/ -v
+        run: python -m pytest tests/ -v --cov=. --cov-report=term-missing --cov-fail-under=60
 
   # ─── Docker Build & Validate ─────────────────────────────
   docker:
