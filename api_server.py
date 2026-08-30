@@ -227,6 +227,17 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     dependencies=[Depends(verify_api_key)] if API_KEY else [],
+
+# --- OpenTelemetry distributed tracing (OTEL_ENABLED=true) ---
+try:
+    from utils.tracing import setup_tracing
+    _otel_ok = setup_tracing("emotion-lens-api")
+    if _otel_ok:
+        from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+        FastAPIInstrumentor.instrument_app(app)
+except ImportError:
+    pass
+
     openapi_tags=[
         {
             "name": "Health",
