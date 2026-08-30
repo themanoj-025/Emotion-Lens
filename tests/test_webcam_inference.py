@@ -7,6 +7,6 @@ from webcam_inference import WebcamProcessor
 class TestWebcamProcessor:
     """Tests for WebcamProcessor."""
 
-    def test_init(self):
+    def test_init(self) -> None:
         processor = WebcamProcessor()
         assert processor is not None

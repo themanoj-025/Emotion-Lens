@@ -246,7 +246,7 @@ def _run_training(
     rotation_range,
     zoom_range,
     model_name,
-):
+) -> None:
     """Execute the training process with live Streamlit updates."""
 
     # Training status placeholders
