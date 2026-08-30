@@ -10,7 +10,7 @@ from utils.config import (
 )
 
 
-def test_emotions_follow_fer2013_order():
+def test_emotions_follow_fer2013_order() -> None:
     """EMOTIONS must match FER2013 training order (7 classes)."""
     assert EMOTIONS == [
         "Angry",
@@ -23,7 +23,7 @@ def test_emotions_follow_fer2013_order():
     ]
 
 
-def test_emotion_config_covers_all_emotions():
+def test_emotion_config_covers_all_emotions() -> None:
     """Every emotion has a color, bg, emoji, valence and arousal."""
     for emotion in EMOTIONS:
         cfg = EMOTION_CONFIG[emotion]
@@ -34,29 +34,29 @@ def test_emotion_config_covers_all_emotions():
         assert -1.0 <= cfg["arousal"] <= 1.0
 
 
-def test_mood_music_covers_all_emotions():
+def test_mood_music_covers_all_emotions() -> None:
     """Every emotion maps to a music genre + search query."""
     for emotion in EMOTIONS:
         assert "genre" in MOOD_MUSIC[emotion]
         assert "query" in MOOD_MUSIC[emotion]
 
 
-def test_positivity_score_happy_positive():
+def test_positivity_score_happy_positive() -> None:
     probs = [0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0]  # 100% Happy
     assert positivity_score(probs) == 1.0
 
 
-def test_positivity_score_angry_negative():
+def test_positivity_score_angry_negative() -> None:
     probs = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # 100% Angry
     assert positivity_score(probs) == -1.0
 
 
-def test_positivity_score_neutral_zero():
+def test_positivity_score_neutral_zero() -> None:
     probs = [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0]  # 100% Neutral
     assert positivity_score(probs) == 0.0
 
 
-def test_positivity_score_bounds():
+def test_positivity_score_bounds() -> None:
     """Mixed distributions must stay within [-1, 1]."""
     import numpy as np
 
@@ -66,20 +66,20 @@ def test_positivity_score_bounds():
         assert -1.0 <= score <= 1.0
 
 
-def test_emotion_index():
+def test_emotion_index() -> None:
     assert emotion_index("Happy") == 3
     assert emotion_index("Angry") == 0
     assert emotion_index("Surprise") == 6
 
 
-def test_badges_all_callable():
+def test_badges_all_callable() -> None:
     """Every badge is a lambda evaluating session state dicts."""
     for name, predicate in BADGES.items():
         assert callable(predicate)
         assert name  # non-empty badge name
 
 
-def test_badge_conditions():
+def test_badge_conditions() -> None:
     assert BADGES["😊 Smile Master"]({"Happy_count": 10})
     assert not BADGES["😊 Smile Master"]({"Happy_count": 3})
     assert BADGES["🏆 Grand Master"]({"total_score": 250})

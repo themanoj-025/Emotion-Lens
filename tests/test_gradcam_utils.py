@@ -11,7 +11,7 @@ from utils.emotion_utils import (
 class TestGetLastConvLayerIdx:
     """Tests for _get_last_conv_layer_idx."""
 
-    def test_returns_none_for_no_conv_layers(self):
+    def test_returns_none_for_no_conv_layers(self) -> None:
         mock_model = type("Model", (), {"layers": [
             type("Layer", (), {"name": "dense_1"})(),
             type("Layer", (), {"name": "output"})(),
@@ -19,7 +19,7 @@ class TestGetLastConvLayerIdx:
         result = _get_last_conv_layer_idx(mock_model)
         assert result is None
 
-    def test_finds_last_conv_layer(self):
+    def test_finds_last_conv_layer(self) -> None:
         mock_model = type("Model", (), {"layers": [
             type("Layer", (), {"name": "conv2d_1"})(),
             type("Layer", (), {"name": "dense_1"})(),
@@ -33,7 +33,7 @@ class TestGetLastConvLayerIdx:
 class TestApplyGradcamOverlay:
     """Tests for apply_gradcam_overlay."""
 
-    def test_modifies_frame(self):
+    def test_modifies_frame(self) -> None:
         frame = np.zeros((100, 100, 3), dtype=np.uint8)
         heatmap = np.random.rand(48, 48).astype(np.float32)
         result = apply_gradcam_overlay(frame, (10, 10, 50, 50), heatmap)

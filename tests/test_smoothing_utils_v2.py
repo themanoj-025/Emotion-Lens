@@ -7,37 +7,37 @@ from utils.smoothing_utils import EmotionSmoother
 class TestEmotionSmoother:
     """Tests for EmotionSmoother."""
 
-    def test_init(self):
+    def test_init(self) -> None:
         smoother = EmotionSmoother()
         assert smoother.window == 5
 
-    def test_single_update(self):
+    def test_single_update(self) -> None:
         smoother = EmotionSmoother()
         probs = [0.1, 0.0, 0.0, 0.8, 0.05, 0.05, 0.0]
         smoothed = smoother.update(probs)
         assert len(smoothed) == 7
 
-    def test_smoothed_emotion(self):
+    def test_smoothed_emotion(self) -> None:
         smoother = EmotionSmoother()
         probs = [0.0, 0.0, 0.0, 0.9, 0.1, 0.0, 0.0]
         emotion, conf, smoothed = smoother.smoothed_emotion(probs)
         assert emotion == "Happy"
         assert conf > 0
 
-    def test_reset(self):
+    def test_reset(self) -> None:
         smoother = EmotionSmoother()
         smoother.update([0.0] * 7)
         smoother.update([0.0] * 7)
         smoother.reset()
         assert len(smoother._buffer) == 0
 
-    def test_window_limit(self):
+    def test_window_limit(self) -> None:
         smoother = EmotionSmoother(window=3)
         for _ in range(10):
             smoother.update([0.1, 0.0, 0.0, 0.8, 0.05, 0.05, 0.0])
         assert len(smoother._buffer) <= 3
 
-    def test_averaging(self):
+    def test_averaging(self) -> None:
         smoother = EmotionSmoother(window=3)
         # Mix of Happy and Sad
         smoother.update([0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0])  # Happy

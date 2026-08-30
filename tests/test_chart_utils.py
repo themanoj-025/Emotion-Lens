@@ -12,32 +12,32 @@ from utils.chart_utils import (
 from utils.config import EMOTIONS
 
 
-def test_bar_chart_returns_figure():
+def test_bar_chart_returns_figure() -> None:
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_bar_chart(probs)
     assert isinstance(fig, go.Figure)
 
 
-def test_bar_chart_has_seven_traces():
+def test_bar_chart_has_seven_traces() -> None:
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_bar_chart(probs)
     assert len(fig.data) == 7
 
 
-def test_bar_chart_uses_emotion_names():
+def test_bar_chart_uses_emotion_names() -> None:
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_bar_chart(probs)
     y_labels = [trace.y[0] for trace in fig.data]
     assert y_labels == EMOTIONS
 
 
-def test_radar_chart_returns_figure():
+def test_radar_chart_returns_figure() -> None:
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_radar_chart(probs)
     assert isinstance(fig, go.Figure)
 
 
-def test_radar_chart_closes_loop():
+def test_radar_chart_closes_loop() -> None:
     """Radar chart should have probs[0] appended to close the polygon."""
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_radar_chart(probs)
@@ -46,13 +46,13 @@ def test_radar_chart_closes_loop():
     assert trace.r[-1] == probs[0]
 
 
-def test_timeline_empty_returns_figure():
+def test_timeline_empty_returns_figure() -> None:
     fig = emotion_timeline([])
     assert isinstance(fig, go.Figure)
     assert len(fig.data) == 0
 
 
-def test_timeline_has_seven_traces():
+def test_timeline_has_seven_traces() -> None:
     predictions = [
         {"emotion": "Happy", "confidence": 0.9, "probabilities": [0.05] * 7, "timestamp": "2026-01-01T00:00:00"},
         {"emotion": "Sad", "confidence": 0.8, "probabilities": [0.05] * 7, "timestamp": "2026-01-01T00:00:01"},
@@ -61,12 +61,12 @@ def test_timeline_has_seven_traces():
     assert len(fig.data) == 7
 
 
-def test_pie_empty_returns_figure():
+def test_pie_empty_returns_figure() -> None:
     fig = emotion_pie([])
     assert isinstance(fig, go.Figure)
 
 
-def test_pie_groups_emotions():
+def test_pie_groups_emotions() -> None:
     predictions = [
         {"emotion": "Happy", "confidence": 0.9, "probabilities": [0] * 7, "timestamp": "t1"},
         {"emotion": "Happy", "confidence": 0.8, "probabilities": [0] * 7, "timestamp": "t2"},
@@ -79,13 +79,13 @@ def test_pie_groups_emotions():
     assert "Sad" in labels
 
 
-def test_valence_arousal_empty():
+def test_valence_arousal_empty() -> None:
     fig = valence_arousal_scatter([])
     assert isinstance(fig, go.Figure)
     assert len(fig.data) == 0
 
 
-def test_valence_arousal_has_points():
+def test_valence_arousal_has_points() -> None:
     predictions = [
         {"emotion": "Happy", "confidence": 0.9, "probabilities": [0] * 7, "timestamp": "t1"},
         {"emotion": "Angry", "confidence": 0.8, "probabilities": [0] * 7, "timestamp": "t2"},

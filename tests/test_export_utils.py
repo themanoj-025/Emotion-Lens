@@ -29,11 +29,11 @@ SAMPLE_PREDICTIONS = [
 ]
 
 
-def test_csv_empty_returns_none():
+def test_csv_empty_returns_none() -> None:
     assert export_predictions_csv([]) is None
 
 
-def test_csv_header_and_rows():
+def test_csv_header_and_rows() -> None:
     content = export_predictions_csv(SAMPLE_PREDICTIONS)
     assert content is not None
     rows = list(csv.DictReader(io.StringIO(content)))
@@ -48,11 +48,11 @@ def test_csv_header_and_rows():
     assert -1.0 <= score <= 1.0
 
 
-def test_json_empty_returns_none():
+def test_json_empty_returns_none() -> None:
     assert export_predictions_json([]) is None
 
 
-def test_json_roundtrip():
+def test_json_roundtrip() -> None:
     content = export_predictions_json(SAMPLE_PREDICTIONS)
     assert content is not None
     data = json.loads(content)
@@ -60,11 +60,11 @@ def test_json_roundtrip():
     assert data[0]["emotion"] == "Happy"
 
 
-def test_session_report_empty_returns_none():
+def test_session_report_empty_returns_none() -> None:
     assert export_session_report([]) is None
 
 
-def test_session_report_counts_and_dominant():
+def test_session_report_counts_and_dominant() -> None:
     report = export_session_report(SAMPLE_PREDICTIONS)
     assert report is not None
     assert "Total Predictions: 2" in report
@@ -72,25 +72,25 @@ def test_session_report_counts_and_dominant():
     assert "Neutral" in report
 
 
-def test_session_report_single_prediction():
+def test_session_report_single_prediction() -> None:
     report = export_session_report([SAMPLE_PREDICTIONS[0]])
     assert report is not None
     assert "Total Predictions: 1" in report
 
 
-def test_dataframe_empty():
+def test_dataframe_empty() -> None:
     df = predictions_to_dataframe([])
     assert df.empty
 
 
-def test_dataframe_has_positivity_column():
+def test_dataframe_has_positivity_column() -> None:
     df = predictions_to_dataframe(SAMPLE_PREDICTIONS)
     assert len(df) == 2
     assert "positivity_score" in df.columns
     assert df["positivity_score"].between(-1, 1).all()
 
 
-def test_dataframe_malformed_probs_get_zero():
+def test_dataframe_malformed_probs_get_zero() -> None:
     preds = [
         {
             "emotion": "Happy",

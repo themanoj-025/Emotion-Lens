@@ -17,7 +17,7 @@ from utils.structured_logging import (
 class TestJSONFormatter:
     """Tests for the JSON log formatter."""
 
-    def test_returns_valid_json(self):
+    def test_returns_valid_json(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
             name="test", level=logging.INFO, pathname="test.py",
@@ -29,7 +29,7 @@ class TestJSONFormatter:
         assert data["level"] == "INFO"
         assert data["logger"] == "test"
 
-    def test_includes_timestamp(self):
+    def test_includes_timestamp(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
             name="test", level=logging.WARNING, pathname="test.py",
@@ -40,7 +40,7 @@ class TestJSONFormatter:
         assert "timestamp" in data
         assert "T" in data["timestamp"]  # ISO format
 
-    def test_includes_request_id_when_set(self):
+    def test_includes_request_id_when_set(self) -> None:
         set_request_id("test-req-123")
         formatter = JSONFormatter()
         record = logging.LogRecord(
@@ -53,7 +53,7 @@ class TestJSONFormatter:
         # Clean up
         request_id_var.set(None)
 
-    def test_excludes_request_id_when_none(self):
+    def test_excludes_request_id_when_none(self) -> None:
         request_id_var.set(None)
         formatter = JSONFormatter()
         record = logging.LogRecord(
@@ -64,7 +64,7 @@ class TestJSONFormatter:
         data = json.loads(output)
         assert "request_id" not in data
 
-    def test_includes_exception_info(self):
+    def test_includes_exception_info(self) -> None:
         formatter = JSONFormatter()
         try:
             raise ValueError("boom")
@@ -81,7 +81,7 @@ class TestJSONFormatter:
         assert data["exception"]["type"] == "ValueError"
         assert "boom" in data["exception"]["value"]
 
-    def test_includes_extra_fields(self):
+    def test_includes_extra_fields(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
             name="test", level=logging.INFO, pathname="test.py",
@@ -97,26 +97,26 @@ class TestJSONFormatter:
 class TestRequestID:
     """Tests for request ID context variable."""
 
-    def test_set_and_get(self):
+    def test_set_and_get(self) -> None:
         req_id = set_request_id("my-id")
         assert req_id == "my-id"
         assert get_request_id() == "my-id"
         # Clean up
         request_id_var.set(None)
 
-    def test_auto_generates_uuid(self):
+    def test_auto_generates_uuid(self) -> None:
         req_id = set_request_id()
         assert isinstance(req_id, str)
         assert len(req_id) == 12
         # Clean up
         request_id_var.set(None)
 
-    def test_default_is_none(self):
+    def test_default_is_none(self) -> None:
         request_id_var.set(None)
         assert get_request_id() is None
 
 
-def _cleanup_logger(logger):
+def _cleanup_logger(logger) -> None:
     """Close and remove all handlers so temp dirs can be deleted on Windows."""
     for handler in logger.handlers[:]:
         handler.flush()
@@ -127,7 +127,7 @@ def _cleanup_logger(logger):
 class TestSetupLogger:
     """Tests for setup_logger factory."""
 
-    def test_creates_logger_with_handlers(self):
+    def test_creates_logger_with_handlers(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             logger = setup_logger("test_setup", log_dir=tmpdir, log_file="test.log")
             try:
@@ -138,7 +138,7 @@ class TestSetupLogger:
             finally:
                 _cleanup_logger(logger)
 
-    def test_returns_same_logger_on_repeat(self):
+    def test_returns_same_logger_on_repeat(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             logger1 = setup_logger("test_repeat", log_dir=tmpdir)
             try:
@@ -147,7 +147,7 @@ class TestSetupLogger:
             finally:
                 _cleanup_logger(logger1)
 
-    def test_logger_writes_json_to_file(self):
+    def test_logger_writes_json_to_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             logger = setup_logger("test_write", log_dir=tmpdir, log_file="out.jsonl")
             try:

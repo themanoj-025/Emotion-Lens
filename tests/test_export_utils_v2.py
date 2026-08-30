@@ -14,7 +14,7 @@ from utils.export_utils import (
 
 
 @pytest.fixture
-def sample_predictions():
+def sample_predictions() -> list[object]:
     return [
         {
             "emotion": "Happy",
@@ -36,17 +36,17 @@ def sample_predictions():
 class TestExportPredictionsCsv:
     """Tests for export_predictions_csv."""
 
-    def test_empty_returns_none(self):
+    def test_empty_returns_none(self) -> None:
         assert export_predictions_csv([]) is None
 
-    def test_csv_content(self, sample_predictions):
+    def test_csv_content(self, sample_predictions) -> None:
         csv = export_predictions_csv(sample_predictions)
         assert csv is not None
         assert "emotion" in csv
         assert "Happy" in csv
         assert "Sad" in csv
 
-    def test_csv_has_all_emotions(self, sample_predictions):
+    def test_csv_has_all_emotions(self, sample_predictions) -> None:
         from utils.config import EMOTIONS
         csv = export_predictions_csv(sample_predictions)
         for e in EMOTIONS:
@@ -56,10 +56,10 @@ class TestExportPredictionsCsv:
 class TestExportPredictionsJson:
     """Tests for export_predictions_json."""
 
-    def test_empty_returns_none(self):
+    def test_empty_returns_none(self) -> None:
         assert export_predictions_json([]) is None
 
-    def test_json_content(self, sample_predictions):
+    def test_json_content(self, sample_predictions) -> None:
         result = export_predictions_json(sample_predictions)
         parsed = json.loads(result)
         assert len(parsed) == 2
@@ -68,10 +68,10 @@ class TestExportPredictionsJson:
 class TestExportSessionReport:
     """Tests for export_session_report."""
 
-    def test_empty_returns_none(self):
+    def test_empty_returns_none(self) -> None:
         assert export_session_report([]) is None
 
-    def test_report_content(self, sample_predictions):
+    def test_report_content(self, sample_predictions) -> None:
         report = export_session_report(sample_predictions)
         assert "Total Predictions: 2" in report
         assert "Dominant Emotion" in report
@@ -80,12 +80,12 @@ class TestExportSessionReport:
 class TestPredictionsToDataframe:
     """Tests for predictions_to_dataframe."""
 
-    def test_empty_returns_empty_df(self):
+    def test_empty_returns_empty_df(self) -> None:
         df = predictions_to_dataframe([])
         assert isinstance(df, pd.DataFrame)
         assert len(df) == 0
 
-    def test_creates_dataframe(self, sample_predictions):
+    def test_creates_dataframe(self, sample_predictions) -> None:
         df = predictions_to_dataframe(sample_predictions)
         assert len(df) == 2
         assert "positivity_score" in df.columns
