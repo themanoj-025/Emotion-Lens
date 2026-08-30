@@ -17,6 +17,8 @@ import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 
+
+pytestmark = pytest.mark.slow
 # Mock TensorFlow before importing api_server
 sys.modules["tensorflow"] = MagicMock()
 sys.modules["tensorflow.keras"] = MagicMock()
@@ -292,6 +294,8 @@ class TestAuthFlow:
     def test_accepts_correct_api_key(self):
         with patch.object(api_server, "API_KEY", "my-secret"):
             from fastapi.security import HTTPAuthorizationCredentials
+
+
             creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="my-secret")
             result = api_server.verify_api_key(credentials=creds)
             assert result is True
