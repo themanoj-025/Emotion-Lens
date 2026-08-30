@@ -36,7 +36,8 @@ try:
     from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
     from pydantic import BaseModel
 except ImportError:
-    print("❌ FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
+    logging.basicConfig(level=logging.INFO)
+    logging.error("FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
     sys.exit(1)
 
 # Rate limiting
@@ -46,14 +47,16 @@ try:
     from slowapi.middleware import SlowAPIMiddleware
     from slowapi.util import get_remote_address
 except ImportError:
-    print("⚠️  slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
+    logging.basicConfig(level=logging.INFO)
+    logging.warning("slowapi not installed. Rate limiting disabled. Install with: pip install slowapi")
     Limiter = None
 
 # TensorFlow / model imports
 try:
     from tensorflow.keras.models import load_model
 except ImportError:
-    print("❌ TensorFlow is not installed. Install with: pip install tensorflow")
+    logging.basicConfig(level=logging.INFO)
+    logging.error("TensorFlow is not installed. Install with: pip install tensorflow")
     sys.exit(1)
 
 # Structured Logging
