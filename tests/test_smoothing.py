@@ -6,7 +6,7 @@ import pytest
 from utils.smoothing_utils import EmotionSmoother
 
 
-def make_probs(emotion_idx, confidence=0.9):
+def make_probs(emotion_idx, confidence=0.9) -> None:
     """Deterministic one-hot-ish probability vector of length 7."""
     probs = [0.05] * 7
     probs[emotion_idx] = confidence
