@@ -16,7 +16,7 @@
 # ═══════════════════════════════════════════════════════════════════════
 
 # ── Base stage ─────────────────────────────────────────────────────────
-FROM python:3.11-slim AS base
+FROM python:3.14-slim AS base
 
 LABEL org.opencontainers.image.title="Emotion-Lens"
 LABEL org.opencontainers.image.description="Streamlit emotion recognition from images/webcam"
