@@ -35,7 +35,7 @@ async def health_check() -> None:
 
 
 @app.get("/metrics", tags=["Info"])
-async def metrics():
+async def metrics() -> dict:
     """Prometheus metrics endpoint."""
     if not _PROM_AVAILABLE:
         return {"status": "prometheus_client not installed"}

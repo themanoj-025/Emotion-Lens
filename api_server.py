@@ -128,7 +128,7 @@ security = HTTPBearer(auto_error=False)
 
 def verify_api_key(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
-):
+) -> bool:
     """Verify API key if authentication is configured.
 
     If EMOTION_API_KEY env var is set, all prediction endpoints
@@ -496,7 +496,7 @@ async def predict_from_file(
     detect_faces: bool = Form(
         True, description="Whether to auto-detect faces. If False, uses the full image."
     ),
-):
+) -> dict:
     """
     Predict emotions from an uploaded image file.
 
