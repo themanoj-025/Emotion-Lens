@@ -549,4 +549,4 @@ async def predict_from_file(
 
 app.include_router(v1_router)
 
-from api_routes import *  # noqa: F401
+from api_routes import *
