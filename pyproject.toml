@@ -36,7 +36,7 @@ profile = "black"
 line_length = 100
 
 [tool.pytest.ini_options]
-addopts = "-m 'not slow' -q"
+addopts = "-m 'not slow' -q --cov --cov-fail-under=50"
 testpaths = ["tests"]
 
 markers = [
