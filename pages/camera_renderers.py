@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import streamlit as st
+
+
 def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
     """Render the live camera feed using streamlit-webrtc."""
     st.info("📷 WebRTC mode enabled. Click 'Start' above when ready.")

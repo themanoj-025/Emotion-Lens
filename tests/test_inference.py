@@ -4,9 +4,6 @@ from unittest.mock import MagicMock, patch
 
 from inference import load_face_cascade, load_model
 
-
-
-
 pytestmark = pytest.mark.slow
 class TestLoadModel:
     """Tests for load_model."""

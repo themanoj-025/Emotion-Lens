@@ -20,6 +20,11 @@ ignore = [
     "B904",    # raise-without-from — legacy code
     "B007",    # unused loop variable
     "B905",    # zip-without-strict
+    "F821",    # undefined name — conditional imports (cv2, plotly, etc.)
+    "F403",    # import-star — re-export pattern
+    "F401",    # unused import — conditional availability check
+    "SIM108",  # if-else-to-ternary — readability preference
+    "RUF059",  # unused loop variable
 ]
 
 [tool.black]

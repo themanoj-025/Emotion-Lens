@@ -3,28 +3,20 @@ Page 1: 🎥 Live Camera — Real-time webcam emotion detection
 Uses streamlit-webrtc for browser-native camera access with frame processing.
 """
 
-import cv2
-import numpy as np
-import plotly.graph_objects as go
 import streamlit as st
 from PIL import Image
 
 from utils.emotion_utils import (
-    apply_gradcam_overlay,
     apply_temporal_smoothing,
-    compute_gradcam,
     compute_positivity_score,
-    predict_emotion,
     render_mood_music_card,
 )
 from utils.model_utils import (
     EMOTION_CONFIG,
-    EMOTIONS,
-    PLOTLY_THEME,
     load_face_cascade,
     load_model_cached,
 )
-from utils.session_utils import add_prediction, add_snapshot
+from utils.session_utils import add_snapshot
 
 
 def show() -> None:
@@ -204,6 +196,6 @@ def show() -> None:
 
 
 from pages.camera_renderers import (
-    _render_webrtc_camera,
     _render_opencv_fallback,
+    _render_webrtc_camera,
 )
