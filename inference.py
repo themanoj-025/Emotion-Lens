@@ -1,75 +1,135 @@
-import sys
+"""Model loading, image preprocessing, and emotion prediction."""
+
+from __future__ import annotations
+
+import base64
+import io
+import logging
+import os
 
 import cv2
 import numpy as np
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import img_to_array
+from PIL import Image
 
-# Define emotion categories
-EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
+from api_models import EMOTIONS, MODEL_PATH, EmotionResult
+
+logger = logging.getLogger("emotion-api")
+
+_model = None
+_face_cascade = None
 
 
-def load_emotion_model(model_path="emotion_model.h5") -> None:
-    """Loads the pre-trained emotion detection model."""
+def get_model():
+    """Lazy-load the Keras model. Returns (model, cascade)."""
+    global _model, _face_cascade
+
+    if _model is None:
+        if not os.path.exists(MODEL_PATH):
+            logger.error("Model file not found: %s", MODEL_PATH)
+            return None, None
+        logger.info("Loading model from %s...", MODEL_PATH)
+        from tensorflow.keras.models import load_model
+
+        _model = load_model(MODEL_PATH)
+        logger.info("Model loaded successfully.")
+
+    if _face_cascade is None:
+        cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        _face_cascade = cv2.CascadeClassifier(cascade_path)
+        if _face_cascade.empty():
+            logger.error("Failed to load face cascade.")
+            return _model, None
+
+    return _model, _face_cascade
+
+
+def preprocess_face(face_roi) -> np.ndarray:
+    """Preprocess a face ROI for model prediction (48×48 grayscale)."""
+    roi_resized = cv2.resize(face_roi, (48, 48), interpolation=cv2.INTER_AREA)
+    roi_array = roi_resized.astype("float32") / 255.0
+    roi_array = np.expand_dims(roi_array, axis=-1)
+    roi_array = np.expand_dims(roi_array, axis=0)
+    return roi_array
+
+
+def predict_face(model, face_roi) -> tuple[str, float, dict[str, float]]:
+    """Predict emotion on a single face ROI."""
+    processed = preprocess_face(face_roi)
+    predictions = model.predict(processed, verbose=0)[0]
+    max_idx = int(np.argmax(predictions))
+    emotion = EMOTIONS[max_idx]
+    confidence = float(predictions[max_idx])
+    probs = {EMOTIONS[i]: float(predictions[i]) for i in range(7)}
+    return emotion, confidence, probs
+
+
+def decode_base64_image(image_b64: str) -> np.ndarray:
+    """Decode a base64 image string to a BGR numpy array."""
+    if "," in image_b64:
+        image_b64 = image_b64.split(",")[1]
+
     try:
-        model = load_model(model_path)
-        print(f"Model loaded successfully from {model_path}")
-        return model
+        img_bytes = base64.b64decode(image_b64)
+    except (ValueError, TypeError) as e:
+        raise ValueError(f"Invalid base64 encoding: {e}") from e
+
+    try:
+        pil_image = Image.open(io.BytesIO(img_bytes))
+        return cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
     except (OSError, ValueError) as e:
-        print(f"Error loading model: {e}")
-        sys.exit(1)
+        raise ValueError(f"Invalid image data: {e}") from e
 
 
-def predict_emotion(model, image_path) -> None:
-    """Predicts the emotion of a given image."""
-    try:
-        # Load image
-        img = cv2.imread(image_path)
-        if img is None:
-            print(f"Could not load image at {image_path}")
-            return
+def process_image(model, cascade, img_bgr, detect_faces=True) -> tuple[list[EmotionResult], int]:
+    """Process an image and return face-level predictions."""
+    gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+    results: list[EmotionResult] = []
 
-        # Preprocess the image for the model
-        gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    if detect_faces:
+        faces = cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
 
-        # In a real scenario you would use a face detector (like Haar Cascades or MTCNN)
-        # to crop the face first. Here we assume the image is mostly the face.
-        # Resize to match model input shape (48x48)
-        resized_img = cv2.resize(gray_img, (48, 48))
+        if len(faces) == 0:
+            emotion, conf, probs = predict_face(model, gray)
+            results.append(EmotionResult(emotion=emotion, confidence=conf, probabilities=probs))
+            return results, 1
 
-        # Convert to array and rescale
-        img_array = img_to_array(resized_img)
-        img_array = img_array / 255.0
+        for x, y, w, h in faces:
+            face_roi = gray[y : y + h, x : x + w]
+            try:
+                emotion, conf, probs = predict_face(model, face_roi)
+                results.append(
+                    EmotionResult(
+                        emotion=emotion,
+                        confidence=conf,
+                        probabilities=probs,
+                        bbox=[int(x), int(y), int(w), int(h)],
+                    )
+                )
+            except (ValueError, RuntimeError) as e:
+                logger.warning("Error predicting face at (%d,%d): %s", x, y, e)
+    else:
+        emotion, conf, probs = predict_face(model, gray)
+        results.append(EmotionResult(emotion=emotion, confidence=conf, probabilities=probs))
 
-        # Expand dimensions to match batch format (1, 48, 48, 1)
-        img_array = np.expand_dims(img_array, axis=0)
-
-        # Predict
-        predictions = model.predict(img_array)[0]
-
-        # Get the index of the highest probability
-        max_index = np.argmax(predictions)
-        predicted_emotion = EMOTIONS[max_index]
-        confidence = predictions[max_index]
-
-        print(f"\nResults for {image_path}:")
-        print(f"Predicted Emotion: {predicted_emotion} (Confidence: {confidence:.2%})")
-
-        print("\nAll Probabilities:")
-        for i, emotion in enumerate(EMOTIONS):
-            print(f" - {emotion}: {predictions[i]:.2%}")
-
-    except (OSError, ValueError, TypeError) as e:
-        print(f"Error during prediction: {e}")
+    return results, len(results)
 
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python inference.py <path_to_image>")
-        sys.exit(1)
+def generate_summary(results: list[EmotionResult]) -> str:
+    """Generate a human-readable summary of the results."""
+    if not results:
+        return "No faces detected."
+    if len(results) == 1:
+        r = results[0]
+        return f"Detected: {r.emotion} ({r.confidence * 100:.1f}%)"
 
-    image_path = sys.argv[1]
+    emotion_counts: dict[str, int] = {}
+    for r in results:
+        emotion_counts[r.emotion] = emotion_counts.get(r.emotion, 0) + 1
 
-    # Load model and predict
-    model = load_emotion_model()
-    predict_emotion(model, image_path)
+    total = len(results)
+    parts = []
+    for emotion, count in sorted(emotion_counts.items(), key=lambda x: -x[1]):
+        pct = count / total * 100
+        parts.append(f"{emotion} {pct:.0f}%")
+
+    return f"Group: {', '.join(parts)}"
