@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.unit
+
 """Tests for inference module."""
 
 from unittest.mock import MagicMock, patch
