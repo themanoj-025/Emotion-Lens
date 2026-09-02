@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.unit
+
 """Tests for Emotion-Lens: config helpers and emotion_utils pure functions."""
 
 import sys

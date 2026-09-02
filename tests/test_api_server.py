@@ -10,6 +10,9 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
+pytestmark = pytest.mark.integration
+
+
 # Mock TensorFlow before importing api_server
 sys.modules["tensorflow"] = MagicMock()
 sys.modules["tensorflow.keras"] = MagicMock()

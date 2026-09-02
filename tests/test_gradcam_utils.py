@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.unit
+
 """Tests for Grad-CAM visualization utilities."""
 
 import numpy as np
