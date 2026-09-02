@@ -1,3 +1,7 @@
+import pytest
+
+pytestmark = pytest.mark.unit
+
 """Tests for model utility functions."""
 import sys
 from unittest.mock import MagicMock, patch
