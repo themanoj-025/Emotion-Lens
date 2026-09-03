@@ -15,6 +15,17 @@ MODEL_PATH = "emotion_model.h5"
 HOST = os.environ.get("API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("API_PORT", "8000"))
 
+# CORS — comma-separated list of allowed origins (CORS_ORIGINS env var)
+_DEFAULT_CORS_ORIGINS = (
+    "http://localhost:8000,http://127.0.0.1:8000,"
+    "http://localhost:8501,http://127.0.0.1:8501"
+)
+CORS_ORIGINS = [
+    o.strip()
+    for o in os.environ.get("CORS_ORIGINS", _DEFAULT_CORS_ORIGINS).split(",")
+    if o.strip()
+]
+
 # API Key Authentication
 API_KEY = os.environ.get("EMOTION_API_KEY", "")
 security = HTTPBearer(auto_error=False)
