@@ -1,5 +1,22 @@
-"""API routes -- prediction, health, and info endpoints."""
+"""API routes -- root, health, and metrics endpoints.
 
+These unversioned routes are registered on the ``app`` created in
+``api_server``. The ``from api_server import app`` below is circular-safe:
+api_server defines ``app`` before it reaches ``from api_routes import *``.
+"""
+
+import os
+
+from fastapi.responses import Response
+
+from api_models import EMOTIONS, MODEL_PATH, HealthResponse
+from api_server import _PROM_AVAILABLE, app
+from inference import get_model
+
+try:
+    from prometheus_client import generate_latest
+except ImportError:
+    generate_latest = None  # type: ignore[assignment]
 
 
 # Root / health / metrics (unversioned — for probes and monitoring)
@@ -37,7 +54,7 @@ async def health_check() -> None:
 @app.get("/metrics", tags=["Info"])
 async def metrics() -> dict:
     """Prometheus metrics endpoint."""
-    if not _PROM_AVAILABLE:
+    if not _PROM_AVAILABLE or generate_latest is None:
         return {"status": "prometheus_client not installed"}
     return Response(content=generate_latest(), media_type="text/plain")
 
