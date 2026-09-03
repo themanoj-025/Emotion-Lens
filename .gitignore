@@ -85,3 +85,9 @@ CLAUDE.md
 
 # Runtime logs
 logs/
+
+# Test coverage artifacts
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
