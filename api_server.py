@@ -49,7 +49,7 @@ try:
 except ImportError:
     _PROM_AVAILABLE = False
 
-from api_models import API_KEY, HOST, PORT, verify_api_key
+from api_models import API_KEY, CORS_ORIGINS, HOST, PORT, verify_api_key
 
 # Structured Logging
 
@@ -139,10 +139,10 @@ if API_KEY:
 else:
     logger.info("⚠ API key authentication DISABLED")
 
-# CORS
+# CORS (comma-separated CORS_ORIGINS env var, defaults to local dev origins)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000", "http://127.0.0.1:8000", "http://localhost:8501", "http://127.0.0.1:8501"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
