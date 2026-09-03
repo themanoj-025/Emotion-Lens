@@ -18,8 +18,10 @@ sys.modules["tensorflow"] = MagicMock()
 sys.modules["tensorflow.keras"] = MagicMock()
 sys.modules["tensorflow.keras.models"] = MagicMock()
 
+import api_models
 import api_server
-from api_server import EmotionResult, HealthResponse, PredictRequest, PredictResponse, generate_summary
+from api_models import EmotionResult, HealthResponse
+from api_server import PredictRequest, PredictResponse, generate_summary
 
 # ── Pydantic Model Tests ──────────────────────────────────────────────────
 
@@ -105,7 +107,8 @@ class TestAPIKeyAuth:
     def test_rejects_wrong_key(self) -> None:
         from fastapi import HTTPException
         from fastapi.security import HTTPAuthorizationCredentials
-        with patch.object(api_server, "API_KEY", "correct-key"):
+        # verify_api_key reads API_KEY from api_models (where it is defined)
+        with patch.object(api_models, "API_KEY", "correct-key"):
             creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="wrong-key")
             with pytest.raises(HTTPException) as exc_info:
                 api_server.verify_api_key(credentials=creds)
@@ -113,14 +116,14 @@ class TestAPIKeyAuth:
 
     def test_rejects_missing_credentials(self) -> None:
         from fastapi import HTTPException
-        with patch.object(api_server, "API_KEY", "some-key"):
+        with patch.object(api_models, "API_KEY", "some-key"):
             with pytest.raises(HTTPException) as exc_info:
                 api_server.verify_api_key(credentials=None)
             assert exc_info.value.status_code == 401
 
     def test_accepts_correct_key(self) -> None:
         from fastapi.security import HTTPAuthorizationCredentials
-        with patch.object(api_server, "API_KEY", "my-secret"):
+        with patch.object(api_models, "API_KEY", "my-secret"):
             creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="my-secret")
             result = api_server.verify_api_key(credentials=creds)
             assert result is True
