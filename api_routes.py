@@ -16,7 +16,7 @@ from inference import get_model
 try:
     from prometheus_client import generate_latest
 except ImportError:
-    generate_latest = None  # type: ignore[assignment]
+    generate_latest = None  # prometheus_client is optional
 
 
 # Root / health / metrics (unversioned — for probes and monitoring)
