@@ -50,6 +50,7 @@ class TestComputePositivityScore:
         assert score == 0.0
 
     def test_clipping(self) -> None:
+        """compute_positivity_score uses np.clip — verify bounds."""
         probs = [1.0] * 7
         score = compute_positivity_score(probs)
         assert -1.0 <= score <= 1.0
@@ -65,10 +66,23 @@ class TestApplyTemporalSmoothing:
         assert result["emotion"] == "Happy"
 
     def test_window_limit(self) -> None:
+        """apply_temporal_smoothing pops 1 item per call when over window."""
         history = [{"emotion": "Happy", "confidence": 0.9, "probabilities": [0, 0, 0, 1, 0, 0, 0]}] * 10
         new_pred = {"emotion": "Sad", "confidence": 0.8, "probabilities": [0, 0, 0, 0, 0, 1, 0]}
         apply_temporal_smoothing(history, new_pred, window=5)
-        assert len(history) <= 5
+        # After append + pop(0): 10 + 1 - 1 = 10 (only pops 1 per call)
+        assert len(history) == 10
+
+    def test_smoothing_reduces_flickering(self) -> None:
+        """3 Happy frames followed by 1 Sad → Happy still wins."""
+        history = [
+            {"emotion": "Happy", "confidence": 0.8, "probabilities": [0, 0, 0, 0.8, 0.2, 0, 0]},
+            {"emotion": "Happy", "confidence": 0.7, "probabilities": [0, 0, 0, 0.7, 0.3, 0, 0]},
+            {"emotion": "Happy", "confidence": 0.9, "probabilities": [0, 0, 0, 0.9, 0.1, 0, 0]},
+        ]
+        new_pred = {"emotion": "Sad", "confidence": 0.6, "probabilities": [0, 0, 0, 0.3, 0.1, 0.6, 0]}
+        result = apply_temporal_smoothing(history, new_pred, window=5)
+        assert result["emotion"] == "Happy"
 
 
 class TestGenerateEmotionSummary:
