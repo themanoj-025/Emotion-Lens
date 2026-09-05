@@ -23,12 +23,18 @@ class TestEmotionConfig:
             assert emotion in EMOTION_CONFIG
 
     def test_config_has_required_keys(self) -> None:
+        """model_utils.EMOTION_CONFIG has color, emoji, bg — NOT valence/arousal."""
         for emotion in EMOTIONS:
             config = EMOTION_CONFIG[emotion]
             assert "color" in config
             assert "emoji" in config
-            assert "valence" in config
-            assert "arousal" in config
+            assert "bg" in config
+
+    def test_colors_are_hex(self) -> None:
+        for emotion in EMOTIONS:
+            color = EMOTION_CONFIG[emotion]["color"]
+            assert color.startswith("#")
+            assert len(color) == 7
 
 
 class TestMoodMusicMap:
