@@ -25,8 +25,9 @@ jobs:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
-        cache: pip
-        with: { python-version: '3.11' }
+        with:
+          python-version: '3.11'
+          cache: pip
 
       - name: Install linting tools
         run: pip install ruff
@@ -44,8 +45,9 @@ jobs:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
-        cache: pip
-        with: { python-version: '3.11' }
+        with:
+          python-version: '3.11'
+          cache: pip
 
       - name: Install system deps (OpenCV)
         run: |
@@ -300,8 +302,9 @@ jobs:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
-        cache: pip
-        with: { python-version: '3.11' }
+        with:
+          python-version: '3.11'
+          cache: pip
 
       - name: Install system deps
         run: |
@@ -351,8 +354,9 @@ jobs:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v7
-        cache: pip
-        with: { python-version: '${{ matrix.python-version }}' }
+        with:
+          python-version: '${{ matrix.python-version }}'
+          cache: pip
 
       - name: Install test dependencies (pure-logic, no TensorFlow)
         run: pip install pytest pytest-cov numpy pandas
