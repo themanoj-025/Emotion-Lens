@@ -196,6 +196,10 @@ def show() -> None:
 
 
 from pages.camera_renderers import (
+    _render_dominant_emotion_card,
+    _render_emotion_bars,
+    _render_emotion_history,
     _render_opencv_fallback,
+    _render_positivity_gauge,
     _render_webrtc_camera,
 )
