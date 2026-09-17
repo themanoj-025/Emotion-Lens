@@ -10,6 +10,7 @@ from __future__ import annotations
 import base64
 import io
 import sys
+from collections.abc import Iterator
 from unittest.mock import MagicMock, patch
 
 import cv2
@@ -33,11 +34,9 @@ from api_server import app
 
 
 @pytest.fixture()
-def client() -> None:
+def client() -> Iterator[TestClient]:
     """Create a TestClient with model mocked."""
-    with patch.object(api_server, "_model", MagicMock()), patch.object(
-        api_server, "_face_cascade", MagicMock()
-    ):
+    with patch.object(api_server, "_model", MagicMock()), patch.object(api_server, "_face_cascade", MagicMock()):
         c = TestClient(app, raise_server_exceptions=False)
         yield c
 
@@ -280,6 +279,7 @@ class TestAuthFlow:
     def test_rejects_missing_credentials_when_key_required(self) -> None:
         with patch.object(api_server, "API_KEY", "test-secret-key"):
             from fastapi import HTTPException
+
             with pytest.raises(HTTPException) as exc_info:
                 api_server.verify_api_key(credentials=None)
             assert exc_info.value.status_code == 401
@@ -288,6 +288,7 @@ class TestAuthFlow:
         with patch.object(api_server, "API_KEY", "test-secret-key"):
             from fastapi import HTTPException
             from fastapi.security import HTTPAuthorizationCredentials
+
             creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="wrong-key")
             with pytest.raises(HTTPException) as exc_info:
                 api_server.verify_api_key(credentials=creds)
@@ -296,7 +297,6 @@ class TestAuthFlow:
     def test_accepts_correct_api_key(self) -> None:
         with patch.object(api_server, "API_KEY", "my-secret"):
             from fastapi.security import HTTPAuthorizationCredentials
-
 
             creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="my-secret")
             result = api_server.verify_api_key(credentials=creds)

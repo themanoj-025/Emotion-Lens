@@ -65,7 +65,7 @@ def _render_distribution_chart(df) -> None:
         st.plotly_chart(fig_bar, use_container_width=True)
 
 
-def _render_timeline_chart(df) -> None:
+def _render_timeline_chart(df):
     """Render emotion over time line chart."""
     st.markdown("#### Emotion Timeline")
 
@@ -159,7 +159,7 @@ def _render_confidence_chart(df) -> None:
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_heatmap(df) -> None:
+def _render_heatmap(df):
     """Render a confidence heatmap showing prediction patterns."""
     st.markdown("#### Confidence Heatmap (Last 100 Predictions)")
 
@@ -213,7 +213,7 @@ def _render_heatmap(df) -> None:
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_positivity_analysis(df) -> None:
+def _render_positivity_analysis(df):
     """Render positivity/valence score trends."""
     st.markdown("#### Positivity Score Over Time")
 
@@ -328,5 +328,3 @@ def _render_positivity_analysis(df) -> None:
     top_emotion = df["emotion"].mode().iloc[0] if not df.empty else None
     if top_emotion:
         render_mood_music_card(top_emotion)
-
-

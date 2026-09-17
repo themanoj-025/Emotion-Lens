@@ -59,9 +59,7 @@ def add_prediction(emotion, confidence, all_probs) -> None:
         {
             "emotion": emotion,
             "confidence": float(confidence),
-            "probabilities": (
-                all_probs.tolist() if hasattr(all_probs, "tolist") else list(all_probs)
-            ),
+            "probabilities": (all_probs.tolist() if hasattr(all_probs, "tolist") else list(all_probs)),
             "timestamp": datetime.now().isoformat(),
         }
     )
@@ -83,7 +81,7 @@ def add_snapshot(pil_image, emotion, confidence) -> None:
     )
 
 
-def get_prediction_dataframe() -> None:
+def get_prediction_dataframe():
     """Get predictions as a pandas DataFrame for analysis/export."""
     if not st.session_state.get("predictions"):
         return pd.DataFrame()
@@ -94,7 +92,7 @@ def get_prediction_dataframe() -> None:
     return df
 
 
-def get_emotion_distribution() -> None:
+def get_emotion_distribution():
     """Get emotion count distribution from session predictions."""
     df = get_prediction_dataframe()
     if df.empty:
@@ -102,7 +100,7 @@ def get_emotion_distribution() -> None:
     return df["emotion"].value_counts().to_dict()
 
 
-def export_predictions_csv() -> None:
+def export_predictions_csv():
     """Export predictions as downloadable CSV content."""
     df = get_prediction_dataframe()
     if df.empty:
@@ -115,7 +113,7 @@ def export_predictions_csv() -> None:
     return csv_buffer.getvalue()
 
 
-def export_predictions_json() -> None:
+def export_predictions_json():
     """Export predictions as downloadable JSON content."""
     if not st.session_state.get("predictions"):
         return None
@@ -131,7 +129,7 @@ def reset_session() -> None:
     init_session_state()
 
 
-def format_session_duration() -> None:
+def format_session_duration():
     """Return formatted session duration string."""
     if "session_start" not in st.session_state:
         return "00:00:00"

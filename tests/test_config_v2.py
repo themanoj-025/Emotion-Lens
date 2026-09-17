@@ -1,6 +1,5 @@
 """Tests for emotion configuration constants."""
 
-
 from utils.config import EMOTIONS, SMOOTHING_WINDOW, positivity_score
 
 

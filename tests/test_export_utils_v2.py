@@ -48,7 +48,9 @@ class TestExportPredictionsCsv:
 
     def test_csv_has_all_emotions(self, sample_predictions) -> None:
         from utils.config import EMOTIONS
+
         csv = export_predictions_csv(sample_predictions)
+        assert csv is not None
         for e in EMOTIONS:
             assert e in csv
 
@@ -61,6 +63,7 @@ class TestExportPredictionsJson:
 
     def test_json_content(self, sample_predictions) -> None:
         result = export_predictions_json(sample_predictions)
+        assert result is not None
         parsed = json.loads(result)
         assert len(parsed) == 2
 
@@ -73,6 +76,7 @@ class TestExportSessionReport:
 
     def test_report_content(self, sample_predictions) -> None:
         report = export_session_report(sample_predictions)
+        assert report is not None
         assert "Total Predictions: 2" in report
         assert "Dominant Emotion" in report
 

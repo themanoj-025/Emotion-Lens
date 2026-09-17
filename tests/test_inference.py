@@ -15,8 +15,8 @@ from inference import (
     decode_base64_image,
     generate_summary,
     get_model,
-    preprocess_face,
     predict_face,
+    preprocess_face,
     process_image,
 )
 
