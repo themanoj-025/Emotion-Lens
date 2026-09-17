@@ -7,6 +7,9 @@ api_server defines ``app`` before it reaches ``from api_routes import *``.
 
 import os
 
+HOST = os.environ.get("API_HOST", "0.0.0.0")
+PORT = int(os.environ.get("API_PORT", "8000"))
+
 from fastapi.responses import Response
 
 from api_models import EMOTIONS, MODEL_PATH, HealthResponse

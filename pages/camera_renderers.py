@@ -2,7 +2,18 @@
 
 from __future__ import annotations
 
+import cv2
+import numpy as np
+import plotly.graph_objects as go
 import streamlit as st
+
+from utils.emotion_utils import (
+    apply_gradcam_overlay,
+    compute_gradcam,
+    predict_emotion,
+)
+from utils.model_utils import EMOTION_CONFIG, EMOTIONS, PLOTLY_THEME
+from utils.session_utils import add_prediction
 
 
 def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
