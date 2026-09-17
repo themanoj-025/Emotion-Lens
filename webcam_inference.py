@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing.image import img_to_array
 EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
 
 
-def load_emotion_model(model_path="emotion_model.h5") -> None:
+def load_emotion_model(model_path="emotion_model.h5"):
     """Loads the pre-trained emotion detection model."""
     try:
         model = load_model(model_path)
@@ -18,7 +18,7 @@ def load_emotion_model(model_path="emotion_model.h5") -> None:
         return None
 
 
-def main() -> None:
+def main():
     print("Initializing Emotion Detection via WebCam...")
 
     # Load the trained CNN model
@@ -27,9 +27,7 @@ def main() -> None:
         return
 
     # Load OpenCV's pre-trained Haar Cascade for face detection
-    face_classifier = cv2.CascadeClassifier(
-        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-    )
+    face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
     # Open the WebCam
     cap = cv2.VideoCapture(0)

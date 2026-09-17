@@ -23,7 +23,7 @@ from utils.model_utils import (
 plt.style.use("dark_background")
 
 
-def show() -> None:
+def show():
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -41,9 +41,7 @@ def show() -> None:
         return
 
     # Tabs
-    tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Architecture", "📊 Parameters", "🎨 Feature Maps", "🔥 Grad-CAM"]
-    )
+    tab1, tab2, tab3, tab4 = st.tabs(["📋 Architecture", "📊 Parameters", "🎨 Feature Maps", "🔥 Grad-CAM"])
 
     with tab1:
         _render_architecture_tab(model)
@@ -120,7 +118,7 @@ def _render_flow_diagram(model) -> None:
     # Create boxes for each layer
     fig = go.Figure()
 
-    y_pos = 0
+    y_pos = 0.0
     for i, layer in enumerate(layers_info):
         layer_type = layer["type"]
 
@@ -301,7 +299,7 @@ def _render_parameters_tab(model) -> None:
     st.plotly_chart(fig_pie, use_container_width=True)
 
 
-def _render_feature_maps_tab(model) -> None:
+def _render_feature_maps_tab(model):
     """Visualize feature maps from intermediate convolutional layers."""
     st.markdown("### 🎨 Feature Map Visualizer")
 
@@ -330,9 +328,7 @@ def _render_feature_maps_tab(model) -> None:
     img_input = np.expand_dims(img_input, axis=[0, -1])  # (1, 48, 48, 1)
 
     # Get conv layers
-    conv_layers = [
-        (i, layer) for i, layer in enumerate(model.layers) if "conv2d" in layer.name.lower()
-    ]
+    conv_layers = [(i, layer) for i, layer in enumerate(model.layers) if "conv2d" in layer.name.lower()]
 
     if not conv_layers:
         st.warning("No convolutional layers found in this model.")
@@ -390,7 +386,7 @@ def _render_feature_maps_tab(model) -> None:
     plt.close()
 
 
-def _render_gradcam_tab(model) -> None:
+def _render_gradcam_tab(model):
     """Generate Grad-CAM heatmaps for visual explanations."""
     st.markdown("### 🔥 Grad-CAM Heatmap")
 

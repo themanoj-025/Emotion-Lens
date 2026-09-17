@@ -6,6 +6,7 @@ Import from here instead of hardcoding values across pages.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from typing import Final
 
 # Emotion Labels (MUST match FER2013 training order)
@@ -80,7 +81,7 @@ GAME_COUNTDOWN: Final = 10  # seconds per game round
 # Helper Functions
 
 
-def positivity_score(probs: list[float]) -> float:
+def positivity_score(probs: Sequence[float]) -> float:
     """Returns −1.0 (most negative) to +1.0 (most positive).
 
     Args:

@@ -115,8 +115,6 @@ def predictions_to_dataframe(predictions: list[dict]) -> pd.DataFrame:
     from utils.config import positivity_score
 
     df["positivity_score"] = df["probabilities"].apply(
-        lambda probs: (
-            positivity_score(probs) if isinstance(probs, list) and len(probs) == 7 else 0
-        )
+        lambda probs: positivity_score(probs) if isinstance(probs, list) and len(probs) == 7 else 0
     )
     return df

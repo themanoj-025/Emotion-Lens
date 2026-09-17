@@ -26,7 +26,7 @@ except ImportError:
 
 
 @app.get("/", tags=["Info"])
-async def root() -> None:
+async def root():
     """API root — provides basic info and links."""
     return {
         "service": "EmotionLens 🎭 API",
@@ -43,7 +43,7 @@ async def root() -> None:
 
 
 @app.get("/health", response_model=HealthResponse, tags=["Health"])
-async def health_check() -> None:
+async def health_check():
     """Health check endpoint. Confirms the server and model are operational."""
     model, _cascade = get_model()
     return HealthResponse(

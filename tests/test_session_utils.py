@@ -101,9 +101,7 @@ class TestAddPrediction:
         init_session_state()
         probs = np.array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.4])
         add_prediction("Surprise", 0.4, probs)
-        assert st.session_state["predictions"][0]["probabilities"] == pytest.approx(
-            probs.tolist()
-        )
+        assert st.session_state["predictions"][0]["probabilities"] == pytest.approx(probs.tolist())
 
     def test_has_timestamp(self) -> None:
         init_session_state()

@@ -13,7 +13,7 @@ from utils.emotion_utils import compute_positivity_score
 from utils.model_utils import EMOTION_CONFIG, EMOTIONS, PLOTLY_THEME
 
 
-def _render_timeline_replay(df) -> None:
+def _render_timeline_replay(df):
     """
     🎬 Emotion Timeline Replay — Record a segment of predictions and play it back
     as an animated chart showing the emotional journey over time.
@@ -122,16 +122,14 @@ def _render_timeline_replay(df) -> None:
         _render_playback_view(recording)
     else:
         if df.empty:
-            st.info(
-                "📭 No predictions yet. Use the **Live Camera** or **Image Analysis** pages to collect data first."
-            )
+            st.info("📭 No predictions yet. Use the **Live Camera** or **Image Analysis** pages to collect data first.")
         else:
             st.info(
                 "👆 Press **🔴 Start Recording** to begin capturing predictions. The replay will appear here once recording completes."
             )
 
 
-def _save_timeline_recording() -> None:
+def _save_timeline_recording():
     """Save the current recording to session state."""
     predictions = st.session_state.get("predictions", [])
     start_idx = st.session_state.timeline_start_idx
@@ -205,7 +203,7 @@ def _render_live_recording_chart(predictions_slice) -> None:
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_playback_view(recording) -> None:
+def _render_playback_view(recording):
     """Render the animated playback view for a completed recording."""
     preds = recording["predictions"]
     count = recording["count"]
@@ -290,9 +288,7 @@ def _render_playback_view(recording) -> None:
 
     # Add the animated trace (starts empty, filled by frames)
     colors_full = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in plot_data["emotion"]]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in plot_data["emotion"]
-    ]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in plot_data["emotion"]]
 
     fig.add_trace(
         go.Scatter(

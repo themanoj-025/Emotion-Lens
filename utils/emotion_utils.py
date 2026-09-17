@@ -14,7 +14,7 @@ from PIL import Image
 from utils.model_utils import EMOTION_CONFIG, EMOTIONS, MOOD_MUSIC_MAP
 
 
-def preprocess_face(face_roi, target_size=(48, 48)) -> None:
+def preprocess_face(face_roi, target_size=(48, 48)) -> "np.ndarray":
     """
     Preprocess a face ROI for model prediction.
 
@@ -32,7 +32,7 @@ def preprocess_face(face_roi, target_size=(48, 48)) -> None:
     return roi_array
 
 
-def predict_emotion(model, face_roi) -> None:
+def predict_emotion(model, face_roi):
     """
     Predict emotion from a preprocessed face ROI.
 
@@ -53,7 +53,7 @@ def predict_emotion(model, face_roi) -> None:
     return predicted_emotion, confidence, predictions
 
 
-def predict_from_image(model, face_cascade, image, detect_faces=True) -> None:
+def predict_from_image(model, face_cascade, image, detect_faces=True):
     """
     Predict emotions from a full image, detecting faces first.
 
@@ -98,7 +98,7 @@ def predict_from_image(model, face_cascade, image, detect_faces=True) -> None:
     return results
 
 
-def _predict_single_face(model, face_roi, bbox) -> None:
+def _predict_single_face(model, face_roi, bbox):
     """Helper to predict emotion on a single face ROI."""
     x, y, w, h = bbox
 
@@ -114,7 +114,7 @@ def _predict_single_face(model, face_roi, bbox) -> None:
         return None
 
 
-def draw_detection_result(image, result) -> None:
+def draw_detection_result(image, result):
     """
     Draw emotion detection results on an image (in-place).
 
@@ -170,7 +170,7 @@ def draw_detection_result(image, result) -> None:
     return image
 
 
-def compute_positivity_score(probabilities) -> None:
+def compute_positivity_score(probabilities):
     """
     Compute a positivity/valence score from −1 to +1 based on emotion probabilities.
 
@@ -197,7 +197,7 @@ def compute_positivity_score(probabilities) -> None:
     return np.clip(score, -1.0, 1.0)
 
 
-def apply_temporal_smoothing(history, new_prediction, window=5) -> None:
+def apply_temporal_smoothing(history, new_prediction, window=5):
     """
     Apply rolling average over recent predictions to reduce flickering.
 
@@ -226,7 +226,7 @@ def apply_temporal_smoothing(history, new_prediction, window=5) -> None:
     }
 
 
-def generate_emotion_summary(results) -> None:
+def generate_emotion_summary(results):
     """
     Generate a group/summary text when multiple faces are detected.
 
@@ -259,7 +259,7 @@ def generate_emotion_summary(results) -> None:
     return f"Your group is {', '.join(parts)}"
 
 
-def image_to_base64(pil_image) -> None:
+def image_to_base64(pil_image):
     """Convert PIL Image to base64 string for download."""
     buffer = BytesIO()
     pil_image.save(buffer, format="PNG")
@@ -269,10 +269,10 @@ def image_to_base64(pil_image) -> None:
 
 # Grad-CAM
 # Cache for the last conv layer index and gradient model to avoid rebuilding
-_GRADCAM_CACHE = {}
+_GRADCAM_CACHE: dict[str, object] = {}
 
 
-def _get_last_conv_layer_idx(model) -> None:
+def _get_last_conv_layer_idx(model):
     """Find the index of the last convolutional layer in the model."""
     last_idx = None
     for i, layer in enumerate(model.layers):
@@ -281,7 +281,7 @@ def _get_last_conv_layer_idx(model) -> None:
     return last_idx
 
 
-def _build_grad_model(model) -> None:
+def _build_grad_model(model):
     """Build and cache the gradient model for Grad-CAM."""
     from tensorflow.keras.models import Model as KerasModel
 
@@ -294,14 +294,12 @@ def _build_grad_model(model) -> None:
         _GRADCAM_CACHE[model_id] = None
         return None
 
-    grad_model = KerasModel(
-        inputs=model.input, outputs=[model.layers[last_conv_idx].output, model.output]
-    )
+    grad_model = KerasModel(inputs=model.input, outputs=[model.layers[last_conv_idx].output, model.output])
     _GRADCAM_CACHE[model_id] = grad_model
     return grad_model
 
 
-def compute_gradcam(model, preprocessed_input, target_class_idx) -> None:
+def compute_gradcam(model, preprocessed_input, target_class_idx):
     """
     Compute Grad-CAM heatmap for a given input and target class.
 
@@ -341,7 +339,7 @@ def compute_gradcam(model, preprocessed_input, target_class_idx) -> None:
 # Face Anonymizer
 
 
-def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate=False) -> None:
+def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate=False) -> "np.ndarray":
     """
     Anonymize (blur or pixelate) all detected faces in an image for privacy preservation.
     Applies a strong Gaussian blur to each face region while preserving the rest of the image.
@@ -395,7 +393,7 @@ def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate
 # Mood Music Sync
 
 
-def render_mood_music_card(emotion, confidence=None) -> None:
+def render_mood_music_card(emotion, confidence=None):
     """
     Render a styled card with Spotify and YouTube search links matching the emotion.
 
@@ -416,9 +414,7 @@ def render_mood_music_card(emotion, confidence=None) -> None:
     import urllib.parse
 
     spotify_url = f"https://open.spotify.com/search/{urllib.parse.quote(music['spotify'])}"
-    youtube_url = (
-        f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
-    )
+    youtube_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
 
     st.markdown(
         f"""
@@ -466,7 +462,7 @@ def render_mood_music_card(emotion, confidence=None) -> None:
     )
 
 
-def apply_gradcam_overlay(frame_bgr, face_bbox, heatmap_small) -> None:
+def apply_gradcam_overlay(frame_bgr, face_bbox, heatmap_small):
     """
     Apply Grad-CAM heatmap overlay on a face region in the frame.
 

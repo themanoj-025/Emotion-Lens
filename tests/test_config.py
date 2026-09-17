@@ -1,5 +1,7 @@
 """Tests for EmotionLens 🎭 config module — pure-logic constants and helpers."""
 
+from typing import Any, cast
+
 from utils.config import (
     BADGES,
     EMOTION_CONFIG,
@@ -26,7 +28,7 @@ def test_emotions_follow_fer2013_order() -> None:
 def test_emotion_config_covers_all_emotions() -> None:
     """Every emotion has a color, bg, emoji, valence and arousal."""
     for emotion in EMOTIONS:
-        cfg = EMOTION_CONFIG[emotion]
+        cfg = cast(dict[str, Any], EMOTION_CONFIG[emotion])
         assert cfg["color"].startswith("#")
         assert cfg["emoji"]
         assert -1.0 <= cfg["valence"] <= 1.0

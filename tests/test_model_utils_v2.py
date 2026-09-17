@@ -1,6 +1,5 @@
 """Tests for model utility constants and helpers."""
 
-
 from utils.model_utils import EMOTION_CONFIG, EMOTIONS, MOOD_MUSIC_MAP
 
 

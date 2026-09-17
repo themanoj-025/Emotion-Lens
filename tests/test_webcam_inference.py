@@ -3,8 +3,6 @@
 import sys
 from unittest.mock import MagicMock, patch
 
-import numpy as np
-
 # Mock tensorflow before importing webcam_inference
 sys.modules.setdefault("tensorflow", MagicMock())
 sys.modules.setdefault("tensorflow.keras", MagicMock())

@@ -60,7 +60,7 @@ class TestApplyTemporalSmoothing:
     """Tests for apply_temporal_smoothing."""
 
     def test_short_history_returns_new(self) -> None:
-        history = []
+        history: list = []
         new_pred = {"emotion": "Happy", "confidence": 0.9, "probabilities": [0, 0, 0, 1, 0, 0, 0]}
         result = apply_temporal_smoothing(history, new_pred)
         assert result["emotion"] == "Happy"
@@ -112,6 +112,7 @@ class TestImageToBase64:
 
     def test_converts_pil_image(self) -> None:
         from PIL import Image
+
         img = Image.new("RGB", (10, 10), color="red")
         b64 = image_to_base64(img)
         assert isinstance(b64, str)

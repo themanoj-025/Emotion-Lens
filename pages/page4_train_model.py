@@ -120,9 +120,7 @@ def show() -> None:
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        use_flip = st.checkbox(
-            "Horizontal Flip", value=True, help="Randomly flip images horizontally."
-        )
+        use_flip = st.checkbox("Horizontal Flip", value=True, help="Randomly flip images horizontally.")
 
     with col2:
         rotation_range = st.slider(
@@ -246,7 +244,7 @@ def _run_training(
     rotation_range,
     zoom_range,
     model_name,
-) -> None:
+):
     """Execute the training process with live Streamlit updates."""
 
     # Training status placeholders
@@ -271,9 +269,7 @@ def _run_training(
             test_path = os.path.join(local_path, "test")
 
         if not os.path.exists(train_path) or not os.path.exists(test_path):
-            status_placeholder.error(
-                f"❌ Dataset paths not found. Check: {train_path} and {test_path}"
-            )
+            status_placeholder.error(f"❌ Dataset paths not found. Check: {train_path} and {test_path}")
             return
 
         status_placeholder.info("📊 Loading data generators...")
@@ -351,9 +347,7 @@ def _run_training(
                 current_loss = history_data["loss"][-1] if history_data["loss"] else 0
                 current_acc = history_data["accuracy"][-1] if history_data["accuracy"] else 0
                 current_val_loss = history_data["val_loss"][-1] if history_data["val_loss"] else 0
-                current_val_acc = (
-                    history_data["val_accuracy"][-1] if history_data["val_accuracy"] else 0
-                )
+                current_val_acc = history_data["val_accuracy"][-1] if history_data["val_accuracy"] else 0
 
                 metrics_placeholder.markdown(
                     f"""
