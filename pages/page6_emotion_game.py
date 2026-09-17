@@ -22,7 +22,7 @@ from utils.model_utils import (
 )
 
 
-def show() -> None:
+def show():
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -167,9 +167,7 @@ def _render_make_this_face_mode(model, face_cascade) -> None:
 
     if st.session_state.game_active and st.session_state.game_target:
         target = st.session_state.game_target
-        target_config = EMOTION_CONFIG.get(
-            target, {"emoji": "❓", "color": "#00D4AA", "bg": "#1C2128"}
-        )
+        target_config = EMOTION_CONFIG.get(target, {"emoji": "❓", "color": "#00D4AA", "bg": "#1C2128"})
         elapsed = time.time() - st.session_state.game_start_time
         remaining = max(0, 10 - elapsed)
 
@@ -267,9 +265,7 @@ def _render_make_this_face_mode(model, face_cascade) -> None:
                         st.success(
                             f"✅ **MATCH!** {EMOTION_CONFIG[target]['emoji']} {target} detected! Confidence: {detected_conf * 100:.1f}%"
                         )
-                        st.info(
-                            f"🏅 Score: {score} (confidence) + {bonus} (time bonus) = **{total_score}** points!"
-                        )
+                        st.info(f"🏅 Score: {score} (confidence) + {bonus} (time bonus) = **{total_score}** points!")
 
                         st.session_state.game_score += total_score
                         st.session_state.game_high_score = max(
@@ -402,10 +398,7 @@ def _render_guess_emotion_mode(model) -> None:
     """'Guess the Emotion' — user sees a face and must guess the emotion."""
     st.markdown("### 🤔 Guess the Emotion")
 
-    st.info(
-        "Upload a face image. Try to guess the emotion yourself, "
-        "then compare with what the CNN predicts!"
-    )
+    st.info("Upload a face image. Try to guess the emotion yourself, then compare with what the CNN predicts!")
 
     uploaded_file = st.file_uploader(
         "📁 Upload a face image",
@@ -533,9 +526,7 @@ def _render_guess_emotion_mode(model) -> None:
                         st.session_state.game_high_score, st.session_state.game_score
                     )
 
-                    st.success(
-                        f"🎉 You scored **{score}** points! Total: **{st.session_state.game_score}**"
-                    )
+                    st.success(f"🎉 You scored **{score}** points! Total: **{st.session_state.game_score}**")
 
                 else:
                     st.info(

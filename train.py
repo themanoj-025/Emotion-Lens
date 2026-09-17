@@ -7,11 +7,9 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
-def parse_args() -> None:
+def parse_args():
     parser = argparse.ArgumentParser(description="Train Face Emotion Detection CNN Model")
-    parser.add_argument(
-        "--epochs", type=int, default=50, help="Number of training epochs (default: 50)"
-    )
+    parser.add_argument("--epochs", type=int, default=50, help="Number of training epochs (default: 50)")
     parser.add_argument("--batch_size", type=int, default=64, help="Batch size (default: 64)")
     parser.add_argument(
         "--model_name",
@@ -22,7 +20,7 @@ def parse_args() -> None:
     return parser.parse_args()
 
 
-def main() -> None:
+def main():
     args = parse_args()
 
     print("Downloading FER2013 dataset from Kaggle...")

@@ -16,20 +16,32 @@ class TestGetLastConvLayerIdx:
     """Tests for _get_last_conv_layer_idx."""
 
     def test_returns_none_for_no_conv_layers(self) -> None:
-        mock_model = type("Model", (), {"layers": [
-            type("Layer", (), {"name": "dense_1"})(),
-            type("Layer", (), {"name": "output"})(),
-        ]})()
+        mock_model = type(
+            "Model",
+            (),
+            {
+                "layers": [
+                    type("Layer", (), {"name": "dense_1"})(),
+                    type("Layer", (), {"name": "output"})(),
+                ]
+            },
+        )()
         result = _get_last_conv_layer_idx(mock_model)
         assert result is None
 
     def test_finds_last_conv_layer(self) -> None:
-        mock_model = type("Model", (), {"layers": [
-            type("Layer", (), {"name": "conv2d_1"})(),
-            type("Layer", (), {"name": "dense_1"})(),
-            type("Layer", (), {"name": "conv2d_2"})(),
-            type("Layer", (), {"name": "output"})(),
-        ]})()
+        mock_model = type(
+            "Model",
+            (),
+            {
+                "layers": [
+                    type("Layer", (), {"name": "conv2d_1"})(),
+                    type("Layer", (), {"name": "dense_1"})(),
+                    type("Layer", (), {"name": "conv2d_2"})(),
+                    type("Layer", (), {"name": "output"})(),
+                ]
+            },
+        )()
         result = _get_last_conv_layer_idx(mock_model)
         assert result == 2
 

@@ -24,7 +24,7 @@ from utils.session_utils import (
 )
 
 
-def show() -> None:
+def show():
     st.markdown(
         """
         <div style="text-align: center; margin-bottom: 1rem;">
@@ -72,9 +72,7 @@ def show() -> None:
             st.metric("Avg Confidence", "—%")
 
     if df.empty:
-        st.info(
-            "📭 No predictions recorded yet. Use the **Live Camera** or **Image Analysis** pages to collect data."
-        )
+        st.info("📭 No predictions recorded yet. Use the **Live Camera** or **Image Analysis** pages to collect data.")
         return
 
     # Charts
@@ -146,5 +144,3 @@ def show() -> None:
         if st.button("🔄 Reset Session", use_container_width=True, type="secondary"):
             reset_session()
             st.rerun()
-
-

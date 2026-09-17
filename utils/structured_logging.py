@@ -147,7 +147,7 @@ def setup_logger(
             record = old_factory(*args, **kwargs)
             if not hasattr(record, "extra_fields"):
                 record.extra_fields = {}
-            record.extra_fields.update(context)
+            record.extra_fields.update(context)  # type: ignore[attr-defined]
             return record
 
         logging.setLogRecordFactory(record_factory)

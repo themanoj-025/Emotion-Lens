@@ -20,8 +20,13 @@ class TestJSONFormatter:
     def test_returns_valid_json(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
-            name="test", level=logging.INFO, pathname="test.py",
-            lineno=1, msg="hello", args=(), exc_info=None,
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=1,
+            msg="hello",
+            args=(),
+            exc_info=None,
         )
         output = formatter.format(record)
         data = json.loads(output)
@@ -32,8 +37,13 @@ class TestJSONFormatter:
     def test_includes_timestamp(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
-            name="test", level=logging.WARNING, pathname="test.py",
-            lineno=1, msg="warn", args=(), exc_info=None,
+            name="test",
+            level=logging.WARNING,
+            pathname="test.py",
+            lineno=1,
+            msg="warn",
+            args=(),
+            exc_info=None,
         )
         output = formatter.format(record)
         data = json.loads(output)
@@ -44,8 +54,13 @@ class TestJSONFormatter:
         set_request_id("test-req-123")
         formatter = JSONFormatter()
         record = logging.LogRecord(
-            name="test", level=logging.INFO, pathname="test.py",
-            lineno=1, msg="msg", args=(), exc_info=None,
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=1,
+            msg="msg",
+            args=(),
+            exc_info=None,
         )
         output = formatter.format(record)
         data = json.loads(output)
@@ -57,8 +72,13 @@ class TestJSONFormatter:
         request_id_var.set(None)
         formatter = JSONFormatter()
         record = logging.LogRecord(
-            name="test", level=logging.INFO, pathname="test.py",
-            lineno=1, msg="msg", args=(), exc_info=None,
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=1,
+            msg="msg",
+            args=(),
+            exc_info=None,
         )
         output = formatter.format(record)
         data = json.loads(output)
@@ -70,10 +90,16 @@ class TestJSONFormatter:
             raise ValueError("boom")
         except ValueError:
             import sys
+
             exc_info = sys.exc_info()
         record = logging.LogRecord(
-            name="test", level=logging.ERROR, pathname="test.py",
-            lineno=1, msg="error occurred", args=(), exc_info=exc_info,
+            name="test",
+            level=logging.ERROR,
+            pathname="test.py",
+            lineno=1,
+            msg="error occurred",
+            args=(),
+            exc_info=exc_info,
         )
         output = formatter.format(record)
         data = json.loads(output)
@@ -84,8 +110,13 @@ class TestJSONFormatter:
     def test_includes_extra_fields(self) -> None:
         formatter = JSONFormatter()
         record = logging.LogRecord(
-            name="test", level=logging.INFO, pathname="test.py",
-            lineno=1, msg="extra", args=(), exc_info=None,
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=1,
+            msg="extra",
+            args=(),
+            exc_info=None,
         )
         record.extra_fields = {"user_id": 42, "action": "login"}
         output = formatter.format(record)

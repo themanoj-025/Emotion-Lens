@@ -28,7 +28,7 @@ MODEL_PATH = "emotion_model.h5"
 
 
 @st.cache_resource
-def load_model_cached(path=None) -> None:
+def load_model_cached(path=None):
     """
     Load the Keras emotion detection model once, cached for all pages.
 
@@ -57,7 +57,7 @@ def load_model_cached(path=None) -> None:
 
 
 @st.cache_resource
-def load_face_cascade() -> None:
+def load_face_cascade():
     """
     Load OpenCV Haar Cascade for face detection (cached).
 
@@ -76,7 +76,7 @@ def load_face_cascade() -> None:
         return None
 
 
-def is_model_available() -> None:
+def is_model_available():
     """Check if the model file exists on disk."""
     return os.path.exists(MODEL_PATH)
 
@@ -119,9 +119,7 @@ def try_download_model() -> bool:
             with open(MODEL_PATH, "wb") as f:
                 f.writelines(resp.iter_content(chunk_size=8192))
             if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100000:
-                st.success(
-                    f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
-                )
+                st.success(f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)")
                 return True
         except (OSError, ValueError):
             continue
@@ -129,7 +127,7 @@ def try_download_model() -> bool:
     return False
 
 
-def ensure_model_on_cloud() -> None:
+def ensure_model_on_cloud():
     """Run on Streamlit Cloud startup to ensure model is available.
 
     Checks if the model exists. If not, tries to download or prompts
@@ -155,7 +153,7 @@ def ensure_model_on_cloud() -> None:
     )
 
 
-def get_model_summary(model) -> None:
+def get_model_summary(model):
     """
     Get model summary as a list of layer dictionaries.
 
@@ -177,9 +175,7 @@ def get_model_summary(model) -> None:
 
     total_params = model.count_params()
     trainable_params = sum(
-        layer.count_params()
-        for layer in model.layers
-        if hasattr(layer, "trainable") and layer.trainable
+        layer.count_params() for layer in model.layers if hasattr(layer, "trainable") and layer.trainable
     )
     non_trainable_params = total_params - trainable_params
 

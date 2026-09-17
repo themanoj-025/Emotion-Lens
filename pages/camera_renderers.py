@@ -16,7 +16,7 @@ from utils.model_utils import EMOTION_CONFIG, EMOTIONS, PLOTLY_THEME
 from utils.session_utils import add_prediction
 
 
-def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
+def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
     """Render the live camera feed using streamlit-webrtc."""
     st.info("📷 WebRTC mode enabled. Click 'Start' above when ready.")
 
@@ -25,7 +25,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
         from streamlit_webrtc import VideoProcessorBase, webrtc_streamer
 
         class EmotionVideoProcessor(VideoProcessorBase):
-            def __init__(self) -> None:
+            def __init__(self):
                 self.model = model
                 self.face_cascade = face_cascade
                 self.last_result = None
@@ -153,7 +153,7 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False) -> None:
         _render_opencv_fallback(model, face_cascade, enable_gradcam)
 
 
-def _render_opencv_fallback(model, face_cascade, enable_gradcam=False) -> None:
+def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
     """Fallback: OpenCV-based camera (works locally)."""
     st.warning("📹 Using OpenCV fallback (WebRTC unavailable). Local webcam access may vary.")
 
@@ -324,7 +324,7 @@ def _render_emotion_bars(result) -> None:
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _render_emotion_history() -> None:
+def _render_emotion_history():
     """Render a sparkline/line chart of emotion history over time."""
     predictions = st.session_state.get("predictions", [])
 

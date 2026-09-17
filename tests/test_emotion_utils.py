@@ -176,7 +176,7 @@ class TestApplyTemporalSmoothing:
     def test_short_history_returns_new(self) -> None:
         from utils.emotion_utils import apply_temporal_smoothing
 
-        history = []
+        history: list = []
         new_pred = {
             "emotion": "Happy",
             "confidence": 0.9,
@@ -206,8 +206,7 @@ class TestApplyTemporalSmoothing:
         from utils.emotion_utils import apply_temporal_smoothing
 
         history = [
-            {"emotion": "Happy", "confidence": 0.8, "probabilities": [0, 0, 0, 0.8, 0.2, 0, 0]}
-            for _ in range(10)
+            {"emotion": "Happy", "confidence": 0.8, "probabilities": [0, 0, 0, 0.8, 0.2, 0, 0]} for _ in range(10)
         ]
         new_pred = {
             "emotion": "Sad",

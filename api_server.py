@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -49,7 +48,7 @@ try:
 except ImportError:
     _PROM_AVAILABLE = False
 
-from api_models import API_KEY, CORS_ORIGINS, HOST, PORT, verify_api_key
+from api_models import API_KEY, CORS_ORIGINS, verify_api_key
 
 # Structured Logging
 
