@@ -37,7 +37,9 @@ def show():
     face_cascade = load_face_cascade()
 
     if model is None:
-        st.error("⚠️ Model file not found. Please train a model first or place `emotion_model.h5` in the project root.")
+        st.error(
+            "⚠️ Model file not found. Please train a model first or place `emotion_model.h5` in the project root."
+        )
         st.page_link(
             "streamlit_app.py?page=Train+Model",
             label="➡️ Go to Train Model page",
@@ -80,7 +82,9 @@ def show():
             # We store a placeholder image since we can't capture the exact frame post-hoc
             placeholder_img = Image.new("RGB", (100, 100), color="#1C2128")
             add_snapshot(placeholder_img, pred["emotion"], pred["confidence"])
-            st.success(f"📸 Snapshot saved: {EMOTION_CONFIG[pred['emotion']]['emoji']} {pred['emotion']}")
+            st.success(
+                f"📸 Snapshot saved: {EMOTION_CONFIG[pred['emotion']]['emoji']} {pred['emotion']}"
+            )
 
     with col3:
         st.button(
@@ -135,7 +139,9 @@ def show():
 
     if current_pred:
         # Apply temporal smoothing to reduce flickering
-        smoothed = apply_temporal_smoothing(st.session_state.temporal_buffer, current_pred, window=5)
+        smoothed = apply_temporal_smoothing(
+            st.session_state.temporal_buffer, current_pred, window=5
+        )
 
         # Layout: Left = Dominant Emotion Card, Right = All Emotions Bar Chart
         left_col, right_col = st.columns([1, 1.5])

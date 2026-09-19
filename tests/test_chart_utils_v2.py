@@ -43,8 +43,18 @@ class TestEmotionTimeline:
 
     def test_with_predictions(self) -> None:
         preds = [
-            {"emotion": "Happy", "confidence": 0.9, "probabilities": [0] * 7, "timestamp": "2025-01-01"},
-            {"emotion": "Sad", "confidence": 0.7, "probabilities": [0] * 7, "timestamp": "2025-01-02"},
+            {
+                "emotion": "Happy",
+                "confidence": 0.9,
+                "probabilities": [0] * 7,
+                "timestamp": "2025-01-01",
+            },
+            {
+                "emotion": "Sad",
+                "confidence": 0.7,
+                "probabilities": [0] * 7,
+                "timestamp": "2025-01-02",
+            },
         ]
         fig = emotion_timeline(preds)
         assert fig is not None
