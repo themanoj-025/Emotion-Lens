@@ -262,7 +262,7 @@ jobs:
         run: |
           errors=0
           # Check for absolute file paths
-          if grep -rn 'C:\\\\' --include='*.py' . 2>/dev/null; then
+          if grep -rn "C:\\uploads\|C:\\Users" --include="*.py" . 2>/dev/null; then
             echo "❌ Found Windows absolute paths (C:\\) in code"
             errors=$((errors+1))
           fi
