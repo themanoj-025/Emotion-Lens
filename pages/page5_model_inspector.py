@@ -41,9 +41,7 @@ def show():
         return
 
     # Tabs
-    tab1, tab2, tab3, tab4 = st.tabs(
-        ["📋 Architecture", "📊 Parameters", "🎨 Feature Maps", "🔥 Grad-CAM"]
-    )
+    tab1, tab2, tab3, tab4 = st.tabs(["📋 Architecture", "📊 Parameters", "🎨 Feature Maps", "🔥 Grad-CAM"])
 
     with tab1:
         _render_architecture_tab(model)
@@ -330,9 +328,7 @@ def _render_feature_maps_tab(model):
     img_input = np.expand_dims(img_input, axis=[0, -1])  # (1, 48, 48, 1)
 
     # Get conv layers
-    conv_layers = [
-        (i, layer) for i, layer in enumerate(model.layers) if "conv2d" in layer.name.lower()
-    ]
+    conv_layers = [(i, layer) for i, layer in enumerate(model.layers) if "conv2d" in layer.name.lower()]
 
     if not conv_layers:
         st.warning("No convolutional layers found in this model.")
