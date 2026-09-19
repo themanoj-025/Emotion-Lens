@@ -7,7 +7,9 @@ import numpy as np
 import tensorflow as tf
 
 
-def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str | None = None) -> np.ndarray:
+def make_gradcam_heatmap(
+    model, img_array: np.ndarray, last_conv_layer_name: str | None = None
+) -> np.ndarray:
     """Generate Grad-CAM heatmap for the top predicted class.
 
     Args:
@@ -52,7 +54,9 @@ def make_gradcam_heatmap(model, img_array: np.ndarray, last_conv_layer_name: str
     return heatmap
 
 
-def overlay_gradcam(original_img_gray: np.ndarray, heatmap: np.ndarray, alpha: float = 0.5) -> np.ndarray:
+def overlay_gradcam(
+    original_img_gray: np.ndarray, heatmap: np.ndarray, alpha: float = 0.5
+) -> np.ndarray:
     """Overlay Grad-CAM heatmap on original face image. Returns BGR image.
 
     Args:
