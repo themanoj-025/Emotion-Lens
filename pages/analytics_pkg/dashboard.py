@@ -72,9 +72,7 @@ def show():
             st.metric("Avg Confidence", "—%")
 
     if df.empty:
-        st.info(
-            "📭 No predictions recorded yet. Use the **Live Camera** or **Image Analysis** pages to collect data."
-        )
+        st.info("📭 No predictions recorded yet. Use the **Live Camera** or **Image Analysis** pages to collect data.")
         return
 
     # Charts

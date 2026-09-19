@@ -122,9 +122,7 @@ def _render_timeline_replay(df):
         _render_playback_view(recording)
     else:
         if df.empty:
-            st.info(
-                "📭 No predictions yet. Use the **Live Camera** or **Image Analysis** pages to collect data first."
-            )
+            st.info("📭 No predictions yet. Use the **Live Camera** or **Image Analysis** pages to collect data first.")
         else:
             st.info(
                 "👆 Press **🔴 Start Recording** to begin capturing predictions. The replay will appear here once recording completes."
@@ -290,9 +288,7 @@ def _render_playback_view(recording):
 
     # Add the animated trace (starts empty, filled by frames)
     colors_full = [EMOTION_CONFIG.get(e, {}).get("color", "#95A5A6") for e in plot_data["emotion"]]
-    emoji_labels = [
-        f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in plot_data["emotion"]
-    ]
+    emoji_labels = [f"{EMOTION_CONFIG.get(e, {}).get('emoji', '')} {e}" for e in plot_data["emotion"]]
 
     fig.add_trace(
         go.Scatter(

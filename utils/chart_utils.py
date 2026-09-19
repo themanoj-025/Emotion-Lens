@@ -119,9 +119,7 @@ def emotion_pie(predictions: list[dict]) -> go.Figure:
             hovertemplate="<b>%{label}</b>: %{value} (%{percent})<extra></extra>",
         )
     )
-    fig.update_layout(
-        **LAYOUT_BASE, title="Session Emotion Distribution", height=300, showlegend=True
-    )
+    fig.update_layout(**LAYOUT_BASE, title="Session Emotion Distribution", height=300, showlegend=True)
     return fig
 
 
