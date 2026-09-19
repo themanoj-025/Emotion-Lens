@@ -10,7 +10,7 @@ streamlit==1.64.0
 
 # Visualization
 
-matplotlib==3.11.1
+matplotlib==3.11.2
 plotly==7.0.0
 
 
