@@ -232,11 +232,7 @@ def show() -> None:
         "KaggleHub": "Dataset download",
     }
 
-    st.table(
-        pd.DataFrame(
-            [{"Technology": tech, "Description": desc} for tech, desc in tech_stack.items()]
-        )
-    )
+    st.table(pd.DataFrame([{"Technology": tech, "Description": desc} for tech, desc in tech_stack.items()]))
 
     # GitHub README
     st.markdown("## 📖 README")

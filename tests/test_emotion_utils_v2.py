@@ -67,9 +67,7 @@ class TestApplyTemporalSmoothing:
 
     def test_window_limit(self) -> None:
         """apply_temporal_smoothing pops 1 item per call when over window."""
-        history = [
-            {"emotion": "Happy", "confidence": 0.9, "probabilities": [0, 0, 0, 1, 0, 0, 0]}
-        ] * 10
+        history = [{"emotion": "Happy", "confidence": 0.9, "probabilities": [0, 0, 0, 1, 0, 0, 0]}] * 10
         new_pred = {"emotion": "Sad", "confidence": 0.8, "probabilities": [0, 0, 0, 0, 0, 1, 0]}
         apply_temporal_smoothing(history, new_pred, window=5)
         # After append + pop(0): 10 + 1 - 1 = 10 (only pops 1 per call)
