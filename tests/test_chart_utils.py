@@ -54,8 +54,18 @@ def test_timeline_empty_returns_figure() -> None:
 
 def test_timeline_has_seven_traces() -> None:
     predictions = [
-        {"emotion": "Happy", "confidence": 0.9, "probabilities": [0.05] * 7, "timestamp": "2026-01-01T00:00:00"},
-        {"emotion": "Sad", "confidence": 0.8, "probabilities": [0.05] * 7, "timestamp": "2026-01-01T00:00:01"},
+        {
+            "emotion": "Happy",
+            "confidence": 0.9,
+            "probabilities": [0.05] * 7,
+            "timestamp": "2026-01-01T00:00:00",
+        },
+        {
+            "emotion": "Sad",
+            "confidence": 0.8,
+            "probabilities": [0.05] * 7,
+            "timestamp": "2026-01-01T00:00:01",
+        },
     ]
     fig = emotion_timeline(predictions)
     assert len(fig.data) == 7

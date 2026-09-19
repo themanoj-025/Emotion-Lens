@@ -119,7 +119,9 @@ def emotion_pie(predictions: list[dict]) -> go.Figure:
             hovertemplate="<b>%{label}</b>: %{value} (%{percent})<extra></extra>",
         )
     )
-    fig.update_layout(**LAYOUT_BASE, title="Session Emotion Distribution", height=300, showlegend=True)
+    fig.update_layout(
+        **LAYOUT_BASE, title="Session Emotion Distribution", height=300, showlegend=True
+    )
     return fig
 
 
@@ -137,7 +139,12 @@ def valence_arousal_scatter(predictions: list[dict]) -> go.Figure:
             x=valences,
             y=arousals,
             mode="markers",
-            marker={"color": colors, "size": 8, "opacity": 0.7, "line": {"color": "#0D1117", "width": 1}},
+            marker={
+                "color": colors,
+                "size": 8,
+                "opacity": 0.7,
+                "line": {"color": "#0D1117", "width": 1},
+            },
             text=emotions,
             hovertemplate="<b>%{text}</b><br>Valence: %{x:.1f}, Arousal: %{y:.1f}<extra></extra>",
         )

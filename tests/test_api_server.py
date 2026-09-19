@@ -28,13 +28,17 @@ from api_server import PredictRequest, PredictResponse, generate_summary
 
 class TestPydanticModels:
     def test_emotion_result(self) -> None:
-        result = EmotionResult(emotion="happy", confidence=0.95, probabilities={"happy": 0.95, "sad": 0.05})
+        result = EmotionResult(
+            emotion="happy", confidence=0.95, probabilities={"happy": 0.95, "sad": 0.05}
+        )
         assert result.emotion == "happy"
         assert result.confidence == 0.95
         assert result.bbox is None
 
     def test_emotion_result_with_bbox(self) -> None:
-        result = EmotionResult(emotion="sad", confidence=0.8, probabilities={}, bbox=[10, 20, 100, 100])
+        result = EmotionResult(
+            emotion="sad", confidence=0.8, probabilities={}, bbox=[10, 20, 100, 100]
+        )
         assert result.bbox == [10, 20, 100, 100]
 
     def test_predict_request(self) -> None:
@@ -47,12 +51,16 @@ class TestPydanticModels:
         assert req.detect_faces is False
 
     def test_health_response(self) -> None:
-        resp = HealthResponse(status="healthy", model_loaded=True, model_path="/path", emotions=["happy"])
+        resp = HealthResponse(
+            status="healthy", model_loaded=True, model_path="/path", emotions=["happy"]
+        )
         assert resp.status == "healthy"
         assert resp.model_loaded is True
 
     def test_predict_response(self) -> None:
-        resp = PredictResponse(success=True, faces_detected=1, results=[], summary="test", processing_time_ms=10.5)
+        resp = PredictResponse(
+            success=True, faces_detected=1, results=[], summary="test", processing_time_ms=10.5
+        )
         assert resp.success is True
         assert resp.processing_time_ms == 10.5
 
