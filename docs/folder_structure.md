@@ -1,6 +1,6 @@
 # EmotionLens — Folder Structure
 
-```
+```text
 Emotion-Lens/
 ├── streamlit_app.py              # Streamlit entry (multi-page)
 ├── api_server.py                 # FastAPI REST server

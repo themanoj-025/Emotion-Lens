@@ -45,7 +45,7 @@ graph TD
 
 ## Data Flow (prediction path)
 
-```
+```text
 webcam frame / uploaded image
         │
         ▼

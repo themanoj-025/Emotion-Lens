@@ -54,7 +54,7 @@
 
 **Emotion overlay (live camera):**
 
-```
+```text
 ┌────────────────────────────┐
 │ [camera feed]              │
 │ ┌────────┐                 │
