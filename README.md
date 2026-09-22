@@ -12,8 +12,8 @@
   <a href="https://github.com/themanoj-025/Emotion-Lens/actions"><img src="https://img.shields.io/github/actions/workflow/status/themanoj-025/Emotion-Lens/ci.yml?style=flat-square&label=CI" alt="CI Status" /></a>
   <a href="https://github.com/themanoj-025/Emotion-Lens/blob/main/LICENSE"><img src="https://img.shields.io/github/license/themanoj-025/Emotion-Lens?style=flat-square" alt="License" /></a>
   <a href="https://github.com/themanoj-025/Emotion-Lens/stargazers"><img src="https://img.shields.io/github/stars/themanoj-025/Emotion-Lens?style=social" alt="Stars" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Python-3.8+-blue?style=flat-square" alt="Python" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/TensorFlow-2.x-orange?style=flat-square" alt="TensorFlow" /></a>
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.8+-blue?style=flat-square" alt="Python" /></a>
+  <a href="https://www.tensorflow.org/"><img src="https://img.shields.io/badge/TensorFlow-2.x-orange?style=flat-square" alt="TensorFlow" /></a>
 </p>
 
 ---
@@ -132,7 +132,7 @@ Unit tests cover the pure-logic modules (config, temporal smoothing, exports) an
 
 ## 🏗️ Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────┐
 │                      User Interface                             │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
@@ -178,7 +178,7 @@ Unit tests cover the pure-logic modules (config, temporal smoothing, exports) an
 
 ## 📁 Project Structure
 
-```
+```text
 Emotion-Lens/
 ├── streamlit_app.py              # Main dashboard
 ├── api_server.py                 # FastAPI REST API
