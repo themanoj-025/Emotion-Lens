@@ -65,7 +65,7 @@
 
 ## 3. High-Level Architecture
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────┐
 │                    User Interface Options                            │
 │                                                                     │
@@ -115,7 +115,7 @@
 
 ## 4. Complete Folder Structure Tree
 
-```
+```text
 Emotion-Lens/
 ├── .devcontainer/
 │   └── devcontainer.json           # Dev container config
@@ -417,7 +417,7 @@ docker run -p 8501:8501 -p 8000:8000 emotion-lens
 
 ## 11. Dependency Graph Summary
 
-```
+```text
 streamlit_app.py
   ├── pages/page1_live_camera.py → inference.py, utils/*
   ├── pages/page2_image_analysis.py → inference.py, utils/*
@@ -490,7 +490,7 @@ inference.py → TensorFlow/Keras, OpenCV, utils/*
 
 ### Model Architecture Details
 
-```
+```text
 Input (48x48x1)
   → Conv2D(32, 3x3) + ReLU + MaxPool(2x2) + Dropout(0.25)
   → Conv2D(64, 3x3) + ReLU + MaxPool(2x2) + Dropout(0.25)

@@ -7,7 +7,7 @@ import changes, zero entry-point changes.**
 
 ## Before (2026-08-10, after v5.0)
 
-```
+```text
 Emotion-Lens/
 ├── streamlit_app.py · api_server.py · train.py · inference.py · webcam_inference.py
 ├── pages/page1..page7
@@ -25,7 +25,7 @@ Emotion-Lens/
 
 ## After (2026-08-11)
 
-```
+```text
 Emotion-Lens/
 ├── streamlit_app.py · api_server.py · train.py · inference.py · webcam_inference.py   (unchanged)
 ├── pages/ · utils/ · assets/ · .streamlit/ · .devcontainer/ · .vscode/                (unchanged)

@@ -9,7 +9,7 @@ emotion detection application.
 
 ## Structure
 
-```
+```text
 docs/
 ├── README.md                      ← this index
 ├── architecture.md                system architecture

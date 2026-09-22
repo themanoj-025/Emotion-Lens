@@ -6,7 +6,7 @@ import each other.
 
 ## 1. Dependency Graph
 
-```
+```text
   ENTRY POINTS (standalone, no cross-imports)
   ┌──────────────┐ ┌────────────┐ ┌──────────┐ ┌──────────────────┐
   │streamlit_app │ │api_server  │ │train.py  │ │webcam_inference  │
