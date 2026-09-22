@@ -2,7 +2,7 @@
 
 ## 1. Streamlit App Boot (primary surface)
 
-```
+```text
 streamlit run streamlit_app.py          # local / Docker CMD / Streamlit Cloud
 │
 ├─ 1. streamlit_app.py imports utils.session_utils + utils.model_utils
@@ -16,7 +16,7 @@ streamlit run streamlit_app.py          # local / Docker CMD / Streamlit Cloud
 
 ## 2. FastAPI Server Boot (secondary surface)
 
-```
+```text
 python api_server.py        # or: uvicorn api_server:app --port 8000
 │
 ├─ 1. FastAPI app constructed with /health, /predict, /predict-file, /

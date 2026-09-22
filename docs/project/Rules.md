@@ -24,7 +24,7 @@
 - Formatter: black; linter: ruff.
 - Structure:
 
-```
+```text
 streamlit_app.py          # entry + sidebar nav
 api_server.py             # FastAPI
 inference.py              # core engine
