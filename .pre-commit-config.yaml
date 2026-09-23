@@ -25,4 +25,5 @@ repos:
       - id: mypy
         language: python
         types: [python]
+        additional_dependencies: ["types-requests"]
         args: [--ignore-missing-imports]
