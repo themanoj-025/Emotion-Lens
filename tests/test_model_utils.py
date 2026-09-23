@@ -17,6 +17,7 @@ from utils.model_utils import (
     EMOTION_CONFIG,
     EMOTIONS,
     MODEL_PATH,
+    MOOD_MUSIC_MAP,
     get_model_summary,
     is_model_available,
     load_face_cascade,
@@ -56,6 +57,20 @@ class TestModelConstants:
         for emotion, config in EMOTION_CONFIG.items():
             assert config["color"].startswith("#")
             assert len(config["color"]) == 7
+
+
+class TestMoodMusicMap:
+    """Tests for MOOD_MUSIC_MAP — every emotion needs playable links."""
+
+    def test_all_emotions_have_music(self) -> None:
+        for emotion in EMOTIONS:
+            assert emotion in MOOD_MUSIC_MAP
+
+    def test_music_has_spotify_and_youtube(self) -> None:
+        for emotion in EMOTIONS:
+            music = MOOD_MUSIC_MAP[emotion]
+            assert "spotify" in music
+            assert "youtube" in music
 
 
 class TestLoadFaceCascade:
