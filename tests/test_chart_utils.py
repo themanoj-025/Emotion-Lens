@@ -31,6 +31,12 @@ def test_bar_chart_uses_emotion_names() -> None:
     assert y_labels == EMOTIONS
 
 
+def test_bar_chart_custom_title() -> None:
+    probs = [0.0] * 7
+    fig = emotion_bar_chart(probs, title="Custom")
+    assert fig.layout.title.text == "Custom"
+
+
 def test_radar_chart_returns_figure() -> None:
     probs = [0.1, 0.05, 0.05, 0.5, 0.15, 0.1, 0.05]
     fig = emotion_radar_chart(probs)

@@ -48,6 +48,16 @@ def test_csv_header_and_rows() -> None:
     assert -1.0 <= score <= 1.0
 
 
+def test_csv_has_all_emotion_columns() -> None:
+    """Every FER2013 emotion gets its own probability column."""
+    from utils.config import EMOTIONS
+
+    content = export_predictions_csv(SAMPLE_PREDICTIONS)
+    assert content is not None
+    for emotion in EMOTIONS:
+        assert emotion in content
+
+
 def test_json_empty_returns_none() -> None:
     assert export_predictions_json([]) is None
 
