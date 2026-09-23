@@ -1,9 +1,14 @@
 """Lightweight circuit breaker for external API calls.
 
-CANONICAL COPY — this file is the single source of truth. It is synced
-verbatim into every portfolio repo by ``tools/sync_circuit_breaker.py``
-(see ``shared/README.md``). Make changes HERE, then re-run the sync;
-do not edit the per-repo copies directly.
+CANONICAL COPY — the single source of truth is ``shared/circuit_breaker.py``
+in the portfolio workspace, synced verbatim into every repo by
+``shared/tools/sync_circuit_breaker.py``. Make changes in the shared copy,
+then re-run the sync; per-repo copies are generated — do not edit them
+directly. Drift is detectable with ``--check``.
+
+Formatting contract: every line stays under 88 columns so black/ruff-format
+agree at any repo line-length (the except tuple below keeps its magic
+trailing comma, which pins the wrapped form under every formatter).
 
 Usage:
     from circuit_breaker import CircuitBreaker
@@ -47,7 +52,7 @@ class CircuitBreaker:
         failure_threshold: int = 5,
         recovery_timeout: float = 60.0,
         name: str = "default",
-    ):
+    ) -> None:
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
         self.name = name
@@ -64,14 +69,14 @@ class CircuitBreaker:
                 logger.info("Circuit breaker %s: OPEN -> HALF_OPEN", self.name)
         return self._state
 
-    def record_success(self):
+    def record_success(self) -> None:
         if self._state == CircuitState.HALF_OPEN:
             self._state = CircuitState.CLOSED
             logger.info("Circuit breaker %s: HALF_OPEN -> CLOSED", self.name)
         self._failure_count = 0
         self._success_count += 1
 
-    def record_failure(self):
+    def record_failure(self) -> None:
         self._failure_count += 1
         self._last_failure_time = time.monotonic()
         if self._failure_count >= self.failure_threshold:
@@ -96,7 +101,14 @@ class CircuitBreaker:
                 return result
             except CircuitBreakerOpenError:
                 raise
-            except (ConnectionError, TimeoutError, OSError, ValueError, KeyError, TypeError):
+            except (
+                ConnectionError,
+                TimeoutError,
+                OSError,
+                ValueError,
+                KeyError,
+                TypeError,
+            ):
                 self.record_failure()
                 raise
             except Exception:
