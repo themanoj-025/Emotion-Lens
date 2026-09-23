@@ -7,6 +7,7 @@ from utils.config import (
     EMOTION_CONFIG,
     EMOTIONS,
     MOOD_MUSIC,
+    SMOOTHING_WINDOW,
     emotion_index,
     positivity_score,
 )
@@ -58,6 +59,18 @@ def test_positivity_score_neutral_zero() -> None:
     assert positivity_score(probs) == 0.0
 
 
+def test_positivity_score_sad_negative() -> None:
+    probs = [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0]  # 100% Sad
+    assert positivity_score(probs) < 0
+
+
+def test_positivity_score_extreme_not_clipped() -> None:
+    """positivity_score does NOT clip — pins the raw weighted-sum contract."""
+    # All 1.0 probs: -1.0 + -0.8 + -0.7 + 1.0 + 0.0 + -0.6 + 0.3 = -1.8
+    probs = [1.0] * 7
+    assert positivity_score(probs) == -1.8  # unclipped
+
+
 def test_positivity_score_bounds() -> None:
     """Mixed distributions must stay within [-1, 1]."""
     import numpy as np
@@ -72,6 +85,11 @@ def test_emotion_index() -> None:
     assert emotion_index("Happy") == 3
     assert emotion_index("Angry") == 0
     assert emotion_index("Surprise") == 6
+
+
+def test_smoothing_window_is_int() -> None:
+    assert SMOOTHING_WINDOW == 5
+    assert isinstance(SMOOTHING_WINDOW, int)
 
 
 def test_badges_all_callable() -> None:
