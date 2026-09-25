@@ -34,4 +34,5 @@ repos:
           - prometheus-client
           - numpy==2.4.6
           - streamlit==1.64.0
+          - opencv-python-headless==5.0.0.93
         args: [--ignore-missing-imports]

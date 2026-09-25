@@ -358,12 +358,13 @@ def anonymize_faces(
         The anonymized BGR image (same array, modified in-place)
     """
     if face_cascade is None:
-        # cv2.data / cv2.CascadeClassifier resolution varies between the
-        # opencv-python runtime package and its typing stubs — getattr keeps
-        # this correct under both.
-        cascades_dir: str = getattr(getattr(cv2, "data"), "haarcascades")
+        # opencv's typing stubs do not export cv2.data / CascadeClassifier
+        # at module level (the runtime package does) — both mypy environments
+        # (pre-commit hook and CI typecheck) resolve the same wheel stubs,
+        # so these ignores are consistently "used".
+        cascades_dir: str = cv2.data.haarcascades  # type: ignore[attr-defined]
         cascade_path = cascades_dir + "haarcascade_frontalface_default.xml"
-        face_cascade = getattr(cv2, "CascadeClassifier")(cascade_path)
+        face_cascade = cv2.CascadeClassifier(cascade_path)  # type: ignore[attr-defined]
 
     gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
