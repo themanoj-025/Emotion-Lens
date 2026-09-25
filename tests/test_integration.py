@@ -127,7 +127,9 @@ class TestPredictionEndpoints:
 
     @patch("api_server.predict_face", return_value=("Happy", 0.92, {"Happy": 0.92, "Sad": 0.08}))
     @patch("api_server.get_model", return_value=(MagicMock(), MagicMock()))
-    def test_predict_base64_returns_success(self, mock_model, mock_predict, client, dummy_b64_image) -> None:
+    def test_predict_base64_returns_success(
+        self, mock_model, mock_predict, client, dummy_b64_image
+    ) -> None:
         response = client.post(
             "/api/v1/predict",
             json={"image": dummy_b64_image, "detect_faces": True},
@@ -144,7 +146,9 @@ class TestPredictionEndpoints:
 
     @patch("api_server.predict_face", return_value=("Happy", 0.92, {"Happy": 0.92}))
     @patch("api_server.get_model", return_value=(MagicMock(), MagicMock()))
-    def test_predict_with_data_uri_prefix(self, mock_model, mock_predict, client, dummy_b64_with_prefix) -> None:
+    def test_predict_with_data_uri_prefix(
+        self, mock_model, mock_predict, client, dummy_b64_with_prefix
+    ) -> None:
         response = client.post(
             "/api/v1/predict",
             json={"image": dummy_b64_with_prefix, "detect_faces": False},

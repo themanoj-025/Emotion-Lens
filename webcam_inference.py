@@ -27,7 +27,9 @@ def main():
         return
 
     # Load OpenCV's pre-trained Haar Cascade for face detection
-    face_classifier = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    face_classifier = cv2.CascadeClassifier(
+        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+    )
 
     # Open the WebCam
     cap = cv2.VideoCapture(0)
