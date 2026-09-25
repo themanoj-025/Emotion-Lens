@@ -29,7 +29,9 @@ try:
     from fastapi.middleware.cors import CORSMiddleware
 except ImportError:
     logging.basicConfig(level=logging.INFO)
-    logging.error("FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart")
+    logging.error(
+        "FastAPI is not installed. Install with: pip install fastapi uvicorn python-multipart"
+    )
     sys.exit(1)
 
 # Rate limiting
@@ -102,7 +104,9 @@ if _PROM_AVAILABLE:
         ["method", "endpoint"],
         buckets=[0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0],
     )
-    EMOTION_PREDICTIONS = Counter("emotionlens_predictions_total", "Total emotion predictions", ["emotion"])
+    EMOTION_PREDICTIONS = Counter(
+        "emotionlens_predictions_total", "Total emotion predictions", ["emotion"]
+    )
     EMOTION_FACES_DETECTED = Counter("emotionlens_faces_detected_total", "Total faces detected")
 
 # ── App Initialization ────────────────────────────────────────────────
@@ -171,12 +175,16 @@ async def add_security_headers(request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["X-XSS-Protection"] = "0"
-    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+    )
     response.headers["Content-Security-Policy"] = "default-src 'none'; frame-ancestors 'none';"
 
     if _PROM_AVAILABLE:
         path = request.url.path
-        EMOTION_REQUEST_COUNT.labels(method=request.method, endpoint=path, status=response.status_code).inc()
+        EMOTION_REQUEST_COUNT.labels(
+            method=request.method, endpoint=path, status=response.status_code
+        ).inc()
         if hasattr(request.state, "start_time"):
             EMOTION_REQUEST_LATENCY.labels(method=request.method, endpoint=path).observe(
                 _time.time() - request.state.start_time
@@ -189,8 +197,10 @@ async def add_security_headers(request, call_next):
 # v1 prediction routes
 from fastapi import APIRouter, Body, File, Form, HTTPException, UploadFile
 
+# Imported for its registration side effect (binds /, /health, /metrics to
+# app); no wildcard names are used in this module.
+import api_routes  # noqa: F401, E402
 from api_models import PredictRequest, PredictResponse
-from api_routes import *
 from inference import decode_base64_image, generate_summary, get_model, process_image
 
 v1_router = APIRouter(prefix="/api/v1")

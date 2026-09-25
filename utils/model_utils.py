@@ -119,7 +119,9 @@ def try_download_model() -> bool:
             with open(MODEL_PATH, "wb") as f:
                 f.writelines(resp.iter_content(chunk_size=8192))
             if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100000:
-                st.success(f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)")
+                st.success(
+                    f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
+                )
                 return True
         except (OSError, ValueError):
             continue
@@ -175,7 +177,9 @@ def get_model_summary(model):
 
     total_params = model.count_params()
     trainable_params = sum(
-        layer.count_params() for layer in model.layers if hasattr(layer, "trainable") and layer.trainable
+        layer.count_params()
+        for layer in model.layers
+        if hasattr(layer, "trainable") and layer.trainable
     )
     non_trainable_params = total_params - trainable_params
 

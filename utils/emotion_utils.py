@@ -294,7 +294,9 @@ def _build_grad_model(model):
         _GRADCAM_CACHE[model_id] = None
         return None
 
-    grad_model = KerasModel(inputs=model.input, outputs=[model.layers[last_conv_idx].output, model.output])
+    grad_model = KerasModel(
+        inputs=model.input, outputs=[model.layers[last_conv_idx].output, model.output]
+    )
     _GRADCAM_CACHE[model_id] = grad_model
     return grad_model
 
@@ -339,7 +341,9 @@ def compute_gradcam(model, preprocessed_input, target_class_idx):
 # Face Anonymizer
 
 
-def anonymize_faces(image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate=False) -> "np.ndarray":
+def anonymize_faces(
+    image_bgr, face_cascade=None, kernel_size=(99, 99), pixelate=False
+) -> "np.ndarray":
     """
     Anonymize (blur or pixelate) all detected faces in an image for privacy preservation.
     Applies a strong Gaussian blur to each face region while preserving the rest of the image.
@@ -414,7 +418,9 @@ def render_mood_music_card(emotion, confidence=None):
     import urllib.parse
 
     spotify_url = f"https://open.spotify.com/search/{urllib.parse.quote(music['spotify'])}"
-    youtube_url = f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
+    youtube_url = (
+        f"https://www.youtube.com/results?search_query={urllib.parse.quote(music['youtube'])}"
+    )
 
     st.markdown(
         f"""
