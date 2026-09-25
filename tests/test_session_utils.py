@@ -188,7 +188,7 @@ class TestFormatSessionDuration:
         assert len(parts) == 3
 
     def test_without_session_start(self) -> None:
-        st.session_state = _SessionState()
+        st.session_state = _SessionState()  # type: ignore[assignment]
         result = format_session_duration()
         assert result == "00:00:00"
 

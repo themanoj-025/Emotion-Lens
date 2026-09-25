@@ -6,6 +6,7 @@ api_server defines ``app`` before it reaches ``from api_routes import *``.
 """
 
 import os
+from typing import Any
 
 HOST = os.environ.get("API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("API_PORT", "8000"))
@@ -18,8 +19,8 @@ from inference import get_model
 
 try:
     from prometheus_client import generate_latest
-except ImportError:
-    generate_latest = None  # prometheus_client is optional
+except ImportError:  # pragma: no cover — prometheus-client is in requirements
+    generate_latest = None  # type: ignore[assignment]
 
 
 # Root / health / metrics (unversioned — for probes and monitoring)
@@ -55,7 +56,7 @@ async def health_check():
 
 
 @app.get("/metrics", tags=["Info"])
-async def metrics() -> dict:
+async def metrics() -> Any:
     """Prometheus metrics endpoint."""
     if not _PROM_AVAILABLE or generate_latest is None:
         return {"status": "prometheus_client not installed"}

@@ -28,6 +28,7 @@ def setup_tracing(service_name: str) -> bool:
 
         # Use OTLP exporter if configured, otherwise console
         otlp_endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
+        exporter: Any
         if otlp_endpoint:
             from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 

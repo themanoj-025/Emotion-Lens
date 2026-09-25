@@ -25,5 +25,13 @@ repos:
       - id: mypy
         language: python
         types: [python]
-        additional_dependencies: ["types-requests"]
+        # Mirror the CI typecheck job's library surface: mypy verdicts
+        # (incl. which type: ignore comments are "used") must match
+        # between this hook and the typecheck workflow.
+        additional_dependencies:
+          - types-requests
+          - slowapi
+          - prometheus-client
+          - numpy==2.4.6
+          - streamlit==1.64.0
         args: [--ignore-missing-imports]
