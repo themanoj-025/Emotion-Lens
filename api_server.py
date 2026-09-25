@@ -22,6 +22,7 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any as _Any
+from typing import cast
 
 # FastAPI imports
 try:
@@ -40,8 +41,8 @@ try:
     from slowapi.errors import RateLimitExceeded
     from slowapi.middleware import SlowAPIMiddleware
     from slowapi.util import get_remote_address
-except ImportError:
-    Limiter = None
+except ImportError:  # pragma: no cover — slowapi is in requirements
+    Limiter = None  # type: ignore[assignment,misc]
 
 try:
     from prometheus_client import Counter, Histogram
@@ -155,7 +156,7 @@ app.add_middleware(
 if Limiter is not None:
     limiter = Limiter(key_func=get_remote_address, default_limits=["60/minute"])
     app.state.limiter = limiter
-    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    app.add_exception_handler(RateLimitExceeded, cast(_Any, _rate_limit_exceeded_handler))
     app.add_middleware(SlowAPIMiddleware)
     logger.info("✓ Rate limiting enabled (60/minute)")
 else:
