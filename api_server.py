@@ -200,7 +200,7 @@ from fastapi import APIRouter, Body, File, Form, HTTPException, UploadFile
 
 # Imported for its registration side effect (binds /, /health, /metrics to
 # app); no wildcard names are used in this module.
-import api_routes  # noqa: F401, E402
+import api_routes  # noqa: F401,E402
 from api_models import PredictRequest, PredictResponse
 from inference import decode_base64_image, generate_summary, get_model, process_image
 
