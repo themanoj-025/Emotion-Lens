@@ -1,0 +1,20 @@
+# Trivy ignore — Emotion-Lens production image
+#
+# Both entries below are Debian system packages under
+# /usr/lib/python3/dist-packages (they ship with the python:3.11-slim
+# base image, Debian trixie). The pip-space copies ARE upgraded to the
+# fixed versions in the Dockerfile deps stage (setuptools>=83.0.0,
+# msgpack>=1.2.1) — verify with:
+#   docker run --rm emotion-lens:ci pip show setuptools msgpack
+# The system copies are managed by apt, not pip; suppressing them here
+# until the base image ships fixed versions.
+#
+# CVE-2025-47273: setuptools path traversal in PackageIndex — not
+# reachable: the prod image never runs setuptools (no builds at
+# runtime; artifacts installed via wheels in the deps stage only).
+CVE-2025-47273
+
+# GHSA-6v7p-g79w-8964: msgpack out-of-bounds read on Unpacker reuse —
+# not reachable: msgpack is only used transitively by Streamlit's
+# websocket layer with trusted, self-generated payloads.
+GHSA-6v7p-g79w-8964
