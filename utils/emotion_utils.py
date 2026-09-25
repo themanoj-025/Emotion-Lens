@@ -358,7 +358,9 @@ def anonymize_faces(
         The anonymized BGR image (same array, modified in-place)
     """
     if face_cascade is None:
-        cascade_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        # cv2.data is populated by the opencv-python package data at runtime
+        cascades_dir: str = getattr(cv2, "data").haarcascades
+        cascade_path = cascades_dir + "haarcascade_frontalface_default.xml"
         face_cascade = cv2.CascadeClassifier(cascade_path)
 
     gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
