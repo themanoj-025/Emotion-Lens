@@ -1,5 +1,8 @@
 [tool.ruff]
-line-length = 120
+# Must match tool.black.line-length: CI runs `ruff format --check` (this
+# width) AND pre-commit black over the same files — two different widths
+# can never both pass on lines in the overlap band.
+line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "B", "BLE", "UP", "SIM", "C4", "RUF", "PLC", "PIE", "I"]
