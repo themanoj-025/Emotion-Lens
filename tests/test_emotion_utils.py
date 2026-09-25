@@ -269,12 +269,11 @@ class TestPreprocessFace:
     def test_output_shape(self) -> None:
         import cv2
 
-        # Mock cv2.resize to return a proper array
-        # setattr: cv2.resize's stubs differ across opencv versions — an
-        # attribute assignment may or may not need an ignore depending on
-        # the environment; setattr is version-robust.
-        setattr(
-            cv2, "resize", lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8)
+        # Mock cv2.resize to return a proper array        # opencv stubs type cv2.resize as an overloaded function; the mock
+        # lambdas don't match, so the assignment needs an ignore (both mypy
+        # environments see the same wheel stubs, so it's consistently used).
+        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
+            0, 255, size, dtype=np.uint8
         )
         from utils.emotion_utils import preprocess_face
 
@@ -285,11 +284,11 @@ class TestPreprocessFace:
     def test_output_dtype(self) -> None:
         import cv2
 
-        # setattr: cv2.resize's stubs differ across opencv versions — an
-        # attribute assignment may or may not need an ignore depending on
-        # the environment; setattr is version-robust.
-        setattr(
-            cv2, "resize", lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8)
+        # opencv stubs type cv2.resize as an overloaded function; the mock
+        # lambdas don't match, so the assignment needs an ignore (both mypy
+        # environments see the same wheel stubs, so it's consistently used).
+        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
+            0, 255, size, dtype=np.uint8
         )
         from utils.emotion_utils import preprocess_face
 
@@ -300,7 +299,9 @@ class TestPreprocessFace:
     def test_output_normalized(self) -> None:
         import cv2
 
-        setattr(cv2, "resize", lambda roi, size, **kw: np.full(size, 255, dtype=np.uint8))
+        cv2.resize = lambda roi, size, **kw: np.full(  # type: ignore[assignment]
+            size, 255, dtype=np.uint8
+        )
         from utils.emotion_utils import preprocess_face
 
         face = np.full((100, 100), 255, dtype=np.uint8)
@@ -311,11 +312,11 @@ class TestPreprocessFace:
     def test_custom_target_size(self) -> None:
         import cv2
 
-        # setattr: cv2.resize's stubs differ across opencv versions — an
-        # attribute assignment may or may not need an ignore depending on
-        # the environment; setattr is version-robust.
-        setattr(
-            cv2, "resize", lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8)
+        # opencv stubs type cv2.resize as an overloaded function; the mock
+        # lambdas don't match, so the assignment needs an ignore (both mypy
+        # environments see the same wheel stubs, so it's consistently used).
+        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
+            0, 255, size, dtype=np.uint8
         )
         from utils.emotion_utils import preprocess_face
 
