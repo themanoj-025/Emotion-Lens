@@ -1,7 +1,9 @@
 # Core ML
 tensorflow==2.21.0
 numpy==2.4.6
-opencv-python-headless==5.0.0.93
+# contrib variant required: OpenCV 5.x moved CascadeClassifier out of the
+# base module into xobjdetect, which ships only in the contrib package
+opencv-contrib-python-headless==5.0.0.93
 pillow==12.3.0
 kagglehub>=1.0.2
 
