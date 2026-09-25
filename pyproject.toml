@@ -48,7 +48,9 @@ markers = [
 [tool.mypy]
 python_version = "3.11"
 ignore_missing_imports = true
-no_site_packages = true
+# no_site_packages stays OFF: the typecheck job installs types-requests,
+# and with no_site_packages mypy cannot see those stubs (two
+# import-untyped errors in utils/model_utils.py + streamlit_app.py).
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true

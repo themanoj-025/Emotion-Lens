@@ -145,7 +145,9 @@ def show():
             img_array = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
 
             # Detect & predict (always on original image for accuracy)
-            face_results = predict_from_image(model, face_cascade, pil_image, detect_faces=enable_auto_detect)
+            face_results = predict_from_image(
+                model, face_cascade, pil_image, detect_faces=enable_auto_detect
+            )
 
             # Start with a copy of the original image
             result_image = img_array.copy()
@@ -244,12 +246,20 @@ def show():
             col1, col2, col3 = st.columns(3)
 
             with col1:
-                col1_title = "Original Image" if not data.get("anonymized") else "📍 Original (for reference)"
+                col1_title = (
+                    "Original Image"
+                    if not data.get("anonymized")
+                    else "📍 Original (for reference)"
+                )
                 st.markdown(f"**{col1_title}**")
                 st.image(data["pil_image"], use_container_width=True)
 
             with col2:
-                col2_title = "🔒 Anonymized (Privacy Mode)" if data.get("anonymized") else "**Detected Faces**"
+                col2_title = (
+                    "🔒 Anonymized (Privacy Mode)"
+                    if data.get("anonymized")
+                    else "**Detected Faces**"
+                )
                 st.markdown(f"**{col2_title}**")
                 st.image(data["display_image"], use_container_width=True)
 
@@ -284,7 +294,9 @@ def show():
 
                 # Positivity score
                 positivity = compute_positivity_score(r["probabilities"])
-                st.markdown(f"**Positivity Score:** {positivity:+.2f} {'😊' if positivity > 0 else '😟'}")
+                st.markdown(
+                    f"**Positivity Score:** {positivity:+.2f} {'😊' if positivity > 0 else '😟'}"
+                )
 
                 # Mood music suggestion
                 render_mood_music_card(r["emotion"], r["confidence"])
@@ -332,7 +344,9 @@ def show():
                         "filename": d["filename"],
                         "emotion": r["emotion"],
                         "confidence": r["confidence"],
-                        "probabilities": {emotion: r["probabilities"][i] for i, emotion in enumerate(EMOTIONS)},
+                        "probabilities": {
+                            emotion: r["probabilities"][i] for i, emotion in enumerate(EMOTIONS)
+                        },
                     }
                 )
         st.download_button(
