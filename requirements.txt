@@ -2,8 +2,11 @@
 tensorflow==2.21.0
 numpy==2.4.6
 # contrib variant required: OpenCV 5.x moved CascadeClassifier out of the
-# base module into xobjdetect, which ships only in the contrib package
-opencv-contrib-python-headless==5.0.0.93
+# base module into xobjdetect, which ships only in the contrib package.
+# Pinned to 4.x: the 5.0 wheel also DROPS the haarcascade XML data files
+# (cv2/data/*.xml), so cv2.data.haarcascades points at an empty dir and
+# CascadeClassifier.load fails at runtime (CI tests-job failure).
+opencv-contrib-python-headless==4.14.0.94
 pillow==12.3.0
 kagglehub>=1.0.2
 

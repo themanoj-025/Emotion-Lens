@@ -377,7 +377,7 @@ jobs:
 
       - name: Install test dependencies (pure-logic, no TensorFlow)
         run: pip install pytest pytest-cov numpy pandas \
-          opencv-contrib-python-headless==5.0.0.93 fastapi==0.141.1 plotly==7.1.0 \
+          opencv-contrib-python-headless==4.14.0.94 fastapi==0.141.1 plotly==7.1.0 \
           pillow==12.3.0 python-multipart==0.0.32 httpx2
 
       - name: Run unit tests
