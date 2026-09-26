@@ -358,13 +358,13 @@ def anonymize_faces(
         The anonymized BGR image (same array, modified in-place)
     """
     if face_cascade is None:
-        # opencv's typing stubs do not export cv2.data / CascadeClassifier
-        # at module level (the runtime package does) — both mypy environments
-        # (pre-commit hook and CI typecheck) resolve the same wheel stubs,
-        # so these ignores are consistently "used".
+        # opencv's typing stubs do not export cv2.data at module level (the
+        # runtime package creates it dynamically) — the ignore below is used
+        # in both mypy environments (pre-commit hook and CI typecheck).
+        # cv2.CascadeClassifier IS in the 4.x stubs, so it needs no ignore.
         cascades_dir: str = cv2.data.haarcascades  # type: ignore[attr-defined]
         cascade_path = cascades_dir + "haarcascade_frontalface_default.xml"
-        face_cascade = cv2.CascadeClassifier(cascade_path)  # type: ignore[attr-defined]
+        face_cascade = cv2.CascadeClassifier(cascade_path)
 
     gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
