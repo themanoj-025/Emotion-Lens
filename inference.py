@@ -19,6 +19,11 @@ _model = None
 _face_cascade = None
 
 
+def model_loaded() -> bool:
+    """Return True if the model has been loaded (without triggering a load)."""
+    return _model is not None
+
+
 def get_model():
     """Lazy-load the Keras model. Returns (model, cascade)."""
     global _model, _face_cascade
