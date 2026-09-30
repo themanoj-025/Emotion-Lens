@@ -269,13 +269,10 @@ class TestPreprocessFace:
     # NOTE: patch (not bare assignment) — these run against the REAL cv2
     # module whenever opencv is installed, and a bare ``cv2.resize = ...``
     # permanently poisons it for every later test in the suite.
-    # opencv stubs type cv2.resize as an overloaded function; the mock
-    # lambdas don't match, so the patch needs an ignore (both mypy
-    # environments see the same wheel stubs, so it's consistently used).
 
     def test_output_shape(self) -> None:
         with patch(
-            "cv2.resize",  # type: ignore[assignment]
+            "cv2.resize",
             lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
         ):
             from utils.emotion_utils import preprocess_face
@@ -286,7 +283,7 @@ class TestPreprocessFace:
 
     def test_output_dtype(self) -> None:
         with patch(
-            "cv2.resize",  # type: ignore[assignment]
+            "cv2.resize",
             lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
         ):
             from utils.emotion_utils import preprocess_face
@@ -297,7 +294,7 @@ class TestPreprocessFace:
 
     def test_output_normalized(self) -> None:
         with patch(
-            "cv2.resize",  # type: ignore[assignment]
+            "cv2.resize",
             lambda roi, size, **kw: np.full(size, 255, dtype=np.uint8),
         ):
             from utils.emotion_utils import preprocess_face
@@ -309,7 +306,7 @@ class TestPreprocessFace:
 
     def test_custom_target_size(self) -> None:
         with patch(
-            "cv2.resize",  # type: ignore[assignment]
+            "cv2.resize",
             lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
         ):
             from utils.emotion_utils import preprocess_face

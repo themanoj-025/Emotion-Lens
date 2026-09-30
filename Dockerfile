@@ -29,8 +29,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     DEBIAN_FRONTEND=noninteractive
 
-# OpenCV/ML runtime libs (existing deps) + tini (PID 1) + curl (healthcheck)
-RUN apt-get update && apt-get install -y \
+# OpenCV/ML runtime libs (existing deps) + tini (PID 1) + curl (healthcheck).
+# upgrade: keep OS packages at Debian point releases so trivy CRITICAL/HIGH
+# scans stay clean on the pinned python:3.11-slim base snapshot.
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
         tini \
         curl \
         libgl1 libglib2.0-0 libsm6 \

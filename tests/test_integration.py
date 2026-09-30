@@ -17,7 +17,6 @@ import sys
 from collections.abc import Iterator
 from unittest.mock import MagicMock, patch
 
-import cv2
 import numpy as np
 import pytest
 from fastapi.security import HTTPAuthorizationCredentials

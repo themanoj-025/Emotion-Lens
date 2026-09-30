@@ -454,6 +454,9 @@ jobs:
           dockerfile: Dockerfile
           failure-threshold: error
           ignore: DL3066
+          # DL3005: image intentionally `apt-get upgrade`s OS packages so
+          # trivy scans pass on the pinned python:3.11-slim base snapshot
+          # (openssl/libssl CVEs are fixed in point releases).
 
   typecheck:
     timeout-minutes: 15
