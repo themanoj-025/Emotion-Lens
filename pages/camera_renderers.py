@@ -94,7 +94,9 @@ def _render_webrtc_camera(model, face_cascade, enable_gradcam=False):
                             # Use the first (largest) face for Grad-CAM
                             fx, fy, fw, fh = faces[0]
                             face_roi = gray[fy : fy + fh, fx : fx + fw]
-                            roi_resized = cv2.resize(face_roi, (48, 48))
+                            roi_resized = cv2.resize(
+                                face_roi, (48, 48), interpolation=cv2.INTER_AREA
+                            )
                             roi_input = roi_resized.astype("float32") / 255.0
                             roi_input = np.expand_dims(roi_input, axis=[0, -1])
 
@@ -228,7 +230,7 @@ def _render_opencv_fallback(model, face_cascade, enable_gradcam=False):
                     try:
                         fx, fy, fw, fh = faces[0]
                         face_roi = gray[fy : fy + fh, fx : fx + fw]
-                        roi_resized = cv2.resize(face_roi, (48, 48))
+                        roi_resized = cv2.resize(face_roi, (48, 48), interpolation=cv2.INTER_AREA)
                         roi_input = roi_resized.astype("float32") / 255.0
                         roi_input = np.expand_dims(roi_input, axis=[0, -1])
                         target = int(np.argmax(result["probabilities"]))

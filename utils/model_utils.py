@@ -4,7 +4,9 @@ Handles model loading with Streamlit caching, face cascade loading,
 and automatic model download for Streamlit Cloud deployment.
 """
 
+import contextlib
 import os
+import time
 
 import cv2
 import streamlit as st
@@ -90,14 +92,28 @@ def is_model_available():
 # ]
 MODEL_DOWNLOAD_URLS: list[str] = []
 
+# Download hardening — bounded retries so a flaky network during a Streamlit
+# Cloud cold start doesn't hard-fail the app. Retries only cover transient
+# failures (network exceptions, 429/5xx); a 404 or a disk error fails fast.
+_DOWNLOAD_ATTEMPTS = 3
+_DOWNLOAD_BACKOFF_SECONDS = (2, 5, 10)
+_DOWNLOAD_CONNECT_TIMEOUT = 10  # seconds — fail fast on unreachable hosts
+_DOWNLOAD_READ_TIMEOUT = 120  # seconds between chunks for large files
+_TRANSIENT_HTTP_STATUS = {429, 500, 502, 503, 504}
+_MIN_MODEL_BYTES = 100_000
+
 
 def try_download_model() -> bool:
     """Attempt to download a pre-trained emotion model from configured URLs.
 
-    Tries each URL in MODEL_DOWNLOAD_URLS. Returns True if a model was
-    successfully downloaded and saved, False otherwise.
+    Tries each URL in MODEL_DOWNLOAD_URLS with bounded retries and
+    exponential backoff, so a flaky network at Streamlit Cloud boot doesn't
+    take the app down permanently. Bytes stream to a temp file that is only
+    moved into place after validation (atomic publish), so a failed download
+    can never leave a corrupt ``emotion_model.h5`` behind.
 
-    This is automatically called on app startup in Streamlit Cloud.
+    Returns True if a model was successfully downloaded and saved, False
+    otherwise. This is automatically called on app startup in Streamlit Cloud.
     """
     if is_model_available():
         return True
@@ -110,21 +126,58 @@ def try_download_model() -> bool:
     except ImportError:
         return False
 
+    timeout: tuple[float, float] = (_DOWNLOAD_CONNECT_TIMEOUT, _DOWNLOAD_READ_TIMEOUT)
+
     for url in MODEL_DOWNLOAD_URLS:
-        try:
-            st.info(f"⬇️ Downloading model from {url}...")
-            resp = requests.get(url, timeout=120, stream=True)
-            if resp.status_code != 200:
-                continue
-            with open(MODEL_PATH, "wb") as f:
-                f.writelines(resp.iter_content(chunk_size=8192))
-            if os.path.exists(MODEL_PATH) and os.path.getsize(MODEL_PATH) > 100000:
-                st.success(
-                    f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
+        tmp_path = MODEL_PATH + ".part"
+        for attempt in range(_DOWNLOAD_ATTEMPTS):
+            try:
+                st.info(
+                    f"⬇️ Downloading model from {url} "
+                    f"(attempt {attempt + 1}/{_DOWNLOAD_ATTEMPTS})..."
                 )
-                return True
-        except (OSError, ValueError):
-            continue
+                with requests.get(url, timeout=timeout, stream=True) as resp:
+                    if resp.status_code in _TRANSIENT_HTTP_STATUS:
+                        st.warning(f"⚠️ HTTP {resp.status_code} from {url}; will retry.")
+                        time.sleep(
+                            _DOWNLOAD_BACKOFF_SECONDS[
+                                min(attempt, len(_DOWNLOAD_BACKOFF_SECONDS) - 1)
+                            ]
+                        )
+                        continue
+                    if resp.status_code != 200:
+                        st.warning(f"⚠️ HTTP {resp.status_code} from {url}; not retrying.")
+                        break
+                    with open(tmp_path, "wb") as f:
+                        for chunk in resp.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
+
+                if os.path.getsize(tmp_path) <= _MIN_MODEL_BYTES:
+                    st.warning("⚠️ Downloaded file failed validation (too small); will retry.")
+                else:
+                    os.replace(tmp_path, MODEL_PATH)  # atomic publish
+                    st.success(
+                        f"✅ Model downloaded successfully ({os.path.getsize(MODEL_PATH) // 1024} KB)"
+                    )
+                    return True
+            except requests.RequestException as e:
+                st.warning(f"⚠️ Download attempt {attempt + 1} failed: {e}")
+            except OSError as e:
+                # Disk/write errors won't be fixed by retrying this URL.
+                st.warning(f"⚠️ Could not write model file: {e}")
+                break
+
+            if attempt < _DOWNLOAD_ATTEMPTS - 1:
+                time.sleep(
+                    _DOWNLOAD_BACKOFF_SECONDS[min(attempt, len(_DOWNLOAD_BACKOFF_SECONDS) - 1)]
+                )
+
+        # Never leave a partial download behind — a truncated emotion_model.h5
+        # would make is_model_available() lie on the next boot.
+        if os.path.exists(tmp_path):
+            with contextlib.suppress(OSError):
+                os.remove(tmp_path)
 
     return False
 
