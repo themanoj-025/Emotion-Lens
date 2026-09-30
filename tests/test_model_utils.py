@@ -3,6 +3,7 @@ import pytest
 pytestmark = pytest.mark.unit
 
 """Tests for model utility functions."""
+import importlib
 import os
 import sys
 from unittest.mock import MagicMock, patch
@@ -14,9 +15,10 @@ sys.modules["tensorflow.keras.models"] = MagicMock()
 # streamlit isn't in the CI test job's deps — mock it if genuinely missing.
 # cv2 must NOT be unconditionally mocked: a planted MagicMock leaks into any
 # test that lazily imports cv2 at call time (e.g. /predict-file → 500s), so
-# only mock it when cv2 truly isn't importable in this environment.
+# only mock it when cv2 truly isn't importable in this environment. Use
+# importlib so the probing import itself doesn't trip unused-import lint.
 try:
-    import cv2
+    importlib.import_module("cv2")
 except ImportError:
     sys.modules["cv2"] = MagicMock()
 sys.modules["streamlit"] = MagicMock()
@@ -151,8 +153,6 @@ class TestTryDownloadModel:
     def _fake_requests(monkeypatch, get_impl, exc_class=None):
         import types
 
-        import utils.model_utils as mu
-
         fake = types.ModuleType("requests")
         fake.RequestException = exc_class or type("RequestException", (Exception,), {})
         fake.get = get_impl
@@ -166,11 +166,13 @@ class TestTryDownloadModel:
         model_path = str(tmp_path / "emotion_model.h5")
         monkeypatch.setattr(mu, "MODEL_PATH", model_path)
         monkeypatch.setattr(mu, "MODEL_DOWNLOAD_URLS", ["https://example.com/model.h5"])
-        monkeypatch.setattr(
-            mu, "is_model_available", lambda: __import__("os").path.exists(model_path)
-        )
+        monkeypatch.setattr(mu, "is_model_available", lambda: os.path.exists(model_path))
         sleeps: list[float] = []
-        monkeypatch.setattr(mu.time, "sleep", lambda s: sleeps.append(s))
+
+        def _record_sleep(seconds: float) -> None:
+            sleeps.append(seconds)
+
+        monkeypatch.setattr(mu.time, "sleep", _record_sleep)
         return model_path, sleeps
 
     def test_success_first_attempt(self, monkeypatch, tmp_path) -> None:
@@ -217,11 +219,13 @@ class TestTryDownloadModel:
         import utils.model_utils as mu
 
         model_path, sleeps = self._setup(monkeypatch, tmp_path)
-        calls = []
-        self._fake_requests(
-            monkeypatch,
-            lambda url, **kw: (calls.append(url), _StreamingResponse(404, b""))[1],
-        )
+        calls: list[str] = []
+
+        def get_impl(url: str, **kw):
+            calls.append(url)
+            return _StreamingResponse(404, b"")
+
+        self._fake_requests(monkeypatch, get_impl)
 
         assert mu.try_download_model() is False
         assert len(calls) == 1  # no retries for a permanent failure
