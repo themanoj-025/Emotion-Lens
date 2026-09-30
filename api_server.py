@@ -8,10 +8,10 @@ Usage:
     uvicorn api_server:app --host 0.0.0.0 --port 8000 --reload
 
 Endpoints:
-    GET  /health          — Health check
-    POST /predict         — Predict emotion from a base64 image
-    POST /predict-file    — Predict emotion from an uploaded image file
-    GET  /                — Root info page
+    GET  /                  — Root info page
+    GET  /health            — Health check
+    POST /api/v1/predict      — Predict emotion from a base64 image
+    POST /api/v1/predict-file — Predict emotion from an uploaded image file
 """
 
 from __future__ import annotations
@@ -51,7 +51,14 @@ try:
 except ImportError:
     _PROM_AVAILABLE = False
 
-from api_models import API_KEY, CORS_ORIGINS, verify_api_key
+from api_models import (
+    API_KEY,
+    CORS_ORIGINS,
+    EMOTIONS,
+    MODEL_PATH,
+    HealthResponse,
+    verify_api_key,
+)
 
 # Structured Logging
 
@@ -198,12 +205,52 @@ async def add_security_headers(request, call_next):
 # v1 prediction routes
 from fastapi import APIRouter, Body, File, Form, HTTPException, UploadFile
 
-# Imported for its registration side effect (binds /, /health, /metrics to
-# app); no wildcard names are used in this module.
 from api_models import PredictRequest, PredictResponse
-from inference import decode_base64_image, generate_summary, get_model, process_image
+from inference import (
+    decode_base64_image,
+    generate_summary,
+    get_model,
+    model_loaded,
+    process_image,
+)
 
 v1_router = APIRouter(prefix="/api/v1")
+
+
+# ── Health & Info ─────────────────────────────────────────────────────
+
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+async def health_check():
+    """Health check for load balancers / uptime monitors.
+
+    Reports whether the model has been loaded WITHOUT triggering a lazy
+    load (a cold health probe must not pay the model-load cost).
+    """
+    loaded = model_loaded()
+    return HealthResponse(
+        status="healthy" if loaded else "unhealthy",
+        model_loaded=loaded,
+        model_path=MODEL_PATH,
+        emotions=EMOTIONS,
+    )
+
+
+@app.get("/", tags=["Info"])
+async def root():
+    """Service info page."""
+    return {
+        "service": "EmotionLens 🎭 API",
+        "version": "1.0.0",
+        "description": app.description,
+        "emotions": EMOTIONS,
+        "endpoints": {
+            "health": "/health",
+            "predict": "/api/v1/predict",
+            "predict_file": "/api/v1/predict-file",
+            "docs": "/docs",
+        },
+    }
 
 
 @v1_router.post("/predict", response_model=PredictResponse, tags=["Prediction"])
@@ -220,7 +267,10 @@ async def predict_from_base64(request: PredictRequest = Body(...)):
     if not request.image:
         raise HTTPException(status_code=400, detail="No image provided.")
 
-    img_bgr = decode_base64_image(request.image)
+    try:
+        img_bgr = decode_base64_image(request.image)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
     results, faces_count = process_image(model, cascade, img_bgr, request.detect_faces)
 
     if _PROM_AVAILABLE:

@@ -3,6 +3,8 @@ import pytest
 pytestmark = pytest.mark.unit
 
 """Tests for model utility functions."""
+import importlib
+import os
 import sys
 from unittest.mock import MagicMock, patch
 
@@ -10,7 +12,15 @@ from unittest.mock import MagicMock, patch
 sys.modules["tensorflow"] = MagicMock()
 sys.modules["tensorflow.keras"] = MagicMock()
 sys.modules["tensorflow.keras.models"] = MagicMock()
-sys.modules["cv2"] = MagicMock()
+# streamlit isn't in the CI test job's deps — mock it if genuinely missing.
+# cv2 must NOT be unconditionally mocked: a planted MagicMock leaks into any
+# test that lazily imports cv2 at call time (e.g. /predict-file → 500s), so
+# only mock it when cv2 truly isn't importable in this environment. Use
+# importlib so the probing import itself doesn't trip unused-import lint.
+try:
+    importlib.import_module("cv2")
+except ImportError:
+    sys.modules["cv2"] = MagicMock()
 sys.modules["streamlit"] = MagicMock()
 
 from utils.model_utils import (
@@ -132,3 +142,172 @@ class TestModelUtilsIntegration:
 
     def test_emotion_list_matches_config(self) -> None:
         assert set(EMOTIONS) == set(EMOTION_CONFIG.keys())
+
+
+class TestTryDownloadModel:
+    """Retry/timeout hardening for the cloud boot download (no real network)."""
+
+    PAYLOAD = b"x" * 150_000  # > _MIN_MODEL_BYTES so validation passes
+
+    @staticmethod
+    def _fake_requests(monkeypatch, get_impl, exc_class=None):
+        import types
+
+        fake = types.ModuleType("requests")
+        fake.RequestException = exc_class or type("RequestException", (Exception,), {})
+        fake.get = get_impl
+        monkeypatch.setitem(sys.modules, "requests", fake)
+        return fake
+
+    @staticmethod
+    def _setup(monkeypatch, tmp_path):
+        import utils.model_utils as mu
+
+        model_path = str(tmp_path / "emotion_model.h5")
+        monkeypatch.setattr(mu, "MODEL_PATH", model_path)
+        monkeypatch.setattr(mu, "MODEL_DOWNLOAD_URLS", ["https://example.com/model.h5"])
+        monkeypatch.setattr(mu, "is_model_available", lambda: os.path.exists(model_path))
+        sleeps: list[float] = []
+
+        def _record_sleep(seconds: float) -> None:
+            sleeps.append(seconds)
+
+        monkeypatch.setattr(mu.time, "sleep", _record_sleep)
+        return model_path, sleeps
+
+    def test_success_first_attempt(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        model_path, sleeps = self._setup(monkeypatch, tmp_path)
+        timeouts_seen = []
+
+        def get_impl(url, **kwargs):
+            timeouts_seen.append(kwargs.get("timeout"))
+            return _StreamingResponse(200, self.PAYLOAD)
+
+        self._fake_requests(monkeypatch, get_impl)
+        assert mu.try_download_model() is True
+        assert os.path.exists(model_path)
+        with open(model_path, "rb") as f:
+            assert f.read() == self.PAYLOAD
+        assert not os.path.exists(model_path + ".part")  # temp cleaned up
+        assert sleeps == []  # no retries needed
+        # Connect/read timeout tuple must be passed to requests.get
+        assert timeouts_seen and timeouts_seen[0] == (
+            mu._DOWNLOAD_CONNECT_TIMEOUT,
+            mu._DOWNLOAD_READ_TIMEOUT,
+        )
+
+    def test_transient_503_then_success(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        model_path, sleeps = self._setup(monkeypatch, tmp_path)
+        responses = iter(
+            [
+                _StreamingResponse(503, b""),
+                _StreamingResponse(503, b""),
+                _StreamingResponse(200, self.PAYLOAD),
+            ]
+        )
+        self._fake_requests(monkeypatch, lambda url, **kw: next(responses))
+
+        assert mu.try_download_model() is True
+        assert os.path.exists(model_path)
+        assert len(sleeps) == 2  # backed off between the failed attempts
+
+    def test_permanent_404_fails_fast(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        model_path, sleeps = self._setup(monkeypatch, tmp_path)
+        calls: list[str] = []
+
+        def get_impl(url: str, **kw):
+            calls.append(url)
+            return _StreamingResponse(404, b"")
+
+        self._fake_requests(monkeypatch, get_impl)
+
+        assert mu.try_download_model() is False
+        assert len(calls) == 1  # no retries for a permanent failure
+        assert sleeps == []
+        assert not os.path.exists(model_path)
+
+    def test_network_errors_retry_then_give_up(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        model_path, sleeps = self._setup(monkeypatch, tmp_path)
+        attempts = []
+
+        def get_impl(url, **kwargs):
+            attempts.append(url)
+            raise mu_requests_error()
+
+        def mu_requests_error():
+            raise requests_exc
+
+        fake = self._fake_requests(monkeypatch, get_impl)
+        requests_exc = fake.RequestException("connection reset")
+
+        assert mu.try_download_model() is False
+        assert len(attempts) == 3  # bounded retries
+        assert len(sleeps) == 2  # backoff between attempts
+        assert not os.path.exists(model_path)
+        assert not os.path.exists(model_path + ".part")  # no partial file left
+
+    def test_all_urls_exhausted_returns_false(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        model_path, _ = self._setup(monkeypatch, tmp_path)
+        monkeypatch.setattr(
+            mu,
+            "MODEL_DOWNLOAD_URLS",
+            ["https://a.example/m.h5", "https://b.example/m.h5"],
+        )
+        self._fake_requests(
+            monkeypatch,
+            lambda url, **kw: _StreamingResponse(404, b""),
+        )
+
+        assert mu.try_download_model() is False
+        assert not os.path.exists(model_path)
+
+    def test_already_available_skips_download(self, monkeypatch, tmp_path) -> None:
+        import utils.model_utils as mu
+
+        monkeypatch.setattr(mu, "is_model_available", lambda: True)
+        called = []
+        self._fake_requests(monkeypatch, lambda url, **kw: called.append(url))
+
+        assert mu.try_download_model() is True
+        assert called == []
+
+    def test_oversized_but_invalid_file_is_retried_and_cleaned(self, monkeypatch, tmp_path) -> None:
+        """A payload below _MIN_MODEL_BYTES must not be published."""
+        import utils.model_utils as mu
+
+        model_path, sleeps = self._setup(monkeypatch, tmp_path)
+        responses = iter([_StreamingResponse(200, b"tiny")] * 3)
+        self._fake_requests(monkeypatch, lambda url, **kw: next(responses))
+
+        assert mu.try_download_model() is False
+        assert not os.path.exists(model_path)  # corrupt file never published
+        assert not os.path.exists(model_path + ".part")
+        assert len(sleeps) == 2  # retried on each failed validation
+
+
+class _StreamingResponse:
+    """Minimal requests.Response stub for stream=True downloads."""
+
+    def __init__(self, status_code: int, payload: bytes) -> None:
+        self.status_code = status_code
+        self._payload = payload
+
+    def iter_content(self, chunk_size: int):
+        if self._payload:
+            yield self._payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc_info):
+        return False

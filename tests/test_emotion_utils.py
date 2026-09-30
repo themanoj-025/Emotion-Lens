@@ -5,7 +5,7 @@ pytestmark = pytest.mark.unit
 """Tests for Emotion-Lens: config helpers and emotion_utils pure functions."""
 
 import sys
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import numpy as np
 
@@ -266,62 +266,53 @@ class TestGenerateEmotionSummary:
 class TestPreprocessFace:
     """Tests for face preprocessing."""
 
+    # NOTE: patch (not bare assignment) — these run against the REAL cv2
+    # module whenever opencv is installed, and a bare ``cv2.resize = ...``
+    # permanently poisons it for every later test in the suite.
+
     def test_output_shape(self) -> None:
-        import cv2
+        with patch(
+            "cv2.resize",
+            lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
+        ):
+            from utils.emotion_utils import preprocess_face
 
-        # Mock cv2.resize to return a proper array        # opencv stubs type cv2.resize as an overloaded function; the mock
-        # lambdas don't match, so the assignment needs an ignore (both mypy
-        # environments see the same wheel stubs, so it's consistently used).
-        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
-            0, 255, size, dtype=np.uint8
-        )
-        from utils.emotion_utils import preprocess_face
-
-        face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
-        result = preprocess_face(face)
+            face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
+            result = preprocess_face(face)
         assert result.shape == (1, 48, 48, 1)
 
     def test_output_dtype(self) -> None:
-        import cv2
+        with patch(
+            "cv2.resize",
+            lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
+        ):
+            from utils.emotion_utils import preprocess_face
 
-        # opencv stubs type cv2.resize as an overloaded function; the mock
-        # lambdas don't match, so the assignment needs an ignore (both mypy
-        # environments see the same wheel stubs, so it's consistently used).
-        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
-            0, 255, size, dtype=np.uint8
-        )
-        from utils.emotion_utils import preprocess_face
-
-        face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
-        result = preprocess_face(face)
+            face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
+            result = preprocess_face(face)
         assert result.dtype == np.float32
 
     def test_output_normalized(self) -> None:
-        import cv2
+        with patch(
+            "cv2.resize",
+            lambda roi, size, **kw: np.full(size, 255, dtype=np.uint8),
+        ):
+            from utils.emotion_utils import preprocess_face
 
-        cv2.resize = lambda roi, size, **kw: np.full(  # type: ignore[assignment]
-            size, 255, dtype=np.uint8
-        )
-        from utils.emotion_utils import preprocess_face
-
-        face = np.full((100, 100), 255, dtype=np.uint8)
-        result = preprocess_face(face)
+            face = np.full((100, 100), 255, dtype=np.uint8)
+            result = preprocess_face(face)
         assert result.max() <= 1.0
         assert result.min() >= 0.0
 
     def test_custom_target_size(self) -> None:
-        import cv2
+        with patch(
+            "cv2.resize",
+            lambda roi, size, **kw: np.random.randint(0, 255, size, dtype=np.uint8),
+        ):
+            from utils.emotion_utils import preprocess_face
 
-        # opencv stubs type cv2.resize as an overloaded function; the mock
-        # lambdas don't match, so the assignment needs an ignore (both mypy
-        # environments see the same wheel stubs, so it's consistently used).
-        cv2.resize = lambda roi, size, **kw: np.random.randint(  # type: ignore[assignment]
-            0, 255, size, dtype=np.uint8
-        )
-        from utils.emotion_utils import preprocess_face
-
-        face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
-        result = preprocess_face(face, target_size=(64, 64))
+            face = np.random.randint(0, 255, (100, 100), dtype=np.uint8)
+            result = preprocess_face(face, target_size=(64, 64))
         assert result.shape == (1, 64, 64, 1)
 
 

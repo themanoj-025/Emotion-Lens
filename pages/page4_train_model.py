@@ -4,6 +4,7 @@ Provides controls for dataset selection, hyperparameters, and training progress.
 """
 
 import os
+import threading
 from io import StringIO
 
 # Set matplotlib for plots
@@ -25,6 +26,13 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 plt.style.use("dark_background")
+
+# Training state guard — Streamlit reruns script the whole page top-to-bottom,
+# so a second "Start Training" click would race the active run (two fits
+# writing the same model file). The threading.Lock guards concurrent scripts
+# (webrtc worker threads / multiple sessions); the session-state flag keeps
+# the button disabled across reruns so a second run can't even start.
+_TRAIN_LOCK = threading.Lock()
 
 
 def show() -> None:
@@ -160,27 +168,39 @@ def show() -> None:
     # Train Button
     st.markdown("---")
 
-    train_disabled = dataset_source == "Local Folder" and local_path is None
+    training_in_progress = st.session_state.get("training_in_progress", False)
+    train_disabled = training_in_progress or (
+        dataset_source == "Local Folder" and local_path is None
+    )
+
+    if training_in_progress:
+        st.info(
+            "⏳ A training run is already in progress. Wait for it to finish before starting a new one."
+        )
 
     if st.button(
-        "🚀 Start Training",
+        "🚀 Start Training" if not training_in_progress else "🏋️ Training...",
         type="primary",
         use_container_width=True,
         disabled=train_disabled,
     ):
-        _run_training(
-            dataset_source=dataset_source,
-            local_path=local_path,
-            arch_type=arch_type,
-            epochs=epochs,
-            batch_size=batch_size,
-            learning_rate=learning_rate,
-            dropout_rate=dropout_rate,
-            use_flip=use_flip,
-            rotation_range=rotation_range,
-            zoom_range=zoom_range,
-            model_name=model_name,
-        )
+        st.session_state["training_in_progress"] = True
+        try:
+            _run_training(
+                dataset_source=dataset_source,
+                local_path=local_path,
+                arch_type=arch_type,
+                epochs=epochs,
+                batch_size=batch_size,
+                learning_rate=learning_rate,
+                dropout_rate=dropout_rate,
+                use_flip=use_flip,
+                rotation_range=rotation_range,
+                zoom_range=zoom_range,
+                model_name=model_name,
+            )
+        finally:
+            st.session_state["training_in_progress"] = False
 
 
 def _build_model(arch_type, input_shape=(48, 48, 1), num_classes=7, dropout_rate=0.25) -> None:
@@ -248,6 +268,12 @@ def _run_training(
     model_name,
 ):
     """Execute the training process with live Streamlit updates."""
+    # Hard guard: never allow two training runs in the same process.
+    if not _TRAIN_LOCK.acquire(blocking=False):
+        st.error(
+            "❌ Another training run is already active in this process. Please wait for it to complete."
+        )
+        return
 
     # Training status placeholders
     status_placeholder = st.empty()
@@ -501,3 +527,5 @@ def _run_training(
     except (RuntimeError, OSError, ValueError) as e:
         status_placeholder.error(f"❌ Training failed: {e}")
         st.exception(e)
+    finally:
+        _TRAIN_LOCK.release()
