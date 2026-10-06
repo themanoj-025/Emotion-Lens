@@ -6,7 +6,7 @@ numpy==2.4.6
 # Pinned to 4.x: the 5.0 wheel also DROPS the haarcascade XML data files
 # (cv2/data/*.xml), so cv2.data.haarcascades points at an empty dir and
 # CascadeClassifier.load fails at runtime (CI tests-job failure).
-opencv-contrib-python-headless==4.14.0.94
+opencv-contrib-python-headless==5.0.0.93
 pillow==12.3.0
 kagglehub>=1.0.2
 
