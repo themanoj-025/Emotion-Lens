@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════
+# Emotion-Lens — Docker Compose (base)
+#
+# Single-service Streamlit app. No external services required.
+# The model checkpoint ships inside the image.
+#
+# Usage:
+#   docker compose up -d
+# ═══════════════════════════════════════════════════════════════════════
+
+name: emotion-lens
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    restart: unless-stopped
+    ports:
+      - "8501:8501"
+    # kagglehub caches the model checkpoint in the appuser home — persist
+    # it so the checkpoint isn't re-downloaded on every container recreate.
+    volumes:
+      - modelcache:/home/appuser/.cache/kagglehub
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+
+volumes:
+  modelcache:  # kagglehub model checkpoint cache — safe to delete (re-downloads)

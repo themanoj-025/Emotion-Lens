@@ -1,0 +1,408 @@
+/* ============================================================
+   EmotionLens 🎭 — Dark Neural-Network Theme
+   ============================================================ */
+
+:root {
+    --bg-primary: #0D1117;
+    --bg-secondary: #161B22;
+    --bg-card: #1C2128;
+    --accent-teal: #00D4AA;
+    --accent-amber: #F5A623;
+    --text-primary: #E6EDF3;
+    --text-secondary: #8B949E;
+    --border-color: #30363D;
+    --danger: #FF6B6B;
+    --success: #2ECC71;
+    --info: #3498DB;
+    --warning: #F39C12;
+}
+
+/* Global Styles */
+.stApp {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.stApp > header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Sidebar */
+.css-1d391kg, .css-1lcbmhc, section[data-testid="stSidebar"] {
+    background-color: var(--bg-secondary) !important;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar .sidebar-content {
+    background-color: var(--bg-secondary);
+}
+
+/* Cards & Containers */
+.css-1r6slb0, .st-emotion-cache-1r6slb0 {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+div[data-testid="stMetric"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+div[data-testid="stMetric"]:hover {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+}
+
+div[data-testid="stMetric"] label {
+    color: var(--text-secondary) !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: var(--text-primary) !important;
+    font-size: 2rem !important;
+    font-weight: 700;
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(135deg, var(--accent-teal), #009B7D);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stButton > button:hover {
+    box-shadow: 0 0 25px rgba(0, 212, 170, 0.4);
+    transform: translateY(-2px);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+}
+
+/* Secondary button variant */
+.stButton > button[kind="secondary"] {
+    background: transparent;
+    border: 2px solid var(--accent-teal);
+    color: var(--accent-teal);
+}
+
+.stButton > button[kind="secondary"]:hover {
+    background: rgba(0, 212, 170, 0.1);
+}
+
+/* DataFrames & Tables */
+.stDataFrame {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stDataFrame [data-testid="stDataFrameResizable"] {
+    background-color: var(--bg-card);
+}
+
+/* Text inputs & Selectboxes */
+.stTextInput > div > div > input,
+.stSelectbox > div > div > select,
+.stNumberInput > div > div > input,
+.stSlider > div {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+}
+
+.stTextInput > div > div > input:focus,
+.stSelectbox > div > div > select:focus {
+    border-color: var(--accent-teal) !important;
+    box-shadow: 0 0 10px rgba(0, 212, 170, 0.2) !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-primary);
+}
+
+.streamlit-expanderHeader:hover {
+    border-color: var(--accent-teal);
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
+    padding: 4px;
+    gap: 4px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.stTabs [data-baseweb="tab"][aria-selected="true"] {
+    background-color: var(--bg-card);
+    color: var(--accent-teal);
+}
+
+/* Progress bars */
+.stProgress > div > div > div > div {
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-amber)) !important;
+}
+
+/* Code blocks */
+.stCodeBlock {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+/* Info, Success, Warning, Error boxes */
+.stAlert {
+    border-radius: 8px;
+    border-left-width: 4px;
+}
+
+div[data-testid="stInfo"] {
+    background-color: rgba(0, 212, 170, 0.1);
+    border-left-color: var(--accent-teal);
+}
+
+div[data-testid="stSuccess"] {
+    background-color: rgba(46, 204, 113, 0.1);
+    border-left-color: var(--success);
+}
+
+div[data-testid="stWarning"] {
+    background-color: rgba(245, 166, 35, 0.1);
+    border-left-color: var(--accent-amber);
+}
+
+div[data-testid="stError"] {
+    background-color: rgba(255, 107, 107, 0.1);
+    border-left-color: var(--danger);
+}
+
+/* Spinner */
+.stSpinner > div {
+    border-color: var(--accent-teal) !important;
+    border-top-color: transparent !important;
+}
+
+/* Custom metric card styling */
+.metric-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
+}
+
+/* Animated confidence bars */
+.conf-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-teal), var(--accent-amber));
+    transition: width 0.3s ease;
+}
+
+/* Emotion badge */
+.emotion-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* Game timer styles */
+.game-timer {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--accent-teal);
+    text-shadow: 0 0 30px rgba(0, 212, 170, 0.5);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+/* Snapshot gallery */
+.snapshot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.snapshot-item {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.snapshot-item:hover {
+    border-color: var(--accent-teal);
+    transform: scale(1.02);
+}
+
+/* Emotion card glow effects */
+.emotion-glow-happy {
+    box-shadow: 0 0 30px rgba(46, 204, 113, 0.3);
+}
+
+.emotion-glow-angry {
+    box-shadow: 0 0 30px rgba(255, 107, 107, 0.3);
+}
+
+.emotion-glow-sad {
+    box-shadow: 0 0 30px rgba(52, 152, 219, 0.3);
+}
+
+/* Headers and titles */
+h1, h2, h3 {
+    color: var(--text-primary) !important;
+    font-weight: 700 !important;
+}
+
+h1 {
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-amber));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Divider */
+hr {
+    border-color: var(--border-color);
+}
+
+/* Markdown */
+.stMarkdown {
+    color: var(--text-primary);
+}
+
+/* Tooltip */
+.stTooltipIcon {
+    color: var(--text-secondary);
+}
+
+/* Checkbox & Toggle */
+.stCheckbox > div > label,
+.stToggle > div > label {
+    color: var(--text-primary);
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* File uploader */
+[data-testid="stFileUploadDropzone"] {
+    background-color: var(--bg-secondary);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: all 0.3s;
+}
+
+[data-testid="stFileUploadDropzone"]:hover {
+    border-color: var(--accent-teal);
+    background-color: rgba(0, 212, 170, 0.05);
+}
+
+[data-testid="stFileUploadDropzone"] [data-testid="stFileUploaderCaption"] {
+    color: var(--text-secondary);
+}
+
+/* Markdown in styled containers */
+.stMarkdown p {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+/* Links */
+a {
+    color: var(--accent-teal) !important;
+}
+
+a:hover {
+    color: #00E6BA !important;
+    text-decoration: none !important;
+}
+
+/* Badge styling for the model inspector */
+.badge-total {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1E3A5F, #2C5F8A);
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.badge-trainable {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1A3A2A, #2E7D5E);
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.badge-non-trainable {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #3A2A1A, #7D5E2E);
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+}

@@ -1,0 +1,32 @@
+# ═══════════════════════════════════════════════════════════════════════
+# Emotion-Lens — Development override
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Adds: source bind mounts + hot reload (polling watcher).
+# NEVER use in production.
+# ═══════════════════════════════════════════════════════════════════════
+
+services:
+  app:
+    build:
+      target: dev
+    volumes:
+      - ./streamlit_app.py:/app/streamlit_app.py
+      - ./inference.py:/app/inference.py
+      - ./api_server.py:/app/api_server.py
+      - ./train.py:/app/train.py
+      - ./webcam_inference.py:/app/webcam_inference.py
+      - ./pages:/app/pages
+      - ./utils:/app/utils
+      - ./assets:/app/assets
+      - ./packages.txt:/app/packages.txt
+      - modelcache:/home/appuser/.cache/kagglehub
+    command: >
+      streamlit run streamlit_app.py
+      --server.port=8501
+      --server.address=0.0.0.0
+      --server.headless=true
+      --browser.gatherUsageStats=false
+      --server.fileWatcherType=polling
+      --server.runOnSave=true

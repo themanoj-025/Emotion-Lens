@@ -1,0 +1,40 @@
+# Core ML
+tensorflow==2.21.0
+numpy==2.4.6
+# contrib variant required: OpenCV 5.x moved CascadeClassifier out of the
+# base module into xobjdetect, which ships only in the contrib package.
+# Pinned to 4.x: the 5.0 wheel also DROPS the haarcascade XML data files
+# (cv2/data/*.xml), so cv2.data.haarcascades points at an empty dir and
+# CascadeClassifier.load fails at runtime (CI tests-job failure).
+opencv-contrib-python-headless==4.14.0.94
+pillow==12.3.0
+kagglehub>=1.0.2
+
+# Streamlit
+streamlit==1.64.0
+
+# Visualization
+
+matplotlib==3.11.2
+plotly==7.1.0
+
+
+# Utils
+pandas==3.0.6
+scikit-learn==1.9.1
+scipy==1.17.1
+requests==2.34.2
+protobuf==7.36.2
+
+# API observability
+fastapi>=0.141.1
+uvicorn>=0.53.0
+slowapi>=0.1.10
+python-multipart>=0.0.6
+prometheus-client>=0.26.0
+
+# OpenTelemetry distributed tracing (optional, enabled via OTEL_ENABLED=true)
+opentelemetry-api>=1.44.0,<2.0
+opentelemetry-sdk>=1.44.0,<2.0
+opentelemetry-exporter-otlp-proto-grpc>=1.44.0,<2.0
+opentelemetry-instrumentation-fastapi>=0.65b0,<1.0
