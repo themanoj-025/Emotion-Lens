@@ -1,4 +1,4 @@
-# Rules — EmotionLens: Coding Standards & AI-Agent Operating Rules
+# Rules — EmotionLens: Coding Standards & Engineering Operating Rules
 
 | Field | Value |
 | --- | --- |
@@ -52,7 +52,7 @@ assets/style.css
 - MUST have tests: preprocessing, model load, API endpoints, Grad-CAM.
 - See [Testing.md](../technical/Testing.md).
 
-## 5. AI Agent Operating Rules
+## 5. Engineering Operating Rules
 
 - Always read Tracker.md and ImplementationPlan.md before starting.
 - Never mark a task 🟢 Done without tests passing.
