@@ -1,0 +1,14 @@
+{
+  "repository": "Emotion-Lens",
+  "mode": "AUDIT_ONLY",
+  "aggressiveness": 3,
+  "phase": 9,
+  "status": "COMPLETED_AUDIT",
+  "baseline_sha": "8d46ae9c5b3fefe83755e5251c78ca708a6b2571",
+  "total_candidates": 66,
+  "t0_count": 40,
+  "t1_count": 1,
+  "t2_count": 25,
+  "t3_count": 0,
+  "updated_at": "2026-10-11T07:39:23.306Z"
+}
