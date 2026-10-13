@@ -6,12 +6,12 @@ numpy==2.4.6
 # Pinned to 4.x: the 5.0 wheel also DROPS the haarcascade XML data files
 # (cv2/data/*.xml), so cv2.data.haarcascades points at an empty dir and
 # CascadeClassifier.load fails at runtime (CI tests-job failure).
-opencv-contrib-python-headless==4.14.0.94
+opencv-contrib-python-headless==5.0.0.93
 pillow==12.3.0
 kagglehub>=1.0.2
 
 # Streamlit
-streamlit==1.64.0
+streamlit==1.65.0
 
 # Visualization
 
@@ -27,14 +27,14 @@ requests==2.34.2
 protobuf==7.36.2
 
 # API observability
-fastapi>=0.141.1
-uvicorn>=0.53.0
+fastapi>=0.143.0
+uvicorn>=0.54.0
 slowapi>=0.1.10
 python-multipart>=0.0.6
 prometheus-client>=0.26.0
 
 # OpenTelemetry distributed tracing (optional, enabled via OTEL_ENABLED=true)
-opentelemetry-api>=1.44.0,<2.0
-opentelemetry-sdk>=1.44.0,<2.0
-opentelemetry-exporter-otlp-proto-grpc>=1.44.0,<2.0
-opentelemetry-instrumentation-fastapi>=0.65b0,<1.0
+opentelemetry-api>=1.45.0,<2.0
+opentelemetry-sdk>=1.45.1,<2.0
+opentelemetry-exporter-otlp-proto-grpc>=1.45.0,<2.0
+opentelemetry-instrumentation-fastapi>=0.66b1,<1.0
