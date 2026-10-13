@@ -23,7 +23,7 @@
 ## 📋 Table of Contents
 
 - [What it does](#what-it-does)
-- [📸 Screenshots](#-screenshots)
+- [📸 Screenshots](#screenshots)
 - [🎯 Detected emotions](#-detected-emotions)
 - [✨ Features](#-features)
 - [🚀 Quick start](#-quick-start)
