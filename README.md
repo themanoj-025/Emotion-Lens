@@ -153,7 +153,7 @@ Emotion-Lens/
 
 ## 📁 Project structure
 
-```
+```text
 Emotion-Lens/
 ├── src/
 │   ├── data/
