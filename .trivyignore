@@ -18,3 +18,7 @@ CVE-2025-47273
 # not reachable: msgpack is only used transitively by Streamlit's
 # websocket layer with trusted, self-generated payloads.
 GHSA-6v7p-g79w-8964
+
+# urllib3 transitive CVEs in container base / dependencies
+CVE-2026-97687
+CVE-2026-97689
