@@ -160,7 +160,7 @@ journey
 graph TD
     User["UX Researcher / Application User"] -->|"Web Browser / Webcam Stream"| EmotionLens["EmotionLens System Boundary"]
     ExternalClient["External Client Application"] -->|"HTTP POST /predict Frame"| EmotionLens
-    
+
     EmotionLens -->|"Scrapes /metrics"| Prometheus["Prometheus Telemetry"]
     EmotionLens -->|"Persists Session Timelines"| LocalStorage["Local Artifact Storage (CSV / JSON)"]
 ```
@@ -213,7 +213,7 @@ graph TD
     UIRoutes --> ModelLoader
     UIRoutes --> Smoother
     UIRoutes --> GradCAM
-    
+
     APIRouter --> Detector
     APIRouter --> ModelLoader
     APIRouter --> Smoother
@@ -310,12 +310,12 @@ stateDiagram-v2
     [*] --> ACQUIRED: Raw frame captured from source
     ACQUIRED --> DETECTED: Face localized in frame
     ACQUIRED --> NO_FACE: No face detected in frame
-    
+
     DETECTED --> PREPROCESSED: Cropped to 48x48 grayscale
     PREPROCESSED --> INFERRED: Softmax probabilities calculated
     INFERRED --> SMOOTHED: Applied exponential moving average
     SMOOTHED --> RENDERED: Bounding box & overlay drawn
-    
+
     NO_FACE --> RENDERED: Frame displayed without overlay
     RENDERED --> [*]
 ```
@@ -672,55 +672,55 @@ Production deployment is executed via containerized Docker environments running 
 
 ## <a id="exam"></a>§EXAM — Cold-Reader Verification Exam (25 Questions)
 
-1. **Q: What is the Python runtime requirement for EmotionLens?**  
+1. **Q: What is the Python runtime requirement for EmotionLens?**
    *A:* Python >= 3.10. Reference: [`pyproject.toml`](pyproject.toml).
-2. **Q: How many total tracked files exist in the Emotion-Lens repository?**  
+2. **Q: How many total tracked files exist in the Emotion-Lens repository?**
    *A:* 151 files. Reference: [§APP](#app).
-3. **Q: How many automated test functions exist across how many test files?**  
+3. **Q: How many automated test functions exist across how many test files?**
    *A:* 233 test functions across 17 test files. Reference: [`tests/`](tests/).
-4. **Q: What dataset was the core Convolutional Neural Network trained on?**  
+4. **Q: What dataset was the core Convolutional Neural Network trained on?**
    *A:* The FER2013 facial expression dataset. Reference: [`README.md`](README.md).
-5. **Q: What are the 7 discrete emotion target classes classified by the model?**  
+5. **Q: What are the 7 discrete emotion target classes classified by the model?**
    *A:* Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise. Reference: [`config.py`](config.py).
-6. **Q: What input dimensions does the CNN model require?**  
+6. **Q: What input dimensions does the CNN model require?**
    *A:* 48x48 pixel grayscale images (shape: 48, 48, 1). Reference: [`config.py`](config.py).
-7. **Q: What explainability technique generates visual saliency heatmaps?**  
+7. **Q: What explainability technique generates visual saliency heatmaps?**
    *A:* Grad-CAM (Gradient-weighted Class Activation Mapping). Reference: [`gradcam_utils.py`](gradcam_utils.py).
-8. **Q: How many pages comprise the interactive Streamlit dashboard?**  
+8. **Q: How many pages comprise the interactive Streamlit dashboard?**
    *A:* 7 pages. Reference: [`pages/`](pages/).
-9. **Q: What mechanism prevents high-frequency prediction flickering between frames?**  
+9. **Q: What mechanism prevents high-frequency prediction flickering between frames?**
    *A:* Rolling exponential moving average temporal smoothing. Reference: [`smoothing.py`](smoothing.py).
-10. **Q: What computer vision library executes face cascade detection?**  
+10. **Q: What computer vision library executes face cascade detection?**
     *A:* OpenCV (`opencv-python-headless`). Reference: [`requirements.txt`](requirements.txt).
-11. **Q: What deep learning framework executes the CNN model?**  
+11. **Q: What deep learning framework executes the CNN model?**
     *A:* TensorFlow (`tensorflow >= 2.16.0`). Reference: [`requirements.txt`](requirements.txt).
-12. **Q: What file provides privacy-preserving facial blurring and pixelation?**  
+12. **Q: What file provides privacy-preserving facial blurring and pixelation?**
     *A:* `anonymize.py`. Reference: [`anonymize.py`](anonymize.py).
-13. **Q: What endpoint provides Prometheus operational metrics?**  
+13. **Q: What endpoint provides Prometheus operational metrics?**
     *A:* `/metrics`. Reference: [`api_server.py`](api_server.py).
-14. **Q: What is the default confidence threshold (`CONFIDENCE_THRESHOLD`)?**  
+14. **Q: What is the default confidence threshold (`CONFIDENCE_THRESHOLD`)?**
     *A:* 0.40 (40%). Reference: [`config.py`](config.py).
-15. **Q: What script launches the standalone desktop OpenCV camera demo?**  
+15. **Q: What script launches the standalone desktop OpenCV camera demo?**
     *A:* `webcam_demo.py`. Reference: [`webcam_demo.py`](webcam_demo.py).
-16. **Q: What total lines of code exist across the codebase?**  
+16. **Q: What total lines of code exist across the codebase?**
     *A:* 16,932 lines of code. Reference: [§META](#meta).
-17. **Q: What git commit hash was verified for this documentation?**  
+17. **Q: What git commit hash was verified for this documentation?**
     *A:* `60bbcd7` (`60bbcd7c5408ba1174b2c5e389da05061be30d39`). Reference: [§META](#meta).
-18. **Q: What git tree hash represents the verified repository state?**  
+18. **Q: What git tree hash represents the verified repository state?**
     *A:* `34eac08dea3b057076b3ea73ac472a5e2cf1b659`. Reference: [§META](#meta).
-19. **Q: What test file executes golden reference inference tests?**  
+19. **Q: What test file executes golden reference inference tests?**
     *A:* `tests/test_golden_inference.py`. Reference: [`tests/test_golden_inference.py`](tests/test_golden_inference.py).
-20. **Q: How many endpoints are exposed by the FastAPI server?**  
+20. **Q: How many endpoints are exposed by the FastAPI server?**
     *A:* 5 endpoints. Reference: [§API](#api).
-21. **Q: What file formats are supported for exporting session timelines?**  
+21. **Q: What file formats are supported for exporting session timelines?**
     *A:* CSV and JSON. Reference: [`export_utils.py`](export_utils.py).
-22. **Q: What is the target latency for CNN inference on CPU?**  
+22. **Q: What is the target latency for CNN inference on CPU?**
     *A:* Under 10 ms (measured 4.8 ms). Reference: [§PERF](#perf).
-23. **Q: What linter is configured for the repository?**  
+23. **Q: What linter is configured for the repository?**
     *A:* Ruff. Reference: [`pyproject.toml`](pyproject.toml).
-24. **Q: Does EmotionLens require persistent SQL tables for inference?**  
+24. **Q: Does EmotionLens require persistent SQL tables for inference?**
     *A:* No, it operates as an in-memory computer vision inference pipeline. Reference: [§ERD](#erd).
-25. **Q: How many files are cataloged with 100% manifest coverage in Appendix A?**  
+25. **Q: How many files are cataloged with 100% manifest coverage in Appendix A?**
     *A:* All 151 tracked files. Reference: [§APP](#app).
 
 ---
