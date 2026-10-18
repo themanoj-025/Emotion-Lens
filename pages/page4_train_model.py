@@ -60,14 +60,18 @@ def show() -> None:
 
     local_path = None
     if dataset_source == "Local Folder":
-        local_path = st.text_input(
+        raw_local_path = st.text_input(
             "Path to dataset folder",
             placeholder="e.g., /path/to/fer2013/",
             help="Folder should contain 'train' and 'test' subdirectories with emotion class subfolders.",
         )
-        if local_path and not os.path.exists(local_path):
-            st.error(f"❌ Path does not exist: {local_path}")
-            local_path = None
+        if raw_local_path:
+            clean_path = os.path.abspath(raw_local_path.strip())
+            if os.path.exists(clean_path) and os.path.isdir(clean_path):
+                local_path = clean_path
+            else:
+                st.error(f"❌ Path does not exist or is not a directory: {raw_local_path}")
+                local_path = None
 
     # Architecture Selection
     st.markdown("### 🧠 Architecture")
@@ -155,15 +159,16 @@ def show() -> None:
     # Model Save
     st.markdown("### 💾 Save Options")
 
-    model_name = st.text_input(
+    raw_model_name = st.text_input(
         "Model filename",
         value="emotion_model.h5",
         help="Name of the saved model file (will be saved to project root).",
     )
 
-    # Add .h5 if not present
-    if not model_name.endswith(".h5"):
-        model_name += ".h5"
+    safe_model_base = os.path.basename(raw_model_name.strip()) or "emotion_model.h5"
+    if not safe_model_base.endswith(".h5"):
+        safe_model_base += ".h5"
+    model_name = safe_model_base
 
     # Train Button
     st.markdown("---")
@@ -502,12 +507,13 @@ def _run_training(
         )
 
         # Download button
-        if os.path.exists(model_name):
-            with open(model_name, "rb") as f:
+        safe_export_path = os.path.abspath(os.path.basename(model_name))
+        if os.path.exists(safe_export_path) and os.path.isfile(safe_export_path):
+            with open(safe_export_path, "rb") as f:
                 st.download_button(
                     label="📥 Download Trained Model",
                     data=f,
-                    file_name=model_name,
+                    file_name=os.path.basename(model_name),
                     mime="application/octet-stream",
                     use_container_width=True,
                     type="primary",
