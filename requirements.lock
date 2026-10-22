@@ -183,7 +183,7 @@ pandas==3.0.6
     # via
     #   -r requirements.txt
     #   streamlit
-pillow==12.3.0
+pillow==13.0.0
     # via
     #   -r requirements.txt
     #   matplotlib
