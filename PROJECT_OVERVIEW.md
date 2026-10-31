@@ -785,7 +785,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`.github/ISSUE_TEMPLATE/bug_report.md`](.github/ISSUE_TEMPLATE/bug_report.md) | `.md` | 36 | 902 | CI/CD automation workflow |
 | [`.github/ISSUE_TEMPLATE/feature_request.md`](.github/ISSUE_TEMPLATE/feature_request.md) | `.md` | 29 | 859 | CI/CD automation workflow |
 | [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) | `.md` | 44 | 1408 | CI/CD automation workflow |
-| [`.github/copilot-instructions.md`](.github/copilot-instructions.md) | `.md` | 17 | 688 | CI/CD automation workflow |
 | [`.github/dependabot.yml`](.github/dependabot.yml) | `.yml` | 34 | 666 | CI/CD automation workflow |
 | [`.github/labeler.yml`](.github/labeler.yml) | `.yml` | 21 | 602 | CI/CD automation workflow |
 | [`.github/scripts/check_lockfile.py`](.github/scripts/check_lockfile.py) | `.py` | 214 | 7174 | CI/CD automation workflow |
@@ -813,8 +812,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`.streamlit/config.toml`](.streamlit/config.toml) | `.toml` | 15 | 280 | Configuration or static asset |
 | [`.trivyignore`](.trivyignore) | `no-ext` | 24 | 1050 | Configuration or static asset |
 | [`.vscode/settings.json`](.vscode/settings.json) | `.json` | 17 | 465 | Configuration or static asset |
-| [`AGENTS.md`](AGENTS.md) | `.md` | 77 | 2033 | Documentation asset |
-| [`AI_DISCLOSURE.md`](AI_DISCLOSURE.md) | `.md` | 67 | 2661 | Documentation asset |
 | [`CHANGELOG.md`](CHANGELOG.md) | `.md` | 40 | 1378 | Documentation asset |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | `.md` | 27 | 955 | Documentation asset |
 | [`Dockerfile`](Dockerfile) | `no-ext` | 113 | 4569 | Configuration or static asset |
@@ -824,7 +821,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`PROJECT_ANALYSIS.md`](PROJECT_ANALYSIS.md) | `.md` | 18 | 887 | Documentation asset |
 | [`README.md`](README.md) | `.md` | 375 | 14824 | Documentation asset |
 | [`SECURITY.md`](SECURITY.md) | `.md` | 25 | 988 | Documentation asset |
-| [`ai-provenance.json`](ai-provenance.json) | `.json` | 64 | 1716 | Configuration or static asset |
 | [`api_models.py`](api_models.py) | `.py` | 85 | 2358 | Python source module or utility |
 | [`api_routes.py`](api_routes.py) | `.py` | 88 | 3604 | Python source module or utility |
 | [`api_server.py`](api_server.py) | `.py` | 338 | 11485 | Python source module or utility |
