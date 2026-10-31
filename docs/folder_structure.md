@@ -47,7 +47,6 @@ Emotion-Lens/
 ├── Makefile                      # Docker task runner
 ├── .env.example                  # Env-var template
 ├── .editorconfig / .gitattributes / .gitignore
-├── AGENTS.md                     # Agent instructions
 └── README.md, LICENSE, PROJECT_ANALYSIS.md, PROJECT_OVERVIEW.md
 ```
 
