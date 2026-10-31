@@ -921,4 +921,3 @@ Production deployment is executed via containerized Docker environments running 
 | [`utils/structured_logging.py`](utils/structured_logging.py) | `.py` | 173 | 5257 | Python source module or utility |
 | [`utils/tracing.py`](utils/tracing.py) | `.py` | 59 | 1934 | Python source module or utility |
 | [`webcam_inference.py`](webcam_inference.py) | `.py` | 89 | 2984 | Python source module or utility |
-
