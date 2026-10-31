@@ -826,7 +826,7 @@ Production deployment is executed via containerized Docker environments running 
 | [`api_server.py`](api_server.py) | `.py` | 338 | 11485 | Python source module or utility |
 | [`assets/dashboard-preview.svg`](assets/dashboard-preview.svg) | `.svg` | 276 | 19930 | Configuration or static asset |
 | [`assets/style.css`](assets/style.css) | `.css` | 408 | 9504 | Configuration or static asset |
-| [`audit/dependabot-agent/2026-08-13-run.md`](audit/dependabot-agent/2026-08-13-run.md) | `.md` | 21 | 1395 | Documentation asset |
+| [`docs/audit/dependabot-agent/2026-08-13-run.md`](docs/audit/dependabot-agent/2026-08-13-run.md) | `.md` | 21 | 1395 | Documentation asset |
 | [`circuit_breaker.py`](circuit_breaker.py) | `.py` | 150 | 4984 | Python source module or utility |
 | [`docker-compose.dev.yml`](docker-compose.dev.yml) | `.yml` | 32 | 1332 | Configuration or static asset |
 | [`docker-compose.prod.yml`](docker-compose.prod.yml) | `.yml` | 17 | 759 | Configuration or static asset |
@@ -921,3 +921,4 @@ Production deployment is executed via containerized Docker environments running 
 | [`utils/structured_logging.py`](utils/structured_logging.py) | `.py` | 173 | 5257 | Python source module or utility |
 | [`utils/tracing.py`](utils/tracing.py) | `.py` | 59 | 1934 | Python source module or utility |
 | [`webcam_inference.py`](webcam_inference.py) | `.py` | 89 | 2984 | Python source module or utility |
+
