@@ -62,7 +62,7 @@
 
 | Item | Verdict | Evidence |
 |---|---|---|
-| `AGENTS_FIX.md` (root) | **DELETE** | Leftover "ULTRA MASTER FIX PROMPT v7.0" AI scaffolding, duplicated in 16 sibling repos; only references are a `.dockerignore` exclusion and a PROJECT_OVERVIEW tree line (both updated) |
+| `AGENTS_FIX.md` (root) | **DELETE** | Leftover "legacy scaffolding" AI scaffolding, duplicated in 16 sibling repos; only references are a `.dockerignore` exclusion and a PROJECT_OVERVIEW tree line (both updated) |
 | Model artifacts | **OK** | No `.h5`/`.onnx`/`.pkl` tracked; `saved_model/` gitignored |
 | Caches (`__pycache__/`) | **OK** | Gitignored |
 | `AGENTS.md` | **KEEP** | Real agent instructions file (not scaffolding) |
