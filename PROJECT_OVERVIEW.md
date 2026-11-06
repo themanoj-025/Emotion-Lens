@@ -7,8 +7,8 @@ git_commit_full: "60bbcd7c5408ba1174b2c5e389da05061be30d39"
 git_tree_hash: "34eac08dea3b057076b3ea73ac472a5e2cf1b659"
 document_version: "3.0.0"
 generated_at: "2026-10-15T15:40:00+05:30"
-author: "Antigravity Autonomous Forensics Engine"
-verification_status: "VERIFIED_CANONICAL"
+author: "Manoj Jana"
+verification_status: "VERIFIED"
 manifests_sha256:
   requirements.txt: "656394c8b394a42cc705d337aed24d70e79691967c39e63812e8931e38504c7d"
   pyproject.toml: "5266ac8ebeb98d75112ee6eba146c5389ad99d4501b856ab9539953aef199a1a"
@@ -816,9 +816,7 @@ Production deployment is executed via containerized Docker environments running 
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | `.md` | 27 | 955 | Documentation asset |
 | [`Dockerfile`](Dockerfile) | `no-ext` | 113 | 4569 | Configuration or static asset |
 | [`LICENSE`](LICENSE) | `no-ext` | 21 | 1069 | Configuration or static asset |
-| [`MODERNIZATION_AUDIT.md`](MODERNIZATION_AUDIT.md) | `.md` | 45 | 1846 | Documentation asset |
 | [`Makefile`](Makefile) | `no-ext` | 41 | 1681 | Configuration or static asset |
-| [`PROJECT_ANALYSIS.md`](PROJECT_ANALYSIS.md) | `.md` | 18 | 887 | Documentation asset |
 | [`README.md`](README.md) | `.md` | 375 | 14824 | Documentation asset |
 | [`SECURITY.md`](SECURITY.md) | `.md` | 25 | 988 | Documentation asset |
 | [`api_models.py`](api_models.py) | `.py` | 85 | 2358 | Python source module or utility |
