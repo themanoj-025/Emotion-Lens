@@ -11,7 +11,7 @@ pillow==13.0.0
 kagglehub>=1.0.3
 
 # Streamlit
-streamlit==1.66.1
+streamlit==1.67.0
 
 # Visualization
 
