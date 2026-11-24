@@ -62,15 +62,16 @@ def show() -> None:
     if dataset_source == "Local Folder":
         raw_local_path = st.text_input(
             "Path to dataset folder",
-            placeholder="e.g., /path/to/fer2013/",
-            help="Folder should contain 'train' and 'test' subdirectories with emotion class subfolders.",
+            placeholder="e.g., data/fer2013",
+            help="Relative path inside workspace containing 'train' and 'test' subdirectories.",
         )
         if raw_local_path:
-            clean_path = os.path.abspath(raw_local_path.strip())
-            if os.path.exists(clean_path) and os.path.isdir(clean_path):
+            workspace_root = os.path.abspath(".")
+            clean_path = os.path.normpath(os.path.join(workspace_root, raw_local_path.strip()))
+            if clean_path.startswith(workspace_root + os.sep) and os.path.isdir(clean_path):
                 local_path = clean_path
             else:
-                st.error(f"❌ Path does not exist or is not a directory: {raw_local_path}")
+                st.error("❌ Path must be an existing folder inside the workspace directory.")
                 local_path = None
 
     # Architecture Selection
@@ -298,8 +299,21 @@ def _run_training(
             train_path = os.path.join(path, "train")
             test_path = os.path.join(path, "test")
         else:
-            train_path = os.path.join(local_path, "train")
-            test_path = os.path.join(local_path, "test")
+            workspace_root = os.path.abspath(".")
+            safe_local_root = os.path.normpath(os.path.join(workspace_root, local_path or ""))
+            if not safe_local_root.startswith(workspace_root + os.sep):
+                status_placeholder.error(
+                    "❌ Dataset path must reside inside the workspace directory."
+                )
+                return
+            train_path = os.path.normpath(os.path.join(safe_local_root, "train"))
+            test_path = os.path.normpath(os.path.join(safe_local_root, "test"))
+            if not (
+                train_path.startswith(workspace_root + os.sep)
+                and test_path.startswith(workspace_root + os.sep)
+            ):
+                status_placeholder.error("❌ Invalid dataset directory structure.")
+                return
 
         if not os.path.exists(train_path) or not os.path.exists(test_path):
             status_placeholder.error(
@@ -507,13 +521,19 @@ def _run_training(
         )
 
         # Download button
-        safe_export_path = os.path.abspath(os.path.basename(model_name))
-        if os.path.exists(safe_export_path) and os.path.isfile(safe_export_path):
+        import re as _re
+
+        export_root = os.path.abspath(".")
+        safe_filename = (
+            _re.sub(r"[^A-Za-z0-9._-]", "_", os.path.basename(model_name)) or "emotion_model.h5"
+        )
+        safe_export_path = os.path.normpath(os.path.join(export_root, safe_filename))
+        if safe_export_path.startswith(export_root + os.sep) and os.path.isfile(safe_export_path):
             with open(safe_export_path, "rb") as f:
                 st.download_button(
                     label="📥 Download Trained Model",
                     data=f,
-                    file_name=os.path.basename(model_name),
+                    file_name=safe_filename,
                     mime="application/octet-stream",
                     use_container_width=True,
                     type="primary",
