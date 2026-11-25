@@ -253,7 +253,16 @@ async def root():
     }
 
 
-@v1_router.post("/predict", response_model=PredictResponse, tags=["Prediction"])
+@v1_router.post(
+    "/predict",
+    response_model=PredictResponse,
+    tags=["Prediction"],
+    responses={
+        400: {"description": "Invalid or missing image input"},
+        429: {"description": "Rate limit exceeded"},
+        503: {"description": "Model or face cascade not loaded"},
+    },
+)
 async def predict_from_base64(request: PredictRequest = Body(...)):
     """Predict emotions from a base64-encoded image."""
     import time
@@ -287,7 +296,16 @@ async def predict_from_base64(request: PredictRequest = Body(...)):
     )
 
 
-@v1_router.post("/predict-file", response_model=PredictResponse, tags=["Prediction"])
+@v1_router.post(
+    "/predict-file",
+    response_model=PredictResponse,
+    tags=["Prediction"],
+    responses={
+        400: {"description": "Unsupported or invalid image file"},
+        429: {"description": "Rate limit exceeded"},
+        503: {"description": "Model or face cascade not loaded"},
+    },
+)
 async def predict_from_file(
     file: UploadFile = File(...),
     detect_faces: bool = Form(True, description="Whether to auto-detect faces."),
@@ -314,7 +332,7 @@ async def predict_from_file(
 
     try:
         contents = await file.read()
-        pil_image = Image.open(io.BytesIO(contents))
+        pil_image = Image.open(io.BytesIO(contents)).convert("RGB")
         img_bgr = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
     except (OSError, ValueError) as e:
         raise HTTPException(status_code=400, detail=f"Invalid image file: {e}")

@@ -79,7 +79,7 @@ def decode_base64_image(image_b64: str) -> np.ndarray:
         raise ValueError(f"Invalid base64 encoding: {e}") from e
 
     try:
-        pil_image = Image.open(io.BytesIO(img_bytes))
+        pil_image = Image.open(io.BytesIO(img_bytes)).convert("RGB")
         return cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
     except (OSError, ValueError) as e:
         raise ValueError(f"Invalid image data: {e}") from e

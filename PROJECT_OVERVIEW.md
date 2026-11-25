@@ -116,14 +116,14 @@ Understanding human emotion from digital video streams is vital across customer 
 
 | Capability Area | Feature | Implementation Module | Technical Characteristics |
 | :--- | :--- | :--- | :--- |
-| **Facial Detection** | Haar Cascade & DNN Detectors | [`face_detector.py`](face_detector.py) | Bounding box localization of single and multiple human faces in video frames |
-| **Emotion Classification** | 7-Class Deep CNN | [`model_utils.py`](model_utils.py) | 4 conv blocks with Batch Normalization, Dropout (0.25/0.5), Softmax output |
-| **Temporal Smoothing** | Rolling Exponential Window | [`smoothing.py`](smoothing.py), [`smoothing_utils.py`](smoothing_utils.py) | Multi-frame rolling average dampening transient classification flicker |
-| **Visual Explainability** | Grad-CAM Saliency Maps | [`gradcam_utils.py`](gradcam_utils.py) | Gradient-based activation mapping visualizing high-influence feature regions |
-| **Privacy Safeguards** | Facial Anonymization | [`anonymize.py`](anonymize.py) | Pixelation and Gaussian blur redaction for non-investigated facial regions |
-| **Interactive Dashboard**| 7-Page Streamlit UI | [`app.py`](app.py), [`pages/`](pages/) | Live Camera, Image Upload, Video Analytics, Batch Processing, Analytics Hub |
+| **Facial Detection** | Haar Cascade & DNN Detectors | [`utils/emotion_utils.py`](utils/emotion_utils.py) | Bounding box localization of single and multiple human faces in video frames |
+| **Emotion Classification** | 7-Class Deep CNN | [`utils/model_utils.py`](utils/model_utils.py) | 4 conv blocks with Batch Normalization, Dropout (0.25/0.5), Softmax output |
+| **Temporal Smoothing** | Rolling Exponential Window | [`utils/smoothing_utils.py`](utils/smoothing_utils.py), [`utils/smoothing_utils.py`](utils/smoothing_utils.py) | Multi-frame rolling average dampening transient classification flicker |
+| **Visual Explainability** | Grad-CAM Saliency Maps | [`utils/gradcam_utils.py`](utils/gradcam_utils.py) | Gradient-based activation mapping visualizing high-influence feature regions |
+| **Privacy Safeguards** | Facial Anonymization | [`utils/emotion_utils.py`](utils/emotion_utils.py) | Pixelation and Gaussian blur redaction for non-investigated facial regions |
+| **Interactive Dashboard**| 7-Page Streamlit UI | [`streamlit_app.py`](streamlit_app.py), [`pages/`](pages/) | Live Camera, Image Upload, Video Analytics, Batch Processing, Analytics Hub |
 | **REST API Serving** | Asynchronous Microservice | [`api_server.py`](api_server.py), [`api_routes.py`](api_routes.py) | Endpoints for frame scoring, health verification, and Prometheus `/metrics` |
-| **Session Analytics** | Affective Timeline Export | [`export_utils.py`](export_utils.py) | CSV and JSON timeline generation of cumulative emotional distributions |
+| **Session Analytics** | Affective Timeline Export | [`utils/export_utils.py`](utils/export_utils.py) | CSV and JSON timeline generation of cumulative emotional distributions |
 
 ---
 
@@ -324,7 +324,7 @@ stateDiagram-v2
 
 ## <a id="erd"></a>§ERD — Entity-Relationship Diagram & Data Dictionaries
 
-EmotionLens operates as an in-memory computer vision inference pipeline without persistent relational SQL tables. Session analytical histories are exported into structured JSON and tabular CSV schemas defined in [`export_utils.py`](export_utils.py):
+EmotionLens operates as an in-memory computer vision inference pipeline without persistent relational SQL tables. Session analytical histories are exported into structured JSON and tabular CSV schemas defined in [`utils/export_utils.py`](utils/export_utils.py):
 
 ```mermaid
 erDiagram
@@ -406,18 +406,18 @@ Emotion-Lens/
 
 | Subsystem | File Path | Primary Responsibilities | Key Functions / Classes |
 | :--- | :--- | :--- | :--- |
-| **Vision Core** | [`face_detector.py`](face_detector.py) | Face bounding box detection | `FaceDetector`, `detect_faces()` |
-| **Vision Core** | [`model_utils.py`](model_utils.py) | CNN model loading and inference | `load_emotion_model()`, `predict_emotion()` |
-| **Vision Core** | [`smoothing.py`](smoothing.py) | Temporal prediction smoothing | `ExponentialSmoother` |
-| **Vision Core** | [`gradcam_utils.py`](gradcam_utils.py) | Visual Grad-CAM heatmap generation | `compute_gradcam()`, `overlay_heatmap()` |
-| **Vision Core** | [`anonymize.py`](anonymize.py) | Privacy-preserving face blurring | `blur_face()`, `pixelate_face()` |
-| **Dashboard** | [`app.py`](app.py) | Streamlit dashboard navigation | `main()` |
-| **Dashboard** | [`pages/1_Live_Camera.py`](pages/1_Live_Camera.py) | Real-time camera streaming view | Streamlit live capture runner |
-| **Dashboard** | [`pages/5_GradCAM_Explain.py`](pages/5_GradCAM_Explain.py) | Saliency map inspector view | Saliency visualization page |
+| **Vision Core** | [`utils/emotion_utils.py`](utils/emotion_utils.py) | Face bounding box detection | `FaceDetector`, `detect_faces()` |
+| **Vision Core** | [`utils/model_utils.py`](utils/model_utils.py) | CNN model loading and inference | `load_emotion_model()`, `predict_emotion()` |
+| **Vision Core** | [`utils/smoothing_utils.py`](utils/smoothing_utils.py) | Temporal prediction smoothing | `ExponentialSmoother` |
+| **Vision Core** | [`utils/gradcam_utils.py`](utils/gradcam_utils.py) | Visual Grad-CAM heatmap generation | `compute_gradcam()`, `overlay_heatmap()` |
+| **Vision Core** | [`utils/emotion_utils.py`](utils/emotion_utils.py) | Privacy-preserving face blurring | `blur_face()`, `pixelate_face()` |
+| **Dashboard** | [`streamlit_app.py`](streamlit_app.py) | Streamlit dashboard navigation | `main()` |
+| **Dashboard** | [`pages/page1_live_camera.py`](pages/page1_live_camera.py) | Real-time camera streaming view | Streamlit live capture runner |
+| **Dashboard** | [`pages/page5_model_inspector.py`](pages/page5_model_inspector.py) | Saliency map inspector view | Saliency visualization page |
 | **API Serving** | [`api_server.py`](api_server.py) | Asynchronous FastAPI service | `create_app()`, `/health`, `/metrics` |
 | **API Serving** | [`api_routes.py`](api_routes.py) | REST endpoint declarations | Endpoint route definitions |
-| **Utilities** | [`chart_utils.py`](chart_utils.py) | Radar & probability distribution plots | `plot_emotion_radar()`, `plot_distribution()`|
-| **Utilities** | [`export_utils.py`](export_utils.py) | Session data export to CSV/JSON | `export_session_data()` |
+| **Utilities** | [`utils/chart_utils.py`](utils/chart_utils.py) | Radar & probability distribution plots | `plot_emotion_radar()`, `plot_distribution()`|
+| **Utilities** | [`utils/export_utils.py`](utils/export_utils.py) | Session data export to CSV/JSON | `export_session_data()` |
 
 ---
 
@@ -457,7 +457,7 @@ Dependencies are declared in [`pyproject.toml`](pyproject.toml) and pinned in [`
 | Configuration File | Format | Governed Subsystem | Key Enforcement Policies |
 | :--- | :--- | :--- | :--- |
 | [`pyproject.toml`](pyproject.toml) | TOML | Packaging & Linter | Line length 88, target Python 3.10+, ruff lint rules |
-| [`config.py`](config.py) | Python | Application Constants | Image dimensions (48x48), 7 target emotion labels |
+| [`utils/config.py`](utils/config.py) | Python | Application Constants | Image dimensions (48x48), 7 target emotion labels |
 | [`.env.example`](.env.example) | Shell | Environment Template | Structural configuration layout |
 
 ---
@@ -516,9 +516,9 @@ Security controls are evaluated using STRIDE threat analysis:
 
 | STRIDE Category | Threat Vector | Mitigation Strategy | Implemented Component |
 | :--- | :--- | :--- | :--- |
-| **Spoofing** | Photographic face spoofing | Confidence thresholds and multi-frame consistency checks | [`smoothing.py`](smoothing.py) |
-| **Tampering** | Corrupted image payload injection | Image decode validation asserting valid matrix channels | [`model_utils.py`](model_utils.py) |
-| **Information Disclosure** | Biometric data leakage | Client-side inference option; automated face anonymization | [`anonymize.py`](anonymize.py) |
+| **Spoofing** | Photographic face spoofing | Confidence thresholds and multi-frame consistency checks | [`utils/smoothing_utils.py`](utils/smoothing_utils.py) |
+| **Tampering** | Corrupted image payload injection | Image decode validation asserting valid matrix channels | [`utils/model_utils.py`](utils/model_utils.py) |
+| **Information Disclosure** | Biometric data leakage | Client-side inference option; automated face anonymization | [`utils/emotion_utils.py`](utils/emotion_utils.py) |
 | **Denial of Service** | Oversized image upload flooding | File upload size limits enforced in ASGI middleware | [`api_server.py`](api_server.py) |
 
 ---
@@ -538,7 +538,7 @@ EmotionLens operates as an edge and local analytics platform. For production API
 
 ## <a id="privacy"></a>§PRIVACY — Data Privacy, PII & Regulatory Compliance
 
-1. **Biometric Face Redaction:** The [`anonymize.py`](anonymize.py) module supports automated Gaussian blurring and pixelation of detected faces to allow emotion tracking while protecting individual anonymity.
+1. **Biometric Face Redaction:** The [`utils/emotion_utils.py`](utils/emotion_utils.py) module supports automated Gaussian blurring and pixelation of detected faces to allow emotion tracking while protecting individual anonymity.
 2. **Local Edge Execution:** The platform can run entirely disconnected from cloud backends, preventing video feeds from leaving local hardware.
 
 ---
@@ -681,27 +681,27 @@ Production deployment is executed via containerized Docker environments running 
 4. **Q: What dataset was the core Convolutional Neural Network trained on?**
    *A:* The FER2013 facial expression dataset. Reference: [`README.md`](README.md).
 5. **Q: What are the 7 discrete emotion target classes classified by the model?**
-   *A:* Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise. Reference: [`config.py`](config.py).
+   *A:* Angry, Disgust, Fear, Happy, Neutral, Sad, Surprise. Reference: [`utils/config.py`](utils/config.py).
 6. **Q: What input dimensions does the CNN model require?**
-   *A:* 48x48 pixel grayscale images (shape: 48, 48, 1). Reference: [`config.py`](config.py).
+   *A:* 48x48 pixel grayscale images (shape: 48, 48, 1). Reference: [`utils/config.py`](utils/config.py).
 7. **Q: What explainability technique generates visual saliency heatmaps?**
-   *A:* Grad-CAM (Gradient-weighted Class Activation Mapping). Reference: [`gradcam_utils.py`](gradcam_utils.py).
+   *A:* Grad-CAM (Gradient-weighted Class Activation Mapping). Reference: [`utils/gradcam_utils.py`](utils/gradcam_utils.py).
 8. **Q: How many pages comprise the interactive Streamlit dashboard?**
    *A:* 7 pages. Reference: [`pages/`](pages/).
 9. **Q: What mechanism prevents high-frequency prediction flickering between frames?**
-   *A:* Rolling exponential moving average temporal smoothing. Reference: [`smoothing.py`](smoothing.py).
+   *A:* Rolling exponential moving average temporal smoothing. Reference: [`utils/smoothing_utils.py`](utils/smoothing_utils.py).
 10. **Q: What computer vision library executes face cascade detection?**
     *A:* OpenCV (`opencv-python-headless`). Reference: [`requirements.txt`](requirements.txt).
 11. **Q: What deep learning framework executes the CNN model?**
     *A:* TensorFlow (`tensorflow >= 2.16.0`). Reference: [`requirements.txt`](requirements.txt).
 12. **Q: What file provides privacy-preserving facial blurring and pixelation?**
-    *A:* `anonymize.py`. Reference: [`anonymize.py`](anonymize.py).
+    *A:* `anonymize.py`. Reference: [`utils/emotion_utils.py`](utils/emotion_utils.py).
 13. **Q: What endpoint provides Prometheus operational metrics?**
     *A:* `/metrics`. Reference: [`api_server.py`](api_server.py).
 14. **Q: What is the default confidence threshold (`CONFIDENCE_THRESHOLD`)?**
-    *A:* 0.40 (40%). Reference: [`config.py`](config.py).
+    *A:* 0.40 (40%). Reference: [`utils/config.py`](utils/config.py).
 15. **Q: What script launches the standalone desktop OpenCV camera demo?**
-    *A:* `webcam_demo.py`. Reference: [`webcam_demo.py`](webcam_demo.py).
+    *A:* `webcam_demo.py`. Reference: [`webcam_inference.py`](webcam_inference.py).
 16. **Q: What total lines of code exist across the codebase?**
     *A:* 16,932 lines of code. Reference: [§META](#meta).
 17. **Q: What git commit hash was verified for this documentation?**
@@ -713,7 +713,7 @@ Production deployment is executed via containerized Docker environments running 
 20. **Q: How many endpoints are exposed by the FastAPI server?**
     *A:* 5 endpoints. Reference: [§API](#api).
 21. **Q: What file formats are supported for exporting session timelines?**
-    *A:* CSV and JSON. Reference: [`export_utils.py`](export_utils.py).
+    *A:* CSV and JSON. Reference: [`utils/export_utils.py`](utils/export_utils.py).
 22. **Q: What is the target latency for CNN inference on CPU?**
     *A:* Under 10 ms (measured 4.8 ms). Reference: [§PERF](#perf).
 23. **Q: What linter is configured for the repository?**
@@ -789,7 +789,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`.github/labeler.yml`](.github/labeler.yml) | `.yml` | 21 | 602 | CI/CD automation workflow |
 | [`.github/scripts/check_lockfile.py`](.github/scripts/check_lockfile.py) | `.py` | 214 | 7174 | CI/CD automation workflow |
 | [`.github/scripts/lint_readme.py`](.github/scripts/lint_readme.py) | `.py` | 164 | 5674 | CI/CD automation workflow |
-| [`.github/workflows/ai-disclosure-check.yml`](.github/workflows/ai-disclosure-check.yml) | `.yml` | 81 | 3777 | CI/CD automation workflow |
 | [`.github/workflows/auto-label.yml`](.github/workflows/auto-label.yml) | `.yml` | 22 | 618 | CI/CD automation workflow |
 | [`.github/workflows/ci.yml`](.github/workflows/ci.yml) | `.yml` | 545 | 20968 | CI/CD automation workflow |
 | [`.github/workflows/codeql.yml`](.github/workflows/codeql.yml) | `.yml` | 60 | 1740 | CI/CD automation workflow |
@@ -824,7 +823,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`api_server.py`](api_server.py) | `.py` | 338 | 11485 | Python source module or utility |
 | [`assets/dashboard-preview.svg`](assets/dashboard-preview.svg) | `.svg` | 276 | 19930 | Configuration or static asset |
 | [`assets/style.css`](assets/style.css) | `.css` | 408 | 9504 | Configuration or static asset |
-| [`docs/audit/dependabot-agent/2026-08-13-run.md`](docs/audit/dependabot-agent/2026-08-13-run.md) | `.md` | 21 | 1395 | Documentation asset |
 | [`circuit_breaker.py`](circuit_breaker.py) | `.py` | 150 | 4984 | Python source module or utility |
 | [`docker-compose.dev.yml`](docker-compose.dev.yml) | `.yml` | 32 | 1332 | Configuration or static asset |
 | [`docker-compose.prod.yml`](docker-compose.prod.yml) | `.yml` | 17 | 759 | Configuration or static asset |
@@ -833,14 +831,7 @@ Production deployment is executed via containerized Docker environments running 
 | [`docs/DEVELOPER_GUIDE.md`](docs/DEVELOPER_GUIDE.md) | `.md` | 3 | 74 | Technical documentation asset |
 | [`docs/DISASTER-RECOVERY.md`](docs/DISASTER-RECOVERY.md) | `.md` | 42 | 1206 | Technical documentation asset |
 | [`docs/README.md`](docs/README.md) | `.md` | 64 | 2957 | Technical documentation asset |
-| [`docs/ai/PROVENANCE.md`](docs/ai/PROVENANCE.md) | `.md` | 42 | 1410 | Technical documentation asset |
-| [`docs/ai/README.md`](docs/ai/README.md) | `.md` | 45 | 1528 | Technical documentation asset |
-| [`docs/ai/transcripts/README.md`](docs/ai/transcripts/README.md) | `.md` | 36 | 1356 | Technical documentation asset |
 | [`docs/architecture.md`](docs/architecture.md) | `.md` | 70 | 2294 | Technical documentation asset |
-| [`docs/audit/cleanup-audit-2026-08-13.md`](docs/audit/cleanup-audit-2026-08-13.md) | `.md` | 52 | 2293 | Technical documentation asset |
-| [`docs/audit/cleanup-audit-2026-08-15-code.md`](docs/audit/cleanup-audit-2026-08-15-code.md) | `.md` | 50 | 1715 | Technical documentation asset |
-| [`docs/audit/cleanup-audit-2026-08-15.md`](docs/audit/cleanup-audit-2026-08-15.md) | `.md` | 68 | 1634 | Technical documentation asset |
-| [`docs/audit/dependabot-inventory-2026-08-16.md`](docs/audit/dependabot-inventory-2026-08-16.md) | `.md` | 234 | 20262 | Technical documentation asset |
 | [`docs/community/CHANGELOG.md`](docs/community/CHANGELOG.md) | `.md` | 54 | 2318 | Technical documentation asset |
 | [`docs/community/CODE_OF_CONDUCT.md`](docs/community/CODE_OF_CONDUCT.md) | `.md` | 132 | 5608 | Technical documentation asset |
 | [`docs/community/CONTRIBUTING.md`](docs/community/CONTRIBUTING.md) | `.md` | 124 | 4218 | Technical documentation asset |
@@ -849,9 +840,6 @@ Production deployment is executed via containerized Docker environments running 
 | [`docs/design/AppFlow.md`](docs/design/AppFlow.md) | `.md` | 117 | 3752 | Technical documentation asset |
 | [`docs/design/Design.md`](docs/design/Design.md) | `.md` | 109 | 3551 | Technical documentation asset |
 | [`docs/folder_structure.md`](docs/folder_structure.md) | `.md` | 74 | 3972 | Technical documentation asset |
-| [`docs/migration/file_move_ledger.md`](docs/migration/file_move_ledger.md) | `.md` | 53 | 2686 | Technical documentation asset |
-| [`docs/migration/migration_summary.md`](docs/migration/migration_summary.md) | `.md` | 78 | 3249 | Technical documentation asset |
-| [`docs/migration/old_tree_to_new_tree.md`](docs/migration/old_tree_to_new_tree.md) | `.md` | 57 | 2987 | Technical documentation asset |
 | [`docs/module_dependency.md`](docs/module_dependency.md) | `.md` | 69 | 4722 | Technical documentation asset |
 | [`docs/package_overview.md`](docs/package_overview.md) | `.md` | 71 | 3460 | Technical documentation asset |
 | [`docs/product/PRD.md`](docs/product/PRD.md) | `.md` | 141 | 6434 | Technical documentation asset |

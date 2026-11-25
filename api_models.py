@@ -11,7 +11,7 @@ from pydantic import BaseModel
 
 # Constants
 EMOTIONS = ["Angry", "Disgust", "Fear", "Happy", "Neutral", "Sad", "Surprise"]
-MODEL_PATH = "emotion_model.h5"
+MODEL_PATH = os.environ.get("EMOTION_MODEL_PATH", "emotion_model.h5")
 HOST = os.environ.get("API_HOST", "0.0.0.0")
 PORT = int(os.environ.get("API_PORT", "8000"))
 
